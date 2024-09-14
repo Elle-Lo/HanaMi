@@ -1,5 +1,5 @@
 //
-//  DepositPage.swift
+//  TreasureMapPage.swift
 //  HanaMi
 //
 //  Created by Tzu ning Lo on 2024/9/14.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DepositPage: View {
+struct TreasureMapPage: View {
     @State private var showMenu = false
 
        var body: some View {
@@ -18,7 +18,7 @@ struct DepositPage: View {
                        // 页面内容
                        VStack {
                            Spacer()
-                           Text("This is Deposit Page")
+                           Text("This is Map Page")
                                .font(.largeTitle)
                                .foregroundColor(.white)
                            Spacer()
@@ -40,5 +40,5 @@ struct DepositPage: View {
            }
 
 #Preview {
-    DepositPage()
+    TreasureMapPage()
 }

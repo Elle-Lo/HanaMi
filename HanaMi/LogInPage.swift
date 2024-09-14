@@ -75,7 +75,6 @@ struct LogInPage: View {
             }
             .padding(.top, 20)
             .fullScreenCover(isPresented: $isHomePresented) {
-                // 进入 HomePage，新的导航系统
                 HomePage()
             }
         }

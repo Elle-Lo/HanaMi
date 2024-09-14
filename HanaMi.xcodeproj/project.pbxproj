@@ -21,6 +21,13 @@
 		ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */; };
 		ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */; };
 		ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD82C9540EB007CDB45 /* Model.swift */; };
+		ABAFAADC2C958556007CDB45 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAADB2C958556007CDB45 /* Menu.swift */; };
+		ABAFAADE2C95859E007CDB45 /* CategoryPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAADD2C95859E007CDB45 /* CategoryPage.swift */; };
+		ABAFAAE02C9585AB007CDB45 /* AnalyticsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAADF2C9585AB007CDB45 /* AnalyticsPage.swift */; };
+		ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */; };
+		ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE32C958650007CDB45 /* CharacterPage.swift */; };
+		ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE52C95882D007CDB45 /* Extension.swift */; };
+		ABAFAAE82C95AD76007CDB45 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE72C95AD76007CDB45 /* MenuButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +43,13 @@
 		ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GmailLogInPage.swift; sourceTree = "<group>"; };
 		ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositPage.swift; sourceTree = "<group>"; };
 		ABAFAAD82C9540EB007CDB45 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		ABAFAADB2C958556007CDB45 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		ABAFAADD2C95859E007CDB45 /* CategoryPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPage.swift; sourceTree = "<group>"; };
+		ABAFAADF2C9585AB007CDB45 /* AnalyticsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPage.swift; sourceTree = "<group>"; };
+		ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureMapPage.swift; sourceTree = "<group>"; };
+		ABAFAAE32C958650007CDB45 /* CharacterPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterPage.swift; sourceTree = "<group>"; };
+		ABAFAAE52C95882D007CDB45 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		ABAFAAE72C95AD76007CDB45 /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,10 +89,16 @@
 				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
 				ABAFAAD82C9540EB007CDB45 /* Model.swift */,
 				ABAFAACD2C941493007CDB45 /* StarterPage.swift */,
-				ABAFAAD12C94153E007CDB45 /* LogInPage.swift */,
-				ABAFAACF2C9414AE007CDB45 /* HomePage.swift */,
 				ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */,
+				ABAFAAD12C94153E007CDB45 /* LogInPage.swift */,
+				ABAFAADB2C958556007CDB45 /* Menu.swift */,
+				ABAFAAE72C95AD76007CDB45 /* MenuButton.swift */,
+				ABAFAACF2C9414AE007CDB45 /* HomePage.swift */,
 				ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */,
+				ABAFAADD2C95859E007CDB45 /* CategoryPage.swift */,
+				ABAFAADF2C9585AB007CDB45 /* AnalyticsPage.swift */,
+				ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */,
+				ABAFAAE32C958650007CDB45 /* CharacterPage.swift */,
 				ABAFAABC2C93DBC1007CDB45 /* Preview Content */,
 			);
 			path = HanaMi;
@@ -96,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */,
+				ABAFAAE52C95882D007CDB45 /* Extension.swift */,
 				ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */,
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
 			);
@@ -184,11 +205,18 @@
 			files = (
 				ABAFAAD22C94153E007CDB45 /* LogInPage.swift in Sources */,
 				ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */,
+				ABAFAAE82C95AD76007CDB45 /* MenuButton.swift in Sources */,
+				ABAFAAE02C9585AB007CDB45 /* AnalyticsPage.swift in Sources */,
 				ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */,
 				ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */,
+				ABAFAADE2C95859E007CDB45 /* CategoryPage.swift in Sources */,
+				ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */,
 				ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
+				ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */,
+				ABAFAADC2C958556007CDB45 /* Menu.swift in Sources */,
 				ABAFAAD02C9414AE007CDB45 /* HomePage.swift in Sources */,
+				ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */,
 				ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

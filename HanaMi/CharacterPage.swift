@@ -1,5 +1,5 @@
 //
-//  DepositPage.swift
+//  CharacterPage.swift
 //  HanaMi
 //
 //  Created by Tzu ning Lo on 2024/9/14.
@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-struct DepositPage: View {
+struct CharacterPage: View {
     @State private var showMenu = false
 
        var body: some View {
            ZStack {
-                       // 背景图像
-                       Color.green.edgesIgnoringSafeArea(.all) // 背景为绿色
+                       
+                       Color.green.edgesIgnoringSafeArea(.all) 
 
                        // 页面内容
                        VStack {
                            Spacer()
-                           Text("This is Deposit Page")
+                           Text("This is Character Page")
                                .font(.largeTitle)
                                .foregroundColor(.white)
                            Spacer()
@@ -40,5 +40,5 @@ struct DepositPage: View {
            }
 
 #Preview {
-    DepositPage()
+    CharacterPage()
 }
