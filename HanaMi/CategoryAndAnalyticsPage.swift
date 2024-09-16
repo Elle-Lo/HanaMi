@@ -1,16 +1,9 @@
-//
-//  TreasureMapPage.swift
-//  HanaMi
-//
-//  Created by Tzu ning Lo on 2024/9/14.
-//
-
 import SwiftUI
 
-struct TreasureMapPage: View {
+struct CategoryAndAnalyticsPage: View {
     var body: some View {
         VStack {
-            Text("地圖頁面")
+            Text("類別分析頁面")
                 .font(.largeTitle)
                 .padding()
 
@@ -26,5 +19,5 @@ struct TreasureMapPage: View {
            }
 
 #Preview {
-    TreasureMapPage()
+    CategoryAndAnalyticsPage()
 }

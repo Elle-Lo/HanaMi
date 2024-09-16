@@ -1,16 +1,16 @@
 //
-//  TreasureMapPage.swift
+//  SettingsPage.swift
 //  HanaMi
 //
-//  Created by Tzu ning Lo on 2024/9/14.
+//  Created by Tzu ning Lo on 2024/9/15.
 //
 
 import SwiftUI
 
-struct TreasureMapPage: View {
+struct SettingsPage: View {
     var body: some View {
         VStack {
-            Text("地圖頁面")
+            Text("設定頁面")
                 .font(.largeTitle)
                 .padding()
 
@@ -23,8 +23,4 @@ struct TreasureMapPage: View {
         .navigationTitle("設定")
         .navigationBarTitleDisplayMode(.inline)
     }
-           }
-
-#Preview {
-    TreasureMapPage()
 }

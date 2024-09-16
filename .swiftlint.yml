@@ -1,0 +1,38 @@
+excluded: # 执行 linting 时忽略的路径。 优先级比 `included` 更高。
+  - Carthage
+  - Pods
+
+line_length:
+  warning: 350
+  error: 450
+  ignores_function_declarations: true
+  ignores_comments: true
+
+function_body_length: # 函数体长度
+  warning: 300
+  error: 350
+
+identifier_name:
+  min_length: # 只有最小长度
+    error: 1 # 只有错误
+
+type_body_length: # 类的长度
+  warning: 2000
+  error: 3000
+
+file_length: # 文件长度
+  warning: 2000
+  error: 3000
+
+cyclomatic_complexity: # 代码复杂度,默认为10
+  warning: 30
+  error: 35
+
+force_cast: warning # 强制转换（代码中存在一些前面通过if判断过类型，后面做的强制转换的代码）
+force_try: warning # try语句判断
+
+disabled_rules: # 执行时排除舍弃的规则
+  - trailing_whitespace # 每一个空行不能有空格，会与Xcode换行后自动对齐生成的空格冲突，建议排除掉加。
+  - identifier_name # 命名规则必须按照驼峰原则（可能model中的某些字段与json字段命名冲突，建议排除掉）
+  - type_name # 类型命名规则限制,以大写字母开头，且长度在1到20个字符之间
+  - shorthand_operator # 使用+= ， -=， *=， /=  代替 a = a + 1

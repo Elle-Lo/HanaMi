@@ -8,35 +8,21 @@
 import SwiftUI
 
 struct CharacterPage: View {
-    @State private var showMenu = false
+    var body: some View {
+        VStack {
+            Text("角色頁面")
+                .font(.largeTitle)
+                .padding()
 
-       var body: some View {
-           ZStack {
-                       
-                       Color.green.edgesIgnoringSafeArea(.all) 
+            // 這裡可以添加各種設定選項
+            Text("在這裡添加各種設定選項")
+                .padding()
 
-                       // 页面内容
-                       VStack {
-                           Spacer()
-                           Text("This is Character Page")
-                               .font(.largeTitle)
-                               .foregroundColor(.white)
-                           Spacer()
-                       }
-
-                       // 放置菜单按钮
-                       MenuButton(showMenu: $showMenu)
-                           .zIndex(2) // 确保按钮在页面最上层
-                       
-                       // 自定义菜单动画显示，避免使用 fullScreenCover
-                       if showMenu {
-                           Menu(showMenu: $showMenu)
-                               .transition(.move(edge: .leading)) // 自定义过渡效果
-                               .animation(.easeInOut, value: showMenu)
-                               .zIndex(1) // 保证菜单在内容上方
-                       }
-                   }
-               }
+            Spacer()
+        }
+        .navigationTitle("設定")
+        .navigationBarTitleDisplayMode(.inline)
+    }
            }
 
 #Preview {
