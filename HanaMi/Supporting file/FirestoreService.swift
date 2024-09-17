@@ -17,7 +17,6 @@ class FirestoreService {
                 return
             }
             
-            // 检查用户文档是否存在且有 treasureList
             guard let document = document, document.exists,
                   let data = document.data(),
                   let treasureList = data["treasureList"] as? [String], !treasureList.isEmpty else {
@@ -25,7 +24,6 @@ class FirestoreService {
                 return
             }
             
-            // 随机选取1到3笔数据
             let selectedTreasureIDs = Array(treasureList.shuffled().prefix(3))
             var fetchedTreasures: [Treasure] = []
             let dispatchGroup = DispatchGroup()
@@ -33,7 +31,6 @@ class FirestoreService {
             for treasureID in selectedTreasureIDs {
                 dispatchGroup.enter()
                 
-                // 使用 treasureID 查找对应的宝藏
                 let treasureRef = self.db.collection("Users").document(userID).collection("Treasures").document(treasureID)
                 
                 treasureRef.getDocument { (treasureDoc, error) in
@@ -49,42 +46,42 @@ class FirestoreService {
                         return
                     }
 
-                    // 提取宝藏数据
+                    
                     let category = treasureData["category"] as? String ?? "Unknown"
                     let locationName = treasureData["locationName"] as? String ?? "Unknown Location"
                     let latitude = treasureData["latitude"] as? Double ?? 0.0
                     let longitude = treasureData["longitude"] as? Double ?? 0.0
                     let isPublic = treasureData["isPublic"] as? Bool ?? true
 
-                    // 查找内容
+                 
                     treasureRef.collection("Contents").getDocuments { (contentsSnapshot, contentError) in
                         var contents: [TreasureContent] = []
                         if let contentDocuments = contentsSnapshot?.documents {
-                            // 遍历文档并解析内容
+                        
                             for contentDoc in contentDocuments {
                                 if let contentTypeString = contentDoc.data()["type"] as? String,
                                    let contentType = ContentType(rawValue: contentTypeString),
-                                   let index = contentDoc.data()["index"] as? Int { // 获取 index 字段
+                                   let index = contentDoc.data()["index"] as? Int {
                                     let contentValue = contentDoc.data()["content"] as? String ?? ""
                                     let content = TreasureContent(id: contentDoc.documentID, type: contentType, content: contentValue, index: index)
                                     contents.append(content)
                                 }
                             }
                             
-                            // 按 index 排序
-                            contents.sort { $0.index < $1.index } // 使用 index 字段排序
+               
+                            contents.sort { $0.index < $1.index }
                         }
                         
-                        // 构建 Treasure 对象
+                     
                         let treasure = Treasure(
                             id: treasureID,
                             category: category,
-                            createdTime: Date(), // 根据需求从 Firestore 提取时间
+                            createdTime: Date(),
                             isPublic: isPublic,
                             latitude: latitude,
                             longitude: longitude,
                             locationName: locationName,
-                            contents: contents // 保持内容的顺序
+                            contents: contents
                         )
                         
                         fetchedTreasures.append(treasure)
@@ -93,7 +90,7 @@ class FirestoreService {
                 }
             }
             
-            // 等待所有数据抓取完毕后返回
+        
             dispatchGroup.notify(queue: .main) {
                 if fetchedTreasures.isEmpty {
                     print("No treasures found for user \(userID)")
@@ -106,9 +103,9 @@ class FirestoreService {
     }
 
 
-    // 保存寶藏及其內容
+
     func saveTreasure(userID: String, coordinate: CLLocationCoordinate2D, locationName: String, category: String, isPublic: Bool, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
-        // 生成新的寶藏ID
+       
         let treasureID = db.collection("Users").document(userID).collection("Treasures").document().documentID
         let treasureData: [String: Any] = [
             "latitude": coordinate.latitude,
@@ -121,7 +118,7 @@ class FirestoreService {
         
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
 
-        // 1. 儲存寶藏基本資料
+     
         treasureRef.setData(treasureData) { [weak self] error in
             guard let self = self else { return }
             if let error = error {
@@ -129,11 +126,10 @@ class FirestoreService {
                 return
             }
 
-            // 2. 儲存內容到 Treasure 子集合中的 Contents 子集合
             self.saveTreasureContents(treasureID: treasureID, userID: userID, contents: contents) { result in
                 switch result {
                 case .success():
-                    // 3. 更新使用者的 treasureList
+                  
                     self.addTreasureIDToUser(userID: userID, treasureID: treasureID, completion: completion)
                 case .failure(let error):
                     completion(.failure(error))
@@ -143,11 +139,10 @@ class FirestoreService {
     }
 
 
-    // 更新使用者的 treasureList
+
     private func addTreasureIDToUser(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let userDocRef = db.collection("Users").document(userID)
-        
-        // 使用 Firestore 的 arrayUnion 方法將寶藏ID添加到 treasureList 中
+    
         userDocRef.updateData([
             "treasureList": FieldValue.arrayUnion([treasureID])
         ]) { error in
@@ -159,7 +154,6 @@ class FirestoreService {
         }
     }
 
-    // 保存寶藏內容
     private func saveTreasureContents(treasureID: String, userID: String, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
         let contentCollectionRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID).collection("Contents")
         let dispatchGroup = DispatchGroup()
@@ -186,8 +180,7 @@ class FirestoreService {
         }
     }
 
-    
-    // 獲取 Treasure 資料
+
     func fetchTreasure(userID: String, treasureID: String, completion: @escaping (Result<Treasure, Error>) -> Void) {
         let docRef = db.collection("Treasures").document(treasureID)
         
@@ -201,7 +194,6 @@ class FirestoreService {
         }
     }
 
-    // 獲取 Treasure 內容
     func fetchTreasureContents(treasureID: String, completion: @escaping (Result<[TreasureContent], Error>) -> Void) {
         db.collection("Treasures").document(treasureID).collection("Contents").getDocuments { snapshot, error in
             if let error = error {
@@ -219,25 +211,25 @@ class FirestoreService {
 
     // MARK: - Category Handling
 
-    // 加載類別
+
     func loadCategories(userID: String, defaultCategories: [String], completion: @escaping ([String]) -> Void) {
         let userDocument = db.collection("Users").document(userID)
 
         userDocument.addSnapshotListener { documentSnapshot, error in
             if let error = error {
                 print("Error fetching Firestore document: \(error)")
-                completion(defaultCategories) // 加載失敗時使用預設類別
+                completion(defaultCategories)
             } else if let document = documentSnapshot, document.exists {
                 if let categoryArray = document.data()?["category"] as? [String] {
                     completion(categoryArray)
                 } else {
-                    // 如果文檔存在但沒有 category，設置預設類別
+                   
                     self.setDefaultCategories(userID: userID, defaultCategories: defaultCategories) {
                         completion(defaultCategories)
                     }
                 }
             } else {
-                // 如果文檔不存在，設置預設類別
+              
                 self.setDefaultCategories(userID: userID, defaultCategories: defaultCategories) {
                     completion(defaultCategories)
                 }
@@ -245,7 +237,7 @@ class FirestoreService {
         }
     }
 
-    // 設置 Firestore 的預設類別
+   
     private func setDefaultCategories(userID: String, defaultCategories: [String], completion: @escaping () -> Void) {
         let userDocument = db.collection("Users").document(userID)
 
@@ -261,7 +253,7 @@ class FirestoreService {
         }
     }
 
-    // 添加新類別到 Firestore
+
     func addCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
         let userDocument = db.collection("Users").document(userID)
 
@@ -278,7 +270,7 @@ class FirestoreService {
         }
     }
 
-    // 刪除類別
+
     func deleteCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
         let userDocument = db.collection("Users").document(userID)
 

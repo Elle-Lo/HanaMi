@@ -44,6 +44,7 @@
 		ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */; };
 		ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */; };
 		ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */; };
+		ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,7 @@
 		ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewView.swift; sourceTree = "<group>"; };
 		ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
+		ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,7 +131,6 @@
 				ABAFAAFA2C980F9F007CDB45 /* DepositPage */,
 				ABAFAADA2C95427A007CDB45 /* Supporting file */,
 				ABAFAABC2C93DBC1007CDB45 /* Preview Content */,
-				ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */,
 			);
 			path = HanaMi;
 			sourceTree = "<group>";
@@ -151,6 +152,7 @@
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
 				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
 				ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */,
+				ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */,
 			);
 			path = "Supporting file";
 			sourceTree = "<group>";
@@ -176,6 +178,7 @@
 				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
 				ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */,
 				ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */,
+				ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */,
 			);
 			path = DepositPage;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
 				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,
+				ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */,
 				ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */,
 				ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */,
 				ABAFAAD02C9414AE007CDB45 /* HomePage.swift in Sources */,
@@ -469,8 +473,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -501,8 +505,8 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

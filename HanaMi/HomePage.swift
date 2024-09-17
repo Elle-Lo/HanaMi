@@ -6,7 +6,7 @@ struct HomePage: View {
     @State private var treasures: [Treasure] = []
     @State private var isLoading = false
 
-    private let userId = "g61HUemIJIRIC1wvvIqa" // 假设的用户ID
+    private let userId = "g61HUemIJIRIC1wvvIqa"
     private let firestoreService = FirestoreService()
 
     var body: some View {
@@ -23,7 +23,7 @@ struct HomePage: View {
 
                 VStack {
                     if isLoading {
-                        ProgressView("加载宝藏中...")
+                        ProgressView("加載中...")
                     } else {
                         ScrollView {
                             ForEach(treasures) { treasure in
@@ -38,7 +38,6 @@ struct HomePage: View {
                 }
                 .padding(.top, 15)
 
-                // 刷新按鈕
                 VStack {
                     Spacer()
                     HStack {
@@ -60,7 +59,7 @@ struct HomePage: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
-            fetchRandomTreasures() // 打开页面时调用
+            fetchRandomTreasures()
         }
     }
 
@@ -84,11 +83,11 @@ struct TreasureCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            // 显示分类
+         
             Text(treasure.category)
                 .font(.headline)
                 .foregroundColor(.black)
-                .padding(.top, 10)  // 控制顶部的 padding
+                .padding(.top, 10)
 
             Text("地點: \(treasure.locationName)")
                 .font(.subheadline)
@@ -97,20 +96,19 @@ struct TreasureCardView: View {
             Divider()
                 .padding(.vertical, 5)
 
-            // 循环展示内容，按 index 排序
             ForEach(treasure.contents.sorted(by: { $0.index < $1.index })) { content in
                 VStack(alignment: .leading, spacing: 10) {
-                    // 根据内容类型展示不同的内容
+                   
                     switch content.type {
                     case .text:
-                        // 显示文本
+                     
                         Text(content.content)
                             .font(.body)
                             .foregroundColor(.black)
                             .fixedSize(horizontal: false, vertical: true) // 确保文本换行时不会拉伸
 
                     case .image:
-                        // 显示图片
+                      
                         if let imageURL = URL(string: content.content) {
                             KFImage(imageURL)
                                 .resizable()
@@ -120,7 +118,7 @@ struct TreasureCardView: View {
                         }
 
                     case .link:
-                        // 显示可点击的链接文本
+                       
                         if let url = URL(string: content.content) {
                             Text(content.displayText ?? url.absoluteString)
                                 .font(.body)
@@ -132,13 +130,13 @@ struct TreasureCardView: View {
                         }
 
                     default:
-                        EmptyView() // 默认情况不展示任何内容
+                        EmptyView()
                     }
                 }
-                .padding(.bottom, 5) // 控制每个内容块之间的底部空间
+                .padding(.bottom, 5)
             }
         }
-        .padding() // 整个卡片的 padding
+        .padding()
         .background(Color.white.opacity(0.8))
         .cornerRadius(15)
         .shadow(radius: 5)
