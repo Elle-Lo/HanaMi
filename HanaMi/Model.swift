@@ -1,16 +1,26 @@
 import Foundation
+import FirebaseFirestore
 
-enum ContentType: Int {
-    case text = 0
-    case image = 1
-    case video = 2
-    case link = 3
-    case map = 4
-    case audio = 5
+enum ContentType: String, Codable {
+    case text
+    case image
+    case video
+    case link
+    case map
+    case audio
 }
 
-struct Treasure: Identifiable {
-    var id: String
+struct Users: Identifiable, Codable {
+    @DocumentID var id: String? // Firestore 自動生成的 ID
+    var name: String
+    var email: String
+    var password: String // 密碼不應該直接存儲在 Firestore 中，應該考慮使用 Firebase Auth 管理
+    var treasureList: [String] // 包含寶藏的ID，與 Treasure 進行關聯
+    var categories: [String]
+}
+
+struct Treasure: Identifiable, Codable {
+    @DocumentID var id: String? // 自動由 Firestore 設置的文檔 ID
     var category: String
     var createdTime: Date
     var isPublic: Bool
@@ -20,17 +30,13 @@ struct Treasure: Identifiable {
     var contents: [TreasureContent]
 }
 
-struct TreasureContent: Identifiable {
-    var id: String
-    var type: ContentType
-    var content: String
-}
-
-struct Users: Identifiable {
-    var id: String
-    var name: String
-    var email: String
-    var password: String // 密碼（注意：應該加密存儲）
-    var treasureList: [String]
-    var categories: [String]
+struct TreasureContent: Identifiable, Codable {
+    var id: String = UUID().uuidString // 每個內容都有唯一的 ID
+    var type: ContentType              // 內容的類型
+    var content: String                // 儲存資料本身（文字、圖片連結、影片連結等）
+    
+    // 可選元數據
+    var displayText: String?           // 用於連結顯示的文本
+    var imageSize: CGSize?             // 用於圖片顯示的大小 (如果需要的話)
+    var timestamp: Date = Date()       // 每個內容的創建時間 (選擇性)
 }

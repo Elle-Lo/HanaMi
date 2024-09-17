@@ -25,7 +25,6 @@
 		ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */; };
 		ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE32C958650007CDB45 /* CharacterPage.swift */; };
 		ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE52C95882D007CDB45 /* Extension.swift */; };
-		ABAFAAEA2C95ECD9007CDB45 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE92C95ECD9007CDB45 /* ImagePicker.swift */; };
 		ABAFAAEC2C95EDE9007CDB45 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAEB2C95EDE9007CDB45 /* LocationManager.swift */; };
 		ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */; };
 		ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */; };
@@ -36,6 +35,9 @@
 		ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */; };
 		ABAFAB002C988FA1007CDB45 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */; };
 		ABAFAB022C988FEF007CDB45 /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */; };
+		ABAFAB042C98907E007CDB45 /* SaveButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */; };
+		ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */; };
+		ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,7 +57,6 @@
 		ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureMapPage.swift; sourceTree = "<group>"; };
 		ABAFAAE32C958650007CDB45 /* CharacterPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterPage.swift; sourceTree = "<group>"; };
 		ABAFAAE52C95882D007CDB45 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
-		ABAFAAE92C95ECD9007CDB45 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		ABAFAAEB2C95EDE9007CDB45 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
@@ -66,6 +67,9 @@
 		ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
 		ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
 		ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
+		ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveButtonView.swift; sourceTree = "<group>"; };
+		ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,7 +137,7 @@
 				ABAFAAE52C95882D007CDB45 /* Extension.swift */,
 				ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */,
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
-				ABAFAAE92C95ECD9007CDB45 /* ImagePicker.swift */,
+				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
 			);
 			path = "Supporting file";
 			sourceTree = "<group>";
@@ -159,6 +163,8 @@
 				ABAFAAFB2C980FFC007CDB45 /* LocationSelectionView.swift */,
 				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
 				ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */,
+				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
+				ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */,
 			);
 			path = DepositPage;
 			sourceTree = "<group>";
@@ -274,10 +280,12 @@
 				ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */,
 				ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */,
 				ABAFAAF72C973C1E007CDB45 /* LocationSearchView.swift in Sources */,
+				ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */,
 				ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */,
 				ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */,
 				ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */,
 				ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */,
+				ABAFAB042C98907E007CDB45 /* SaveButtonView.swift in Sources */,
 				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
 				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,
@@ -285,8 +293,8 @@
 				ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */,
 				ABAFAAD02C9414AE007CDB45 /* HomePage.swift in Sources */,
 				ABAFAAF32C971045007CDB45 /* MapView.swift in Sources */,
-				ABAFAAEA2C95ECD9007CDB45 /* ImagePicker.swift in Sources */,
 				ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */,
+				ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */,
 				ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,7 +433,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "我們需要您的相簿存取權限來上傳照片";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -457,7 +464,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "我們需要您的相簿存取權限來上傳照片";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

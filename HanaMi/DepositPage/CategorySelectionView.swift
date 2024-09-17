@@ -6,7 +6,7 @@ struct CategorySelectionView: View {
     @Binding var categories: [String]
     @State private var showAddCategorySheet: Bool = false
     @State private var newCategory: String = ""
-    let db = Firestore.firestore()
+    let firestoreService = FirestoreService() // 使用 FirestoreService 管理 Firebase 交互
     let userID: String
     let defaultCategories = ["Creative", "Energetic", "Happy"] // 預設的三個類別
 
@@ -44,7 +44,12 @@ struct CategorySelectionView: View {
         }
         .padding(.horizontal)
         .onAppear {
-            loadCategoriesFromFirestore()
+            firestoreService.loadCategories(userID: userID, defaultCategories: defaultCategories) { loadedCategories in
+                categories = loadedCategories
+                if !loadedCategories.isEmpty {
+                    selectedCategory = loadedCategories.first ?? "Creative"
+                }
+            }
         }
         .sheet(isPresented: $showAddCategorySheet) {
             // Sheet 內容
@@ -68,7 +73,7 @@ struct CategorySelectionView: View {
 
                     Button("完成") {
                         if !newCategory.isEmpty {
-                            saveCategoryToFirestore(category: newCategory) { success in
+                            firestoreService.addCategory(userID: userID, category: newCategory) { success in
                                 if success {
                                     selectedCategory = newCategory
                                     categories.append(newCategory)
@@ -88,64 +93,4 @@ struct CategorySelectionView: View {
             .presentationDetents([.fraction(0.25)])
         }
     }
-
-    // 加載 Firestore 的類別數據
-    private func loadCategoriesFromFirestore() {
-        let userDocument = db.collection("Users").document(userID)
-
-        userDocument.addSnapshotListener { documentSnapshot, error in
-            if let error = error {
-                print("Error fetching Firestore document: \(error)")
-            } else if let document = documentSnapshot, document.exists {
-                if let categoryArray = document.data()?["category"] as? [String] {
-                    self.categories = categoryArray
-                    if !self.categories.isEmpty {
-                        self.selectedCategory = self.categories.first ?? "Creative"
-                    }
-                } else {
-                    // 如果文檔存在但沒有 category，設置預設類別
-                    self.setDefaultCategoriesToFirestore()
-                }
-            } else {
-                // 如果文檔不存在，設置預設類別
-                self.setDefaultCategoriesToFirestore()
-            }
-        }
-    }
-
-    // 設置 Firestore 的預設類別
-    private func setDefaultCategoriesToFirestore() {
-        let userDocument = db.collection("Users").document(userID)
-
-        userDocument.setData([
-            "category": defaultCategories
-        ]) { error in
-            if let error = error {
-                print("Error setting default categories: \(error)")
-            } else {
-                self.categories = defaultCategories
-                self.selectedCategory = defaultCategories.first ?? "Creative"
-                print("Default categories set in Firestore")
-            }
-        }
-    }
-
-    // 保存新類別到 Firestore
-    private func saveCategoryToFirestore(category: String, completion: @escaping (Bool) -> Void) {
-        let userDocument = db.collection("Users").document(userID)
-
-        userDocument.updateData([
-            "category": FieldValue.arrayUnion([category])
-        ]) { error in
-            if let error = error {
-                print("Error updating Firestore: \(error)")
-                completion(false)
-            } else {
-                print("Category updated successfully in Firestore")
-                completion(true)
-            }
-        }
-    }
 }
-
-
