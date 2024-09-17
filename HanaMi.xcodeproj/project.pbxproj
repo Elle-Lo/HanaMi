@@ -21,6 +21,30 @@
 		ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */; };
 		ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */; };
 		ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD82C9540EB007CDB45 /* Model.swift */; };
+		ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */; };
+		ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */; };
+		ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE32C958650007CDB45 /* CharacterPage.swift */; };
+		ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAE52C95882D007CDB45 /* Extension.swift */; };
+		ABAFAAEC2C95EDE9007CDB45 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAEB2C95EDE9007CDB45 /* LocationManager.swift */; };
+		ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */; };
+		ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */; };
+		ABAFAAF32C971045007CDB45 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAF22C971045007CDB45 /* MapView.swift */; };
+		ABAFAAF52C973BF8007CDB45 /* LocationSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAF42C973BF8007CDB45 /* LocationSearchViewModel.swift */; };
+		ABAFAAF72C973C1E007CDB45 /* LocationSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAF62C973C1E007CDB45 /* LocationSearchView.swift */; };
+		ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAFB2C980FFC007CDB45 /* LocationSelectionView.swift */; };
+		ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */; };
+		ABAFAB002C988FA1007CDB45 /* FirestoreService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */; };
+		ABAFAB022C988FEF007CDB45 /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */; };
+		ABAFAB042C98907E007CDB45 /* SaveButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */; };
+		ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */; };
+		ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */; };
+		ABAFAB0B2C993504007CDB45 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB0A2C993504007CDB45 /* Kingfisher */; };
+		ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB0D2C993707007CDB45 /* SwiftSoup */; };
+		ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */; };
+		ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */; };
+		ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */; };
+		ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */; };
+		ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +60,27 @@
 		ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GmailLogInPage.swift; sourceTree = "<group>"; };
 		ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositPage.swift; sourceTree = "<group>"; };
 		ABAFAAD82C9540EB007CDB45 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAndAnalyticsPage.swift; sourceTree = "<group>"; };
+		ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureMapPage.swift; sourceTree = "<group>"; };
+		ABAFAAE32C958650007CDB45 /* CharacterPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterPage.swift; sourceTree = "<group>"; };
+		ABAFAAE52C95882D007CDB45 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		ABAFAAEB2C95EDE9007CDB45 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
+		ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		ABAFAAF22C971045007CDB45 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		ABAFAAF42C973BF8007CDB45 /* LocationSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewModel.swift; sourceTree = "<group>"; };
+		ABAFAAF62C973C1E007CDB45 /* LocationSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchView.swift; sourceTree = "<group>"; };
+		ABAFAAFB2C980FFC007CDB45 /* LocationSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectionView.swift; sourceTree = "<group>"; };
+		ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
+		ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreService.swift; sourceTree = "<group>"; };
+		ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
+		ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveButtonView.swift; sourceTree = "<group>"; };
+		ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditorView.swift; sourceTree = "<group>"; };
+		ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewView.swift; sourceTree = "<group>"; };
+		ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
+		ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,9 +88,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABAFAB0B2C993504007CDB45 /* Kingfisher in Frameworks */,
 				ABAFAAC82C93F80E007CDB45 /* FirebaseDatabase in Frameworks */,
 				ABAFAACA2C93F80E007CDB45 /* FirebaseFirestore in Frameworks */,
 				ABAFAACC2C93F80E007CDB45 /* FirebaseStorage in Frameworks */,
+				ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */,
+				ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,14 +119,17 @@
 		ABAFAAB52C93DBBF007CDB45 /* HanaMi */ = {
 			isa = PBXGroup;
 			children = (
-				ABAFAADA2C95427A007CDB45 /* Supporting file */,
-				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
+				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				ABAFAAD82C9540EB007CDB45 /* Model.swift */,
-				ABAFAACD2C941493007CDB45 /* StarterPage.swift */,
-				ABAFAAD12C94153E007CDB45 /* LogInPage.swift */,
+				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
+				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
 				ABAFAACF2C9414AE007CDB45 /* HomePage.swift */,
-				ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */,
-				ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */,
+				ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */,
+				ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */,
+				ABAFAAE32C958650007CDB45 /* CharacterPage.swift */,
+				ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */,
+				ABAFAAFA2C980F9F007CDB45 /* DepositPage */,
+				ABAFAADA2C95427A007CDB45 /* Supporting file */,
 				ABAFAABC2C93DBC1007CDB45 /* Preview Content */,
 			);
 			path = HanaMi;
@@ -96,10 +147,52 @@
 			isa = PBXGroup;
 			children = (
 				ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */,
+				ABAFAAE52C95882D007CDB45 /* Extension.swift */,
 				ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */,
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
+				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
+				ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */,
+				ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */,
 			);
 			path = "Supporting file";
+			sourceTree = "<group>";
+		};
+		ABAFAAF12C96F88E007CDB45 /* Log In */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAACD2C941493007CDB45 /* StarterPage.swift */,
+				ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */,
+				ABAFAAD12C94153E007CDB45 /* LogInPage.swift */,
+				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
+			);
+			path = "Log In";
+			sourceTree = "<group>";
+		};
+		ABAFAAFA2C980F9F007CDB45 /* DepositPage */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAB112C996B5B007CDB45 /* Map */,
+				ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */,
+				ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */,
+				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
+				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
+				ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */,
+				ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */,
+				ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */,
+			);
+			path = DepositPage;
+			sourceTree = "<group>";
+		};
+		ABAFAB112C996B5B007CDB45 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAAF22C971045007CDB45 /* MapView.swift */,
+				ABAFAAEB2C95EDE9007CDB45 /* LocationManager.swift */,
+				ABAFAAF42C973BF8007CDB45 /* LocationSearchViewModel.swift */,
+				ABAFAAF62C973C1E007CDB45 /* LocationSearchView.swift */,
+				ABAFAAFB2C980FFC007CDB45 /* LocationSelectionView.swift */,
+			);
+			path = Map;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +205,7 @@
 				ABAFAAAF2C93DBBF007CDB45 /* Sources */,
 				ABAFAAB02C93DBBF007CDB45 /* Frameworks */,
 				ABAFAAB12C93DBBF007CDB45 /* Resources */,
+				ABAFAAF82C97C803007CDB45 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -122,6 +216,9 @@
 				ABAFAAC72C93F80E007CDB45 /* FirebaseDatabase */,
 				ABAFAAC92C93F80E007CDB45 /* FirebaseFirestore */,
 				ABAFAACB2C93F80E007CDB45 /* FirebaseStorage */,
+				ABAFAB0A2C993504007CDB45 /* Kingfisher */,
+				ABAFAB0D2C993707007CDB45 /* SwiftSoup */,
+				ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */,
 			);
 			productName = HanaMi;
 			productReference = ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */;
@@ -153,7 +250,9 @@
 			mainGroup = ABAFAAAA2C93DBBF007CDB45;
 			packageReferences = (
 				ABAFAAC62C93F80E007CDB45 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				ABAFAAD52C9445C6007CDB45 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = ABAFAAB42C93DBBF007CDB45 /* Products */;
 			projectDirPath = "";
@@ -177,18 +276,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		ABAFAAF82C97C803007CDB45 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/$TEMP_DIR/swiftlint.log\n",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nif [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n\n\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		ABAFAAAF2C93DBBF007CDB45 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */,
 				ABAFAAD22C94153E007CDB45 /* LogInPage.swift in Sources */,
+				ABAFAAEC2C95EDE9007CDB45 /* LocationManager.swift in Sources */,
 				ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */,
+				ABAFAB022C988FEF007CDB45 /* ToggleButton.swift in Sources */,
+				ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */,
+				ABAFAB002C988FA1007CDB45 /* FirestoreService.swift in Sources */,
+				ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */,
+				ABAFAAF52C973BF8007CDB45 /* LocationSearchViewModel.swift in Sources */,
 				ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */,
 				ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */,
+				ABAFAAF72C973C1E007CDB45 /* LocationSearchView.swift in Sources */,
+				ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */,
+				ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */,
+				ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */,
+				ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */,
 				ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */,
+				ABAFAB042C98907E007CDB45 /* SaveButtonView.swift in Sources */,
+				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
+				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,
+				ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */,
+				ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */,
+				ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */,
 				ABAFAAD02C9414AE007CDB45 /* HomePage.swift in Sources */,
+				ABAFAAF32C971045007CDB45 /* MapView.swift in Sources */,
+				ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */,
+				ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */,
 				ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -233,7 +375,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -296,7 +438,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -326,11 +468,13 @@
 				DEVELOPMENT_TEAM = KX36U2DJW6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -356,11 +500,13 @@
 				DEVELOPMENT_TEAM = KX36U2DJW6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -407,12 +553,28 @@
 				minimumVersion = 11.2.0;
 			};
 		};
-		ABAFAAD52C9445C6007CDB45 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+		ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 0.57.0;
+				minimumVersion = 7.12.0;
+			};
+		};
+		ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.5;
+			};
+		};
+		ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.1.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -432,6 +594,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ABAFAAC62C93F80E007CDB45 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		ABAFAB0A2C993504007CDB45 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		ABAFAB0D2C993707007CDB45 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

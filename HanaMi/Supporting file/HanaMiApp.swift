@@ -1,12 +1,6 @@
-//
-//  HanaMiApp.swift
-//  HanaMi
-//
-//  Created by Tzu ning Lo on 2024/9/13.
-//
-
 import SwiftUI
 import FirebaseCore
+import IQKeyboardManagerSwift
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
@@ -21,6 +15,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct HanaMiApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    init() {
+            IQKeyboardManager.shared.enable = true
+        }
     
     var body: some Scene {
         WindowGroup {

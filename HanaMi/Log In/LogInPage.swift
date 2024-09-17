@@ -30,7 +30,6 @@ struct LogInPage: View {
             }
             .padding(.horizontal, 40)
             
-            
             VStack(alignment: .leading, spacing: 5) {
                 Text("Password")
                     .font(.system(size: 18, weight: .medium))
@@ -75,8 +74,7 @@ struct LogInPage: View {
             }
             .padding(.top, 20)
             .fullScreenCover(isPresented: $isHomePresented) {
-                // 进入 HomePage，新的导航系统
-                HomePage()
+                MainTabView()
             }
         }
         .padding(.top, 50)
