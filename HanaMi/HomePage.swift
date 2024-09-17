@@ -7,8 +7,8 @@ struct HomePage: View {
     @State private var currentTreasures: [Treasure] = []
     @State private var isLoading = false
 
-    private let userId = "currentUserId"
-    private let firestoreService = FirestoreService() // 实例化 FirestoreService
+    private let userId = "g61HUemIJIRIC1wvvIqa" // 假设的用户ID
+    private let firestoreService = FirestoreService()
 
     var body: some View {
         NavigationView {
@@ -23,66 +23,26 @@ struct HomePage: View {
                 Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
 
                 VStack {
-                    Spacer().frame(height: 5)
 
                     // 加载指示器
                     if isLoading {
                         ProgressView("加载宝藏中...")
                     } else {
-                        // 顯示內容的 ScrollView
+                        // 顯示内容的 ScrollView，允许滑动
                         ScrollView {
                             ForEach(currentTreasures) { treasure in
-                                VStack(alignment: .leading, spacing: 10) {
-                                    ForEach(treasure.contents) { content in
-                                        VStack {
-                                            switch content.type {
-                                            case .text:
-                                                Text(content.content)
-                                                    .padding()
-                                                    .background(Color.white.opacity(0.4))
-                                                    .cornerRadius(15)
-
-                                            case .image:
-                                                AsyncImage(url: URL(string: content.content)) { image in
-                                                    image
-                                                        .resizable()
-                                                        .scaledToFit()
-                                                } placeholder: {
-                                                    ProgressView()
-                                                }
-                                                .frame(width: 300, height: 200)
-                                                .cornerRadius(15)
-
-                                            case .link:
-                                                Link(destination: URL(string: content.content)!) {
-                                                    Text("点击打开链接")
-                                                }
-                                                .padding()
-                                                .background(Color.white.opacity(0.4))
-                                                .cornerRadius(15)
-
-                                            default:
-                                                EmptyView() // 其他類型尚未處理
-                                            }
-                                        }
-                                        .padding(.horizontal)
-                                        .padding(.bottom, 20)
-                                    }
-                                }
-                                .padding()
-                                .background(Color.white.opacity(0.4))
-                                .cornerRadius(15)
-                                .padding(.bottom, 10)
+                                TreasureCardView(treasure: treasure)
+                                    .padding(.horizontal, 20)
+                                    .padding(.vertical, 10)
                             }
                         }
                     }
 
                     Spacer()
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 100)
+                .padding(.top, 15) 
 
-                // 刷新按鈕，固定在右下角靠上一點
+                // 刷新按鈕，固定在右下角
                 VStack {
                     Spacer()
 
@@ -132,6 +92,66 @@ struct HomePage: View {
     }
 }
 
-#Preview {
-    HomePage()
+struct TreasureCardView: View {
+    var treasure: Treasure
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(treasure.category)
+                .font(.headline)
+                .foregroundColor(.black)
+                .padding(.top, 10)
+
+            Text("地點: \(treasure.locationName)")
+                .font(.subheadline)
+                .foregroundColor(.gray)
+
+            Divider()
+                .padding(.vertical, 5)
+
+            // 依照順序顯示 TreasureContents
+            ForEach(treasure.contents) { content in
+                VStack(alignment: .leading, spacing: 10) {
+                    switch content.type {
+                    case .text:
+                        Text(content.content)
+                            .font(.body)
+                            .foregroundColor(.black)
+
+                    case .image:
+                        if let imageURL = URL(string: content.content) {
+                            AsyncImage(url: imageURL) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(maxWidth: .infinity)
+                            .cornerRadius(10)
+                        }
+
+                    case .link:
+                        if let url = URL(string: content.content) {
+                            Link(destination: url) {
+                                Text(content.displayText ?? "点击打开链接")
+                                    .font(.body)
+                                    .foregroundColor(.blue)
+                            }
+                            .padding()
+                            .background(Color.blue.opacity(0.2))
+                            .cornerRadius(10)
+                        }
+
+                    default:
+                        EmptyView() // 处理其他类型
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(Color.white.opacity(0.8))
+        .cornerRadius(15)
+        .shadow(radius: 5)
+    }
 }
