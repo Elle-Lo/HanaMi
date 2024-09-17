@@ -5,6 +5,7 @@ import FirebaseStorage
 import MapKit
 import CoreLocation
 import PhotosUI
+import AVFoundation
 
 struct DepositPage: View {
     @State private var isPublic: Bool = true
@@ -22,6 +23,9 @@ struct DepositPage: View {
     @State private var showingLinkAlert = false // 控制顯示連結插入的對話框
     @State private var linkURL = "" // 存儲用戶輸入的URL
     @State private var linkDisplayText = "" // 存儲顯示在文本中的鏈接文本
+
+    @State private var showingAudioPicker = false // 音頻選擇器
+    @StateObject private var audioRecorder = AudioRecorder() // 錄音管理器
 
     @StateObject private var locationManager = LocationManager()
     @StateObject private var searchViewModel = LocationSearchViewModel()
@@ -58,6 +62,7 @@ struct DepositPage: View {
                     adjustRichTextHeight()
                 }
 
+            // 按鈕區域
             HStack {
                 // 插入圖片按鈕
                 Button(action: {
@@ -65,11 +70,11 @@ struct DepositPage: View {
                 }) {
                     Image(systemName: "photo")
                         .resizable()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 30, height: 30) // 調整按鈕大小
                         .foregroundColor(.black)
-                        .padding()
+                        .padding(10) // 更小的內邊距
                         .background(Color(UIColor.systemGray6))
-                        .cornerRadius(8)
+                        .cornerRadius(5) // 更小的圓角
                 }
                 .sheet(isPresented: $showingImagePicker) {
                     PhotoPicker(image: $selectedImage)
@@ -86,11 +91,11 @@ struct DepositPage: View {
                 }) {
                     Image(systemName: "link")
                         .resizable()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 30, height: 30) // 調整按鈕大小
                         .foregroundColor(.black)
-                        .padding()
+                        .padding(10)
                         .background(Color(UIColor.systemGray6))
-                        .cornerRadius(8)
+                        .cornerRadius(5)
                 }
                 .alert("插入連結", isPresented: $showingLinkAlert) {
                     TextField("連結網址", text: $linkURL)
@@ -99,40 +104,51 @@ struct DepositPage: View {
                     Button("取消", role: .cancel) { }
                 }
 
-                // 插入音訊按鈕
+                // 插入音頻按鈕
                 Button(action: {
-                    insertAudio()
+                    showingAudioPicker = true // 打開音頻選擇器
                 }) {
                     Image(systemName: "speaker.wave.2.fill")
                         .resizable()
-                        .frame(width: 40, height: 40)
+                        .frame(width: 30, height: 30) // 調整按鈕大小
                         .foregroundColor(.black)
-                        .padding()
+                        .padding(10)
                         .background(Color(UIColor.systemGray6))
-                        .cornerRadius(8)
+                        .cornerRadius(5)
                 }
+
+                // 使用 Spacer 將按鈕推到右側
+                Spacer()
+
+                // 保存按鈕
+                SaveButtonView(
+                    userID: userID,
+                    selectedCoordinate: selectedCoordinate,
+                    selectedLocationName: selectedLocationName,
+                    selectedCategory: selectedCategory,
+                    isPublic: isPublic,
+                    contents: richText, // 直接传递 NSAttributedString
+                    errorMessage: $errorMessage,
+                    onSave: resetFields // 傳遞回調來清空資料
+                )
             }
             .padding(.horizontal)
 
             Spacer()
 
-            // 保存按鈕與錯誤訊息
+            // 顯示錯誤訊息
             if let errorMessage = errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .font(.caption)
             }
-
-            // 更新：将富文本直接传递给 SaveButtonView
-            SaveButtonView(
-                userID: userID,
-                selectedCoordinate: selectedCoordinate,
-                selectedLocationName: selectedLocationName,
-                selectedCategory: selectedCategory,
-                isPublic: isPublic,
-                contents: richText, // 直接传递 NSAttributedString
-                errorMessage: $errorMessage
-            )
+        }
+        .sheet(isPresented: $showingAudioPicker) {
+            AudioRecorderView(audioRecorder: audioRecorder, showingAudioPicker: $showingAudioPicker) { audioURL in
+                if let url = audioURL {
+                    insertAudio(url: url) // 插入音頻連結到富文本
+                }
+            }
         }
         .sheet(item: $activeSheet) { item in
             switch item {
@@ -151,6 +167,7 @@ struct DepositPage: View {
                 )
             }
         }
+        .ignoresSafeArea(.keyboard, edges: .bottom) // 防止鍵盤影響佈局
     }
 
     // 动态调整富文本高度
@@ -162,7 +179,7 @@ struct DepositPage: View {
         }
     }
 
-    // 插入图片到富文本（不上传，只显示）
+    // 插入圖片到富文本
     func insertImage(_ image: UIImage) {
         let editor = RichTextEditorView(text: $richText)
         editor.insertImage(image)
@@ -173,13 +190,24 @@ struct DepositPage: View {
         guard let url = URL(string: linkURL), !linkDisplayText.isEmpty else { return }
         let editor = RichTextEditorView(text: $richText)
         editor.insertLinkBlock(url, displayText: linkDisplayText)
-        linkURL = "" // 重置連結和显示文字
+        linkURL = "" // 清空输入框
         linkDisplayText = ""
     }
 
-    // 插入音訊到富文本
-    func insertAudio() {
+    // 插入音頻到富文本
+    func insertAudio(url: URL) {
         let editor = RichTextEditorView(text: $richText)
-        editor.insertAudio()
+        let displayText = "錄音檔: \(url.lastPathComponent)"
+        editor.insertLinkBlock(url, displayText: displayText)
+    }
+
+    // 重置所有輸入欄位
+    func resetFields() {
+        richText = NSAttributedString(string: "") // 清空富文本
+        selectedCategory = "Creative" // 恢復預設類別
+        selectedCoordinate = nil // 清空地點
+        selectedLocationName = "未知地點" // 恢復預設地點
+        isPublic = true // 恢復公開選項的預設值
+        errorMessage = nil // 清空錯誤消息
     }
 }

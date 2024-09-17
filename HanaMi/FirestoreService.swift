@@ -8,95 +8,103 @@ class FirestoreService {
 
     // 獲取用戶儲存的寶藏列表 (最多三筆)
     func fetchRandomTreasures(userID: String, completion: @escaping (Result<[Treasure], Error>) -> Void) {
-            let userDocument = db.collection("Users").document(userID)
+        let userDocument = db.collection("Users").document(userID)
+        
+        userDocument.getDocument { [weak self] (document, error) in
+            guard let self = self else { return }
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
             
-            userDocument.getDocument { [weak self] (document, error) in
-                guard let self = self else { return }
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
+            // 检查用户文档是否存在且有 treasureList
+            guard let document = document, document.exists,
+                  let data = document.data(),
+                  let treasureList = data["treasureList"] as? [String], !treasureList.isEmpty else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "用户文档不存在或宝藏列表为空"])))
+                return
+            }
+            
+            // 随机选取1到3笔数据
+            let selectedTreasureIDs = Array(treasureList.shuffled().prefix(3))
+            var fetchedTreasures: [Treasure] = []
+            let dispatchGroup = DispatchGroup()
+
+            for treasureID in selectedTreasureIDs {
+                dispatchGroup.enter()
                 
-                guard let document = document, document.exists,
-                      let data = document.data(),
-                      let treasureList = data["treasureList"] as? [String] else {
-                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "用户文档不存在"])))
-                    return
-                }
+                // 使用 treasureID 查找对应的宝藏
+                let treasureRef = self.db.collection("Users").document(userID).collection("Treasures").document(treasureID)
                 
-                // 隨機選取最多三筆數據
-                let randomTreasureIDs = treasureList.shuffled().prefix(3)
-                var fetchedTreasures: [Treasure] = []
-                let dispatchGroup = DispatchGroup()
-
-                for treasureID in randomTreasureIDs {
-                    dispatchGroup.enter()
+                treasureRef.getDocument { (treasureDoc, error) in
+                    if let error = error {
+                        print("Error fetching treasure: \(error.localizedDescription)")
+                        dispatchGroup.leave()
+                        return
+                    }
                     
-                    // 使用 treasureID 查找對應的寶藏
-                    let treasureRef = self.db.collection("Users").document(userID).collection("Treasures").document(treasureID)
-                    
-                    treasureRef.getDocument { (treasureDoc, error) in
-                        if let error = error {
-                            print("Error fetching treasure: \(error)")
-                            dispatchGroup.leave()
-                            return
-                        }
-                        
-                        guard let treasureData = treasureDoc?.data(), let treasureID = treasureDoc?.documentID else {
-                            print("Treasure data not found.")
-                            dispatchGroup.leave()
-                            return
-                        }
+                    guard let treasureData = treasureDoc?.data(), let treasureID = treasureDoc?.documentID else {
+                        print("Treasure data not found for ID: \(treasureID)")
+                        dispatchGroup.leave()
+                        return
+                    }
 
-                        // 提取寶藏數據
-                        let category = treasureData["category"] as? String ?? "Unknown"
-                        let locationName = treasureData["locationName"] as? String ?? "Unknown Location"
-                        let latitude = treasureData["latitude"] as? Double ?? 0.0
-                        let longitude = treasureData["longitude"] as? Double ?? 0.0
-                        let isPublic = treasureData["isPublic"] as? Bool ?? true
+                    // 提取宝藏数据
+                    let category = treasureData["category"] as? String ?? "Unknown"
+                    let locationName = treasureData["locationName"] as? String ?? "Unknown Location"
+                    let latitude = treasureData["latitude"] as? Double ?? 0.0
+                    let longitude = treasureData["longitude"] as? Double ?? 0.0
+                    let isPublic = treasureData["isPublic"] as? Bool ?? true
 
-                        // 查找內容
-                        treasureRef.collection("Contents").getDocuments { (contentsSnapshot, contentError) in
-                            var contents: [TreasureContent] = []
-                            if let contentDocuments = contentsSnapshot?.documents {
-                                for contentDoc in contentDocuments {
-                                    if let contentTypeString = contentDoc.data()["type"] as? String,
-                                       let contentType = ContentType(rawValue: contentTypeString) {
-                                        let contentValue = contentDoc.data()["content"] as? String ?? ""
-                                        let content = TreasureContent(id: contentDoc.documentID, type: contentType, content: contentValue)
-                                        contents.append(content)
-                                    }
+                    // 查找内容
+                    treasureRef.collection("Contents").getDocuments { (contentsSnapshot, contentError) in
+                        var contents: [TreasureContent] = []
+                        if let contentDocuments = contentsSnapshot?.documents {
+                            // 遍历文档并解析内容
+                            for contentDoc in contentDocuments {
+                                if let contentTypeString = contentDoc.data()["type"] as? String,
+                                   let contentType = ContentType(rawValue: contentTypeString),
+                                   let index = contentDoc.data()["index"] as? Int { // 获取 index 字段
+                                    let contentValue = contentDoc.data()["content"] as? String ?? ""
+                                    let content = TreasureContent(id: contentDoc.documentID, type: contentType, content: contentValue, index: index)
+                                    contents.append(content)
                                 }
                             }
                             
-                            // 建立寶藏實體
-                            let treasure = Treasure(
-                                id: treasureID,
-                                category: category,
-                                createdTime: Date(), // 這裡可以根據需求從 Firestore 提取時間
-                                isPublic: isPublic,
-                                latitude: latitude,
-                                longitude: longitude,
-                                locationName: locationName,
-                                contents: contents
-                            )
-                            
-                            fetchedTreasures.append(treasure)
-                            dispatchGroup.leave()
+                            // 按 index 排序
+                            contents.sort { $0.index < $1.index } // 使用 index 字段排序
                         }
+                        
+                        // 构建 Treasure 对象
+                        let treasure = Treasure(
+                            id: treasureID,
+                            category: category,
+                            createdTime: Date(), // 根据需求从 Firestore 提取时间
+                            isPublic: isPublic,
+                            latitude: latitude,
+                            longitude: longitude,
+                            locationName: locationName,
+                            contents: contents // 保持内容的顺序
+                        )
+                        
+                        fetchedTreasures.append(treasure)
+                        dispatchGroup.leave()
                     }
                 }
-                
-                // 所有數據抓取完畢後返回
-                dispatchGroup.notify(queue: .main) {
-                    if fetchedTreasures.isEmpty {
-                        print("No treasures found for user \(userID)")
-                    }
+            }
+            
+            // 等待所有数据抓取完毕后返回
+            dispatchGroup.notify(queue: .main) {
+                if fetchedTreasures.isEmpty {
+                    print("No treasures found for user \(userID)")
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "没有找到宝藏"])))
+                } else {
                     completion(.success(fetchedTreasures))
                 }
             }
         }
-    
+    }
+
 
     // 保存寶藏及其內容
     func saveTreasure(userID: String, coordinate: CLLocationCoordinate2D, locationName: String, category: String, isPublic: Bool, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {

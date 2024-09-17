@@ -40,6 +40,10 @@
 		ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */; };
 		ABAFAB0B2C993504007CDB45 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB0A2C993504007CDB45 /* Kingfisher */; };
 		ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB0D2C993707007CDB45 /* SwiftSoup */; };
+		ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */; };
+		ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */; };
+		ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */; };
+		ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +76,9 @@
 		ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveButtonView.swift; sourceTree = "<group>"; };
 		ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditorView.swift; sourceTree = "<group>"; };
+		ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewView.swift; sourceTree = "<group>"; };
+		ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
+		ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +91,7 @@
 				ABAFAACA2C93F80E007CDB45 /* FirebaseFirestore in Frameworks */,
 				ABAFAACC2C93F80E007CDB45 /* FirebaseStorage in Frameworks */,
 				ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */,
+				ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,6 +150,7 @@
 				ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */,
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
 				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
+				ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */,
 			);
 			path = "Supporting file";
 			sourceTree = "<group>";
@@ -152,6 +161,7 @@
 				ABAFAACD2C941493007CDB45 /* StarterPage.swift */,
 				ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */,
 				ABAFAAD12C94153E007CDB45 /* LogInPage.swift */,
+				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
 			);
 			path = "Log In";
 			sourceTree = "<group>";
@@ -159,18 +169,27 @@
 		ABAFAAFA2C980F9F007CDB45 /* DepositPage */ = {
 			isa = PBXGroup;
 			children = (
+				ABAFAB112C996B5B007CDB45 /* Map */,
 				ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */,
+				ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */,
+				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
+				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
+				ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */,
+				ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */,
+			);
+			path = DepositPage;
+			sourceTree = "<group>";
+		};
+		ABAFAB112C996B5B007CDB45 /* Map */ = {
+			isa = PBXGroup;
+			children = (
 				ABAFAAF22C971045007CDB45 /* MapView.swift */,
 				ABAFAAEB2C95EDE9007CDB45 /* LocationManager.swift */,
 				ABAFAAF42C973BF8007CDB45 /* LocationSearchViewModel.swift */,
 				ABAFAAF62C973C1E007CDB45 /* LocationSearchView.swift */,
 				ABAFAAFB2C980FFC007CDB45 /* LocationSelectionView.swift */,
-				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
-				ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */,
-				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
-				ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */,
 			);
-			path = DepositPage;
+			path = Map;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,6 +215,7 @@
 				ABAFAACB2C93F80E007CDB45 /* FirebaseStorage */,
 				ABAFAB0A2C993504007CDB45 /* Kingfisher */,
 				ABAFAB0D2C993707007CDB45 /* SwiftSoup */,
+				ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */,
 			);
 			productName = HanaMi;
 			productReference = ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */;
@@ -229,6 +249,7 @@
 				ABAFAAC62C93F80E007CDB45 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 			);
 			productRefGroup = ABAFAAB42C93DBBF007CDB45 /* Products */;
 			projectDirPath = "";
@@ -279,11 +300,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */,
 				ABAFAAD22C94153E007CDB45 /* LogInPage.swift in Sources */,
 				ABAFAAEC2C95EDE9007CDB45 /* LocationManager.swift in Sources */,
 				ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */,
 				ABAFAB022C988FEF007CDB45 /* ToggleButton.swift in Sources */,
+				ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */,
 				ABAFAB002C988FA1007CDB45 /* FirestoreService.swift in Sources */,
+				ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */,
 				ABAFAAF52C973BF8007CDB45 /* LocationSearchViewModel.swift in Sources */,
 				ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */,
 				ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */,
@@ -441,6 +465,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -472,6 +497,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -539,6 +565,14 @@
 				minimumVersion = 2.7.5;
 			};
 		};
+		ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -566,6 +600,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -31,14 +31,12 @@ struct Treasure: Identifiable, Codable {
 }
 
 struct TreasureContent: Identifiable, Codable {
-    var id: String = UUID().uuidString // 每個內容都有唯一的 ID
-    var type: ContentType              // 內容的類型
-    var content: String                // 儲存資料本身（文字、圖片連結、影片連結等）
-    
-    // 可選元數據
-    var displayText: String?           // 用於連結顯示的文本
-    var imageSize: CGSize?             // 用於圖片顯示的大小 (如果需要的話)
-    var timestamp: Date = Date()       // 每個內容的創建時間 (選擇性)
+    var id: String = UUID().uuidString  // 每个内容都有唯一的 ID
+    var type: ContentType               // 内容的类型
+    var content: String                 // 存储数据本身（文字、图片链接、视频链接等）
+    var index: Int                      // 新增的字段，用于标记顺序
+    var displayText: String?            // 显示在链接上的文本（可选）
+    var timestamp: Date = Date()        // 每个内容的创建时间（可选）
 }
 
 struct LinkMetadata {

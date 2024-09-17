@@ -1,19 +1,20 @@
 import SwiftUI
 import UIKit
+import AVFoundation
 
 struct RichTextEditorView: UIViewRepresentable {
     @Binding var text: NSAttributedString
 
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
-        
-        // 配置 TextKit 2 文本編輯器
+
+        // 配置 TextKit 文本编辑器
         textView.isEditable = true
         textView.attributedText = text
         textView.delegate = context.coordinator
         
-        // 基本設置
-        textView.font = UIFont.systemFont(ofSize: 18)
+        // 设置字体大小，调整链接显示大小
+        textView.font = UIFont.systemFont(ofSize: 20) // 将字体大小设置为20
         return textView
     }
 
@@ -64,66 +65,79 @@ struct RichTextEditorView: UIViewRepresentable {
         text = mutableRichText
     }
 
-    // 插入連結為區塊樣式（模擬連結預覽框）
     func insertLinkBlock(_ url: URL, displayText: String) {
+        let linkString = NSMutableAttributedString(string: displayText, attributes: [
+            .link: url,
+            .foregroundColor: UIColor.blue, // 显示链接为蓝色
+            .font: UIFont.systemFont(ofSize: 16) // 将链接文本设置为更大的字体（24号字体）
+        ])
+        
         let mutableRichText = NSMutableAttributedString(attributedString: text)
-
-        // 插入預覽區塊
-        let linkAttachment = NSTextAttachment()
-        linkAttachment.image = generateLinkPreview(url: url, text: displayText)
-        
-        // 設置連結預覽大小
-        let targetWidth = UIScreen.main.bounds.width - 60
-        let aspectRatio: CGFloat = 16/9 // 模擬視頻的寬高比
-        let targetHeight = targetWidth / aspectRatio
-        
-        linkAttachment.bounds = CGRect(x: 0, y: 0, width: targetWidth, height: targetHeight)
-        let linkAttachmentString = NSAttributedString(attachment: linkAttachment)
-        
-        // 添加到富文本
-        mutableRichText.append(linkAttachmentString)
-        
-        // 添加點擊事件
-        let linkAttributes: [NSAttributedString.Key: Any] = [
-            .link: url
-        ]
-        let clickableText = NSAttributedString(string: "\n", attributes: linkAttributes) // 使預覽框成為可點擊區域
-        mutableRichText.append(clickableText)
-        
+        mutableRichText.append(linkString)
         text = mutableRichText
     }
     
-    // 模擬生成連結預覽圖像（可以替換為真實預覽 API）
-    func generateLinkPreview(url: URL, text: String) -> UIImage {
-        let renderer = UIGraphicsImageRenderer(size: CGSize(width: UIScreen.main.bounds.width - 60, height: 150))
-        return renderer.image { context in
-            // 背景
-            UIColor.systemGray6.setFill()
-            context.fill(CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 60, height: 150))
-            
-            // 模擬插入 YouTube 預覽圖
-            if let youtubeImage = UIImage(systemName: "play.rectangle.fill") {
-                youtubeImage.draw(in: CGRect(x: 20, y: 20, width: 50, height: 50))
+    // 检查麦克风权限并插入音频
+    func insertAudio() {
+        checkMicrophonePermission { granted in
+            if granted {
+                // 开始录音
+                startRecording()
+            } else {
+                print("没有麦克风权限")
             }
-            
-            // 顯示連結文字
-            let attributes: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 16),
-                .foregroundColor: UIColor.darkText
-            ]
-            let string = "\(text)\n\(url.absoluteString)"
-            string.draw(with: CGRect(x: 80, y: 20, width: 220, height: 100), options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
         }
     }
-    
-    // 插入音訊
-    func insertAudio() {
-        let audioAttachment = NSTextAttachment()
-        audioAttachment.image = UIImage(systemName: "speaker.wave.2.fill") // 代表音訊的圖標
-        let audioString = NSAttributedString(attachment: audioAttachment)
 
-        let mutableRichText = NSMutableAttributedString(attributedString: text)
-        mutableRichText.append(audioString)
-        text = mutableRichText
+        // 开始录音
+        func startRecording() {
+            // 此处为录音逻辑的简要示例，使用 AVAudioRecorder
+            print("开始录音...")
+            // 你可以进一步实现录音功能
+        }
+        
+        // 跳转到 Apple Music
+        func openAppleMusic() {
+            if let appleMusicURL = URL(string: "https://music.apple.com") { // 替换为 Apple Music 链接
+                UIApplication.shared.open(appleMusicURL, options: [:], completionHandler: nil)
+            }
+        }
+
+    // 检查和请求麦克风权限（iOS 17+）
+    func checkMicrophonePermission(completion: @escaping (Bool) -> Void) {
+        if #available(iOS 17.0, *) {
+            // 使用 AVAudioApplication 来检查麦克风权限
+            switch AVAudioApplication.shared.recordPermission {
+            case .granted:
+                completion(true)
+            case .denied:
+                completion(false)
+            case .undetermined:
+                AVAudioApplication.requestRecordPermission { allowed in
+                    DispatchQueue.main.async {
+                        completion(allowed)
+                    }
+                }
+            @unknown default:
+                completion(false)
+            }
+        } else {
+            // iOS 17 以下版本，仍然使用 AVAudioSession
+            switch AVAudioSession.sharedInstance().recordPermission {
+            case .granted:
+                completion(true)
+            case .denied:
+                completion(false)
+            case .undetermined:
+                AVAudioSession.sharedInstance().requestRecordPermission { allowed in
+                    DispatchQueue.main.async {
+                        completion(allowed)
+                    }
+                }
+            @unknown default:
+                completion(false)
+            }
+        }
     }
-}
+
+    }
