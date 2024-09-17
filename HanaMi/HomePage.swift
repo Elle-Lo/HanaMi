@@ -1,6 +1,7 @@
 import SwiftUI
+import SwiftSoup
 import FirebaseFirestore
-import MapKit
+import Kingfisher
 
 struct HomePage: View {
     @State private var treasures: [Treasure] = []
@@ -23,7 +24,6 @@ struct HomePage: View {
                 Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
 
                 VStack {
-
                     // 加载指示器
                     if isLoading {
                         ProgressView("加载宝藏中...")
@@ -40,7 +40,7 @@ struct HomePage: View {
 
                     Spacer()
                 }
-                .padding(.top, 15) 
+                .padding(.top, 15)
 
                 // 刷新按鈕，固定在右下角
                 VStack {
@@ -120,28 +120,15 @@ struct TreasureCardView: View {
 
                     case .image:
                         if let imageURL = URL(string: content.content) {
-                            AsyncImage(url: imageURL) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFit()
-                            } placeholder: {
-                                ProgressView()
-                            }
-                            .frame(maxWidth: .infinity)
-                            .cornerRadius(10)
+                            KFImage(imageURL)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: .infinity)
+                                .cornerRadius(10)
                         }
 
                     case .link:
-                        if let url = URL(string: content.content) {
-                            Link(destination: url) {
-                                Text(content.displayText ?? "点击打开链接")
-                                    .font(.body)
-                                    .foregroundColor(.blue)
-                            }
-                            .padding()
-                            .background(Color.blue.opacity(0.2))
-                            .cornerRadius(10)
-                        }
+                        LinkCard(content: content)
 
                     default:
                         EmptyView() // 处理其他类型
@@ -154,4 +141,99 @@ struct TreasureCardView: View {
         .cornerRadius(15)
         .shadow(radius: 5)
     }
+}
+
+// 链接样式呈现
+struct LinkCard: View {
+    var content: TreasureContent
+    @State private var metadata: LinkMetadata? = nil
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            if let url = URL(string: content.content) {
+                if let metadata = metadata {
+                    // 显示抓取到的链接元数据
+                    HStack(alignment: .top) {
+                        if let imageUrl = metadata.imageUrl, let imgUrl = URL(string: imageUrl) {
+                            AsyncImage(url: imgUrl) { image in
+                                image.resizable()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .frame(width: 50, height: 50)
+                            .cornerRadius(8)
+                        }
+
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(metadata.title)
+                                .font(.headline)
+                                .lineLimit(1)
+
+                            Text(metadata.description)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                                .lineLimit(2)
+
+                            // 实际链接
+                            HStack {
+                                Image(systemName: "link")
+                                    .foregroundColor(.red)
+                                Text(content.content)
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                                    .lineLimit(1)
+                            }
+                        }
+
+                        Spacer()
+                    }
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                    )
+                    .onTapGesture {
+                        UIApplication.shared.open(url)
+                    }
+                } else {
+                    // 显示加载中的状态
+                    ProgressView("Loading...")
+                        .onAppear {
+                            fetchLinkMetadata(from: url) { fetchedMetadata in
+                                DispatchQueue.main.async {
+                                    self.metadata = fetchedMetadata
+                                }
+                            }
+                        }
+                }
+            }
+        }
+        .padding()
+    }
+}
+
+
+func fetchLinkMetadata(from url: URL, completion: @escaping (LinkMetadata?) -> Void) {
+    URLSession.shared.dataTask(with: url) { data, response, error in
+        guard let data = data, error == nil else {
+            completion(nil)
+            return
+        }
+
+        do {
+            let html = String(data: data, encoding: .utf8) ?? ""
+            let document = try SwiftSoup.parse(html)
+            
+            let title = try document.select("meta[property=og:title]").attr("content")
+            let description = try document.select("meta[property=og:description]").attr("content")
+            let imageUrl = try document.select("meta[property=og:image]").attr("content")
+            
+            let metadata = LinkMetadata(title: title, description: description, imageUrl: imageUrl.isEmpty ? nil : imageUrl)
+            completion(metadata)
+        } catch {
+            completion(nil)
+        }
+    }.resume()
 }

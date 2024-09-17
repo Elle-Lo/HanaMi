@@ -40,3 +40,9 @@ struct TreasureContent: Identifiable, Codable {
     var imageSize: CGSize?             // 用於圖片顯示的大小 (如果需要的話)
     var timestamp: Date = Date()       // 每個內容的創建時間 (選擇性)
 }
+
+struct LinkMetadata {
+    var title: String
+    var description: String
+    var imageUrl: String?
+}

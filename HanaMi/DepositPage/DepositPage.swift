@@ -1,6 +1,7 @@
 import SwiftUI
 import Firebase
 import FirebaseFirestore
+import FirebaseStorage
 import MapKit
 import CoreLocation
 import PhotosUI
@@ -25,6 +26,8 @@ struct DepositPage: View {
     @StateObject private var locationManager = LocationManager()
     @StateObject private var searchViewModel = LocationSearchViewModel()
     
+    @State private var richTextHeight: CGFloat = 300 // 预设高度
+    
     let userID = "g61HUemIJIRIC1wvvIqa"
     
     var body: some View {
@@ -46,11 +49,15 @@ struct DepositPage: View {
             )
 
             // 富文本編輯器
-            RichTextEditorView(text: $richText)
-                .frame(minHeight: 300)
-                .border(Color.gray, width: 1)
+            RichTextEditorView(text: $richText) // 直接传递 $richText
+                .background(Color.clear) // 背景透明
+                .frame(height: richTextHeight)
                 .padding(.horizontal)
-            
+                .onAppear {
+                    // 动态调整高度
+                    adjustRichTextHeight()
+                }
+
             HStack {
                 // 插入圖片按鈕
                 Button(action: {
@@ -69,7 +76,7 @@ struct DepositPage: View {
                 }
                 .onChange(of: selectedImage) { newImage in
                     if let image = newImage {
-                        insertImage(image)
+                        insertImage(image) // 插入圖片到富文本，但不上传
                     }
                 }
 
@@ -116,13 +123,14 @@ struct DepositPage: View {
                     .font(.caption)
             }
 
+            // 更新：将富文本直接传递给 SaveButtonView
             SaveButtonView(
                 userID: userID,
                 selectedCoordinate: selectedCoordinate,
                 selectedLocationName: selectedLocationName,
                 selectedCategory: selectedCategory,
                 isPublic: isPublic,
-                contents: extractContentsFromRichText(richText), // 傳遞從富文本中提取的內容
+                contents: richText, // 直接传递 NSAttributedString
                 errorMessage: $errorMessage
             )
         }
@@ -145,18 +153,27 @@ struct DepositPage: View {
         }
     }
 
-    // 插入圖片到富文本
+    // 动态调整富文本高度
+    func adjustRichTextHeight() {
+        DispatchQueue.main.async {
+            let maxHeight = UIScreen.main.bounds.height / 2 // 设置最大高度限制
+            let newHeight = richText.size().height + 20 // 增加 padding
+            richTextHeight = min(max(newHeight, 300), maxHeight) // 动态调整高度
+        }
+    }
+
+    // 插入图片到富文本（不上传，只显示）
     func insertImage(_ image: UIImage) {
         let editor = RichTextEditorView(text: $richText)
         editor.insertImage(image)
     }
 
-    // 插入連結區塊到富文本
+    // 插入連結到富文本
     func insertLink() {
         guard let url = URL(string: linkURL), !linkDisplayText.isEmpty else { return }
         let editor = RichTextEditorView(text: $richText)
         editor.insertLinkBlock(url, displayText: linkDisplayText)
-        linkURL = "" // 重置鏈接和顯示文字
+        linkURL = "" // 重置連結和显示文字
         linkDisplayText = ""
     }
 
@@ -165,36 +182,4 @@ struct DepositPage: View {
         let editor = RichTextEditorView(text: $richText)
         editor.insertAudio()
     }
-    
-    func extractContentsFromRichText(_ richText: NSAttributedString) -> [TreasureContent] {
-        var contents: [TreasureContent] = []
-
-        richText.enumerateAttributes(in: NSRange(location: 0, length: richText.length), options: []) { attributes, range, _ in
-            if let attachment = attributes[.attachment] as? NSTextAttachment, let image = attachment.image {
-                // 插入圖片內容
-                if let imageData = image.pngData() {
-                    let base64String = imageData.base64EncodedString() // 將圖片轉換成 base64
-                    let content = TreasureContent(type: .image, content: base64String)
-                    contents.append(content)
-                }
-            } else if let link = attributes[.link] as? URL {
-                // 插入連結內容
-                let displayText = richText.attributedSubstring(from: range).string
-                let content = TreasureContent(type: .link, content: link.absoluteString, displayText: displayText)
-                contents.append(content)
-            } else {
-                // 插入文字內容
-                let text = richText.attributedSubstring(from: range).string
-                let content = TreasureContent(type: .text, content: text)
-                contents.append(content)
-            }
-        }
-
-        return contents
-    }
-
-}
-
-#Preview {
-    DepositPage()
 }
