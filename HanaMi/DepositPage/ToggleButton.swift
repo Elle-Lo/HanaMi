@@ -1,10 +1,3 @@
-//
-//  ToggleButton.swift
-//  HanaMi
-//
-//  Created by Tzu ning Lo on 2024/9/17.
-//
-
 import SwiftUI
 
 struct ToggleButton: View {
