@@ -208,10 +208,53 @@ class FirestoreService {
             }
         }
     }
+    
+//    func fetchPublicTreasures(completion: @escaping (Result<[Treasure], Error>) -> Void) {
+//        let publicTreasuresRef = db.collectionGroup("Treasures").whereField("isPublic", isEqualTo: true)
+//        
+//        publicTreasuresRef.getDocuments { snapshot, error in
+//            if let error = error {
+//                completion(.failure(error))
+//            } else {
+//                let treasures = snapshot?.documents.compactMap { try? $0.data(as: Treasure.self) }
+//                completion(.success(treasures ?? []))
+//            }
+//        }
+//    }
+    
+    // 查詢公開的寶藏，只獲取經緯度和 treasureID
+    func fetchPublicTreasuresNear(coordinate: CLLocationCoordinate2D, radius: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
+        let location = GeoPoint(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        
+        let publicTreasuresQuery = db.collectionGroup("Treasures")
+            .whereField("isPublic", isEqualTo: true)
+            // 添加你的地理範圍查詢條件
+
+        publicTreasuresQuery.getDocuments { snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                let treasures = snapshot?.documents.compactMap { document -> TreasureSummary? in
+                    let data = document.data()
+                    
+                    // documentID 不需要使用 guard let，直接使用即可
+                    let treasureID = document.documentID
+                    
+                    // 這裡仍然需要檢查 latitude 和 longitude
+                    guard let latitude = data["latitude"] as? Double,
+                          let longitude = data["longitude"] as? Double else {
+                        return nil
+                    }
+                    
+                    return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude)
+                }
+                completion(.success(treasures ?? []))
+            }
+        }
+    }
+
 
     // MARK: - Category Handling
-
-
     func loadCategories(userID: String, defaultCategories: [String], completion: @escaping ([String]) -> Void) {
         let userDocument = db.collection("Users").document(userID)
 
