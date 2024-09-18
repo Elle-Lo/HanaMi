@@ -9,7 +9,7 @@ import AVFoundation
 
 struct DepositPage: View {
     @State private var isPublic: Bool = true
-    @State private var categories: [String] = ["Creative", "Technology", "Health", "Education"]
+    @State private var categories: [String] = []
     @State private var selectedCategory: String = "Creative"
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var selectedLocationName: String? = "未知地點"
@@ -29,7 +29,6 @@ struct DepositPage: View {
     @State private var isRecording: Bool = false
     @State private var isPlaying: Bool = false
     @State private var uploadedAudioURL: URL?
-    
     
     @StateObject private var locationManager = LocationManager()
     @StateObject private var searchViewModel = LocationSearchViewModel()

@@ -215,15 +215,17 @@ class FirestoreService {
     func loadCategories(userID: String, defaultCategories: [String], completion: @escaping ([String]) -> Void) {
         let userDocument = db.collection("Users").document(userID)
 
-        userDocument.addSnapshotListener { documentSnapshot, error in
+        // 一次性獲取 Firestore 中的類別數據
+        userDocument.getDocument { documentSnapshot, error in
             if let error = error {
                 print("Error fetching Firestore document: \(error)")
-                completion(defaultCategories)
+                completion(defaultCategories) 
             } else if let document = documentSnapshot, document.exists {
-                if let categoryArray = document.data()?["category"] as? [String] {
+                if let categoryArray = document.data()?["category"] as? [String], !categoryArray.isEmpty {
+                   
                     completion(categoryArray)
                 } else {
-                   
+                    
                     self.setDefaultCategories(userID: userID, defaultCategories: defaultCategories) {
                         completion(defaultCategories)
                     }
@@ -236,7 +238,6 @@ class FirestoreService {
             }
         }
     }
-
    
     private func setDefaultCategories(userID: String, defaultCategories: [String], completion: @escaping () -> Void) {
         let userDocument = db.collection("Users").document(userID)

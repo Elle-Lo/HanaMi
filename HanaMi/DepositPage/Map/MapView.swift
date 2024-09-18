@@ -15,7 +15,6 @@ struct CustomMapView: UIViewRepresentable {
             self.parent = parent
         }
         
-        // 處理地圖上的點擊事件
         @objc func handleTapGesture(gesture: UITapGestureRecognizer) {
             let mapView = gesture.view as! MKMapView
             let tapLocation = gesture.location(in: mapView)
