@@ -28,6 +28,7 @@
 import Foundation
 import CoreLocation
 import Combine
+import MapKit
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var location: CLLocation?
@@ -48,4 +49,14 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Failed to get location: \(error.localizedDescription)")
     }
+
+    // 新增一個 region 屬性，計算基於當前位置的區域
+    var region: MKCoordinateRegion? {
+        guard let location = location else {
+            return nil
+        }
+        let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+        return MKCoordinateRegion(center: location.coordinate, span: span)
+    }
 }
+

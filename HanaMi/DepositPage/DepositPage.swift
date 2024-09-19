@@ -52,7 +52,8 @@ struct DepositPage: View {
                     selectedLocationName: $selectedLocationName,
                     shouldZoomToUserLocation: $shouldZoomToUserLocation,
                     locationManager: locationManager,
-                    searchViewModel: searchViewModel
+                    searchViewModel: searchViewModel,
+                    userID: userID
                 )
                 
                 ScrollView {

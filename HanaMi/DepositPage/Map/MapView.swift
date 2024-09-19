@@ -9,10 +9,11 @@ struct MapView: View {
     @Binding var showTreasureDetail: Bool     // 可選的顯示詳情
     @ObservedObject var locationManager = LocationManager()
     @ObservedObject var treasureManager = TreasureManager()
-
+    let userID: String
+    
     var body: some View {
         VStack {
-            if let selectedCoordinate = selectedCoordinate {
+            if selectedCoordinate != nil {
                 Text("已選地點: \(selectedLocationName ?? "未知地點")")
             }
 
@@ -20,11 +21,13 @@ struct MapView: View {
                 selectedCoordinate: $selectedCoordinate,
                 selectedLocationName: $selectedLocationName,
                 shouldZoomToUserLocation: $shouldZoomToUserLocation,
-                selectedTreasure: .constant(nil),  // 這裡傳入 nil 作為默認值
-                showTreasureDetail: .constant(false),  // 傳遞一個 false 的默認值
+                selectedTreasure: .constant(nil),  // 不需要寶藏，設置為 nil
+                showTreasureDetail: .constant(false),  // 不需要詳情，設置為 false
+                isShowingAllTreasures: .constant(false),  // 固定為 false，因為不涉及寶藏顯示
                 locationManager: locationManager,
                 treasureManager: treasureManager,
-                mode: .selectLocation
+                mode: .selectLocation,
+                userID: userID
             )
             .edgesIgnoringSafeArea(.all)
         }

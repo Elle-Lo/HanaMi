@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct MainTabView: View {
+    private var userID: String = "g61HUemIJIRIC1wvvIqa"
+    
     init() {
         // 修改选中的 tab 颜色
         UITabBar.appearance().barTintColor = UIColor.white.withAlphaComponent(0.7) // 半透明白色背景
@@ -25,7 +27,7 @@ struct MainTabView: View {
                         Label("儲存", systemImage: "plus.circle.fill")
                     }
 
-                TreasureMapPage()
+                TreasureMapPage(userID: userID)
                     .tabItem {
                         Label("分析", systemImage: "chart.bar.fill")
                     }

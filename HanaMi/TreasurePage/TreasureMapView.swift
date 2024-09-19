@@ -2,30 +2,27 @@ import SwiftUI
 import MapKit
 
 struct TreasureMapView: View {
-    @State private var selectedCoordinate: CLLocationCoordinate2D?
-    @State private var selectedLocationName: String?
-    @State private var shouldZoomToUserLocation = true
-    @ObservedObject var locationManager = LocationManager()
+    @State private var selectedTreasure: Treasure? = nil
+    @State private var showTreasureDetail = false
+    @State private var isShowingAllTreasures = true
+
     @ObservedObject var treasureManager = TreasureManager()
-    @State private var showTreasureDetail = false // 控制是否顯示寶藏詳情
-    @State private var selectedTreasure: Treasure? // 當前選中的寶藏
+    @ObservedObject var locationManager = LocationManager()
+    let userID: String
     
     var body: some View {
-        VStack {
-            if let selectedLocationName = selectedLocationName {
-                Text("選中的寶藏: \(selectedLocationName)")
-            }
-            
-            // 使用 .viewTreasures 模式顯示寶藏標註
+        ZStack {
             CustomMapView(
-                selectedCoordinate: $selectedCoordinate,
-                selectedLocationName: $selectedLocationName,
-                shouldZoomToUserLocation: $shouldZoomToUserLocation,
-                selectedTreasure: $selectedTreasure,
-                showTreasureDetail: $showTreasureDetail,
+                selectedCoordinate: .constant(nil),
+                selectedLocationName: .constant(nil),
+                shouldZoomToUserLocation: .constant(false),
+                selectedTreasure: $selectedTreasure,  // 绑定选中的宝藏
+                showTreasureDetail: $showTreasureDetail,  // 控制 Sheet 的显示
+                isShowingAllTreasures: $isShowingAllTreasures,
                 locationManager: locationManager,
                 treasureManager: treasureManager,
-                mode: .viewTreasures // 顯示寶藏
+                mode: .viewTreasures, 
+                userID: userID
             )
             .edgesIgnoringSafeArea(.all)
         }

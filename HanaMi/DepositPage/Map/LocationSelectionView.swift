@@ -15,7 +15,8 @@ struct LocationSelectionView: View {
     
     @ObservedObject var searchViewModel: LocationSearchViewModel
     @State private var activeSheet: ActiveSheet? = nil
-
+    let userID: String
+    
     var body: some View {
         HStack {
             // 顯示地圖選擇地點的按鈕
@@ -64,9 +65,11 @@ struct LocationSelectionView: View {
                     shouldZoomToUserLocation: $shouldZoomToUserLocation,
                     selectedTreasure: .constant(nil),
                     showTreasureDetail: .constant(false),
+                    isShowingAllTreasures: .constant(false),
                     locationManager: locationManager,
                     treasureManager: TreasureManager(), // 傳入空的 treasureManager
-                    mode: .selectLocation
+                    mode: .selectLocation,
+                    userID: userID
                 )
                 
             case .search:
