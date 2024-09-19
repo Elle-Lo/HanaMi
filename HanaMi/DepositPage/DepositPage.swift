@@ -36,7 +36,7 @@ struct DepositPage: View {
     @State private var richTextHeight: CGFloat = 300
     @State private var keyboardHeight: CGFloat = 0
     
-    let userID = "g61HUemIJIRIC1wvvIqa"
+    let userID = "otheruser"
     
     var body: some View {
         GeometryReader { geometry in

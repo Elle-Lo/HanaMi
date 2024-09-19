@@ -76,9 +76,10 @@ struct CustomMapView: UIViewRepresentable {
             }
         
         // 当用户点击标注时，获取宝藏详细信息并显示 Sheet
-           func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+           func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
                if let treasureAnnotation = view.annotation as? TreasureAnnotation {
                    // 调用 TreasureManager 来获取宝藏详细信息
+                   print("Selected treasure annotation with ID: \(treasureAnnotation.treasureID)")  // 添加日志
                    parent.treasureManager.getTreasure(by: treasureAnnotation.treasureID, for: userID) { treasure in
                        if let treasure = treasure {
                            DispatchQueue.main.async {
@@ -98,7 +99,7 @@ struct CustomMapView: UIViewRepresentable {
             if let treasureAnnotation = annotation as? TreasureAnnotation {
                 let identifier = "TreasureMarker"
                 var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
-
+                
                 if annotationView == nil {
                     // 创建新的 MKMarkerAnnotationView 实例
                     annotationView = MKMarkerAnnotationView(annotation: treasureAnnotation, reuseIdentifier: identifier)
