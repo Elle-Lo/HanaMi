@@ -193,28 +193,26 @@ class FirestoreService {
     
     // MARK: - 查找附近的宝藏
     
-    // 查询所有宝藏，包括用户自己的和其他用户的公开宝藏
     func fetchAllTreasuresNear(userID: String, minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
-        // 首先获取用户自己的宝藏
+        // 首先获取用户自己的所有宝藏（包括公开和私人）
         fetchUserTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { userResult in
             switch userResult {
             case .success(let userTreasures):
-                var allTreasures = userTreasures
+            var allTreasures = userTreasures
                 
                 // 查询其他用户的公开宝藏
                 let publicTreasuresQuery = self.db.collectionGroup("Treasures")
-                    .whereField("isPublic", isEqualTo: true)
+                    .whereField("isPublic", isEqualTo: true)  // 只查询公开的宝藏
+                    .whereField("userID", isNotEqualTo: userID)  // 排除当前用户的宝藏
                     .whereField("latitude", isGreaterThanOrEqualTo: minLat)
                     .whereField("latitude", isLessThanOrEqualTo: maxLat)
                     .whereField("longitude", isGreaterThanOrEqualTo: minLng)
                     .whereField("longitude", isLessThanOrEqualTo: maxLng)
-                // 确保字段名是否正确（例如 'ownerID'，而非 'userID'）
-                    .whereField("ownerID", isNotEqualTo: userID)
-                
-                // 获取其他用户的公开宝藏
+
                 publicTreasuresQuery.getDocuments { snapshot, error in
                     if let error = error {
-                        completion(.failure(error))
+                        // 如果公开宝藏查询失败，仍然返回用户自己的宝藏
+                        completion(.success(allTreasures))
                     } else {
                         let publicTreasures = snapshot?.documents.compactMap { document -> TreasureSummary? in
                             let data = document.data()
@@ -224,17 +222,21 @@ class FirestoreService {
                             }
                             let treasureID = document.documentID
                             return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude)
-                        }
-                        // 合并用户自己的宝藏和公开宝藏
-                        allTreasures.append(contentsOf: publicTreasures ?? [])
+                        } ?? []
+
+                        // 合并用户自己的宝藏和其他用户的公开宝藏
+                        allTreasures.append(contentsOf: publicTreasures)
+
+                        // 返回去重后的结果（如果需要）
                         completion(.success(allTreasures))
                     }
                 }
             case .failure(let error):
-                completion(.failure(error))
+                completion(.failure(error))  // 用户宝藏查询失败时返回错误
             }
         }
     }
+
     
     // 查询用户自己的宝藏
     func fetchUserTreasuresNear(userID: String, minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {

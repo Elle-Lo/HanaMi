@@ -101,10 +101,10 @@ struct CustomMapView: UIViewRepresentable {
                 var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView
                 
                 if annotationView == nil {
-                    // 创建新的 MKMarkerAnnotationView 实例
+                  
                     annotationView = MKMarkerAnnotationView(annotation: treasureAnnotation, reuseIdentifier: identifier)
                 } else {
-                    // 如果视图被复用，需要重新设置 annotation，确保视图被正确配置
+                    
                     annotationView?.annotation = treasureAnnotation
                 }
 
@@ -132,7 +132,7 @@ struct CustomMapView: UIViewRepresentable {
 
             if mode == .selectLocation { // 如果是選擇地點模式
                 parent.selectedCoordinate = coordinate
-//                parent.selectedLocationName = "選中的地點"
+                parent.selectedLocationName = ""
 
                 // 使用反向地理編碼獲取地點名稱
                 let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)

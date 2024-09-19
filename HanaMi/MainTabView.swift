@@ -19,7 +19,7 @@ struct MainTabView: View {
 
                 CategoryAndAnalyticsPage()
                     .tabItem {
-                        Label("類別", systemImage: "list.bullet")
+                        Label("類別分析", systemImage: "chart.pie")
                     }
 
                 DepositPage()
@@ -29,12 +29,12 @@ struct MainTabView: View {
 
                 TreasureMapPage(userID: userID)
                     .tabItem {
-                        Label("分析", systemImage: "chart.bar.fill")
+                        Label("地圖", systemImage: "mappin.and.ellipse.circle.fill")
                     }
 
                 CharacterPage()
                     .tabItem {
-                        Label("地圖", systemImage: "map.fill")
+                        Label("角色", systemImage: "person.crop.circle.fill")
                     }
             }
             .accentColor(.black) // 选中的 tab 项目变为黑色
