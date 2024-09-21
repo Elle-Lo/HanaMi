@@ -13,7 +13,7 @@ struct AnalyticsView: View {
     private let firestoreService = FirestoreService()
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 20) {
             // 標題
             Text("ANALYTICS")
                 .font(.largeTitle)
@@ -49,29 +49,35 @@ struct AnalyticsView: View {
                                 .bold()
                                 .foregroundColor(.orange)
                         )
-                        .padding(.top, 20)
+                        .padding(.top, 10) // 圓形圖表與最常儲存類別之間的間距
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }
 
-            // 下方顯示其他類別的比例
-            VStack(alignment: .leading, spacing: 10) {
-                ForEach(categories, id: \.self) { category in
-                    if category != mostSavedCategory {  // 排除最常儲存的類別
-                        HStack {
-                            Text(category)
-                                .font(.subheadline)
-                                .foregroundColor(.black)
+            // 加大其他類別與圓形的間距
+            Spacer().frame(height: 20)
 
-                            Spacer()
+            // 顯示其他類別的比例，使用 ScrollView 以防放不下
+            ScrollView {
+                VStack(alignment: .leading, spacing: 15) {
+                    ForEach(categories, id: \.self) { category in
+                        if category != mostSavedCategory {  // 排除最常儲存的類別
+                            HStack {
+                                Text(category)
+                                    .font(.title3)  // 字體大小變大
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.gray)
 
-                            RoundedRectangle(cornerRadius: 5)
-                                .fill(Color.orange.opacity(0.2))
-                                .frame(width: calculateBarWidth(for: category), height: 10)
+                                Spacer()
 
-                            Text(String(format: "%.0f%%", calculatePercentage(for: category) * 100))
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                                RoundedRectangle(cornerRadius: 5)
+                                    .fill(Color.orange.opacity(0.2))
+                                    .frame(width: CGFloat(categoryCounts[category, default: 0]) / CGFloat(totalCount) * 200, height: 10)
+
+                                Text(String(format: "%.0f%%", Double(categoryCounts[category, default: 0]) / Double(totalCount) * 100))
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
                 }
@@ -84,18 +90,6 @@ struct AnalyticsView: View {
         .onAppear {
             fetchCategoryData()
         }
-    }
-
-    // 計算條狀圖的寬度
-    private func calculateBarWidth(for category: String) -> CGFloat {
-        guard totalCount > 0 else { return 0 }  // 確保總數不為 0
-        return CGFloat(categoryCounts[category, default: 0]) / CGFloat(totalCount) * 200
-    }
-
-    // 計算類別的百分比
-    private func calculatePercentage(for category: String) -> Double {
-        guard totalCount > 0 else { return 0 }  // 確保總數不為 0
-        return Double(categoryCounts[category, default: 0]) / Double(totalCount)
     }
 
     // 從 Firestore 獲取類別寶藏數據
