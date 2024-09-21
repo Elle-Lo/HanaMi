@@ -237,7 +237,6 @@ class FirestoreService {
         }
     }
 
-    
     // 查询用户自己的宝藏
     func fetchUserTreasuresNear(userID: String, minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
         // 在用户的 "Treasures" 子集合中按经纬度过滤
@@ -265,7 +264,6 @@ class FirestoreService {
         }
     }
         
-        
         // 将 Firestore document 转换为 TreasureSummary
         func documentToTreasureSummary(_ document: DocumentSnapshot) -> TreasureSummary? {
             let data = document.data()
@@ -276,7 +274,7 @@ class FirestoreService {
             return TreasureSummary(id: document.documentID, latitude: latitude, longitude: longitude)
         }
         
-        // MARK: - 类别处理
+        // MARK: - 類別處理
         func loadCategories(userID: String, defaultCategories: [String], completion: @escaping ([String]) -> Void) {
             let userDocument = db.collection("Users").document(userID)
             
@@ -332,5 +330,254 @@ class FirestoreService {
                 completion(error == nil)
             }
         }
+    
+    func deleteCategoryAndTreasures(userID: String, category: String, completion: @escaping (Bool) -> Void) {
+        // 首先查詢並刪除該類別下的所有寶藏
+        fetchTreasuresForCategory(userID: userID, category: category) { result in
+            switch result {
+            case .success(let treasures):
+                let dispatchGroup = DispatchGroup()
+                
+                for treasure in treasures {
+                                guard let treasureID = treasure.id else {
+                                    print("無法刪除，寶藏 ID 為 nil")
+                                    dispatchGroup.leave()
+                                    continue
+                                }
+                                
+                                dispatchGroup.enter()
+                                self.deleteTreasure(userID: userID, treasureID: treasureID) { success in
+                                    if success {
+                                        print("成功刪除寶藏: \(treasureID)")
+                                    } else {
+                                        print("刪除寶藏失敗: \(treasureID)")
+                                    }
+                                    dispatchGroup.leave()
+                                }
+                            }
+                
+                dispatchGroup.notify(queue: .main) {
+                    // 當所有寶藏刪除完成後，刪除該類別
+                    self.deleteCategory(userID: userID, category: category, completion: completion)
+                }
+                
+            case .failure(let error):
+                print("加載寶藏失敗: \(error.localizedDescription)")
+                completion(false)
+            }
+        }
+    }
+
+    func deleteTreasure(userID: String, treasureID: String, completion: @escaping (Bool) -> Void) {
+        let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+        treasureRef.delete { error in
+            if let error = error {
+                print("刪除寶藏錯誤: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
+    }
+    
+    func updateCategoryNameAndTreasures(userID: String, oldName: String, newName: String, completion: @escaping (Bool) -> Void) {
+        // 先更新 Firestore 中的類別名稱
+        updateCategoryName(userID: userID, oldName: oldName, newName: newName) { success in
+            if success {
+                // 類別名稱更新成功後，再更新所有屬於該類別的寶藏
+                self.fetchTreasuresForCategory(userID: userID, category: oldName) { result in
+                    switch result {
+                    case .success(let treasures):
+                        let dispatchGroup = DispatchGroup()
+                        
+                        for treasure in treasures {
+                            guard let treasureID = treasure.id else {
+                                print("無法更新，寶藏 ID 為 nil")
+                                dispatchGroup.leave()
+                                continue
+                            }
+                            
+                            dispatchGroup.enter()
+                            let treasureRef = self.db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+                            treasureRef.updateData(["category": newName]) { error in
+                                if let error = error {
+                                    print("更新寶藏類別名稱失敗: \(error.localizedDescription)")
+                                }
+                                dispatchGroup.leave()
+                            }
+                        }
+                        
+                        dispatchGroup.notify(queue: .main) {
+                            completion(true)
+                        }
+                        
+                    case .failure(let error):
+                        print("加載寶藏失敗: \(error.localizedDescription)")
+                        completion(false)
+                    }
+                }
+            } else {
+                completion(false)
+            }
+        }
+    }
+
+    
+    func updateCategoryName(userID: String, oldName: String, newName: String, completion: @escaping (Bool) -> Void) {
+        let userDocRef = db.collection("Users").document(userID)
+        userDocRef.updateData([
+            "category": FieldValue.arrayRemove([oldName])  // 先刪除舊名稱
+        ]) { error in
+            if error == nil {
+                userDocRef.updateData([
+                    "category": FieldValue.arrayUnion([newName])  // 再添加新名稱
+                ]) { error in
+                    completion(error == nil)
+                }
+            } else {
+                completion(false)
+            }
+        }
+    }
+
+    func fetchTreasuresForCategory(userID: String, category: String, completion: @escaping (Result<[Treasure], Error>) -> Void) {
+        let treasuresCollection = db.collection("Users").document(userID).collection("Treasures")
+        
+        // 查詢符合該類別的所有寶藏
+        treasuresCollection.whereField("category", isEqualTo: category).getDocuments { snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let documents = snapshot?.documents else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "沒有找到寶藏"])))
+                return
+            }
+            
+            // Dispatch Group 用於處理所有寶藏的加載，包含其 contents
+            let dispatchGroup = DispatchGroup()
+            var treasures: [Treasure] = []
+            
+            for document in documents {
+                let data = document.data()
+                guard let category = data["category"] as? String,
+                      let latitude = data["latitude"] as? Double,
+                      let longitude = data["longitude"] as? Double,
+                      let locationName = data["locationName"] as? String,
+                      let isPublic = data["isPublic"] as? Bool,
+                      let createdTime = data["createdTime"] as? Timestamp else {
+                    continue
+                }
+                
+                // 生成初始寶藏對象（不包含 contents）
+                var treasure = Treasure(
+                    id: document.documentID,
+                    category: category,
+                    createdTime: createdTime.dateValue(),
+                    isPublic: isPublic,
+                    latitude: latitude,
+                    longitude: longitude,
+                    locationName: locationName,
+                    contents: []  // 這裡先初始化空的 contents
+                )
+                
+                // 開始獲取這個寶藏的 contents
+                dispatchGroup.enter()
+                let contentsRef = treasuresCollection.document(document.documentID).collection("Contents")
+                contentsRef.getDocuments { contentSnapshot, contentError in
+                    if let contentError = contentError {
+                        print("Error fetching contents: \(contentError.localizedDescription)")
+                    } else if let contentDocuments = contentSnapshot?.documents {
+                        treasure.contents = contentDocuments.compactMap { contentDoc in
+                            let contentData = contentDoc.data()
+                            guard let typeString = contentData["type"] as? String,
+                                  let content = contentData["content"] as? String,
+                                  let index = contentData["index"] as? Int else {
+                                return nil
+                            }
+                            let type = ContentType(rawValue: typeString) ?? .text
+                            return TreasureContent(id: contentDoc.documentID, type: type, content: content, index: index)
+                        }
+                    }
+                    treasures.append(treasure)  // 添加寶藏（包含 contents）
+                    dispatchGroup.leave()
+                }
+            }
+            
+            // 當所有寶藏及其內容加載完成後，調用 completion 回調
+            dispatchGroup.notify(queue: .main) {
+                completion(.success(treasures))
+            }
+        }
+    }
+
+    
+    func fetchAllTreasures(userID: String, completion: @escaping (Result<[Treasure], Error>) -> Void) {
+        let treasuresCollection = db.collection("Users").document(userID).collection("Treasures")
+        
+        treasuresCollection.getDocuments { snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let documents = snapshot?.documents else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "沒有找到寶藏"])))
+                return
+            }
+            
+            let dispatchGroup = DispatchGroup()
+            var treasures: [Treasure] = []
+            
+            for document in documents {
+                let data = document.data()
+                guard let category = data["category"] as? String,
+                      let latitude = data["latitude"] as? Double,
+                      let longitude = data["longitude"] as? Double,
+                      let locationName = data["locationName"] as? String,
+                      let isPublic = data["isPublic"] as? Bool,
+                      let createdTime = data["createdTime"] as? Timestamp else {
+                    continue
+                }
+                
+                var treasure = Treasure(
+                    id: document.documentID,
+                    category: category,
+                    createdTime: createdTime.dateValue(),
+                    isPublic: isPublic,
+                    latitude: latitude,
+                    longitude: longitude,
+                    locationName: locationName,
+                    contents: []  // 初始化為空
+                )
+                
+                dispatchGroup.enter()
+                let contentsRef = treasuresCollection.document(document.documentID).collection("Contents")
+                contentsRef.getDocuments { contentSnapshot, contentError in
+                    if let contentError = contentError {
+                        print("Error fetching contents: \(contentError.localizedDescription)")
+                    } else if let contentDocuments = contentSnapshot?.documents {
+                        treasure.contents = contentDocuments.compactMap { contentDoc in
+                            let contentData = contentDoc.data()
+                            guard let typeString = contentData["type"] as? String,
+                                  let content = contentData["content"] as? String,
+                                  let index = contentData["index"] as? Int else {
+                                return nil
+                            }
+                            let type = ContentType(rawValue: typeString) ?? .text
+                            return TreasureContent(id: contentDoc.documentID, type: type, content: content, index: index)
+                        }
+                    }
+                    treasures.append(treasure)
+                    dispatchGroup.leave()
+                }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                completion(.success(treasures))
+            }
+        }
+    }
     
 }

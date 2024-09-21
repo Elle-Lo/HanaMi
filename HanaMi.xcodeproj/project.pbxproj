@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD842C9D1B4500A0135E /* CategoryView.swift */; };
+		AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */; };
+		AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */; };
 		ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */; };
 		ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */; };
 		ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */; };
@@ -53,6 +56,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB5CCD842C9D1B4500A0135E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
+		AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanaMi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaMiApp.swift; sourceTree = "<group>"; };
 		ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -110,6 +116,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB5CCD832C9D192000A0135E /* CategoryAndAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */,
+				AB5CCD842C9D1B4500A0135E /* CategoryView.swift */,
+				AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */,
+				AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */,
+			);
+			path = CategoryAndAnalytics;
+			sourceTree = "<group>";
+		};
 		ABAFAAAA2C93DBBF007CDB45 = {
 			isa = PBXGroup;
 			children = (
@@ -129,14 +146,14 @@
 		ABAFAAB52C93DBBF007CDB45 /* HanaMi */ = {
 			isa = PBXGroup;
 			children = (
-				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				ABAFAAD82C9540EB007CDB45 /* Model.swift */,
 				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
 				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
 				ABAFAACF2C9414AE007CDB45 /* HomePage.swift */,
-				ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */,
 				ABAFAAE32C958650007CDB45 /* CharacterPage.swift */,
 				ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */,
+				ABAFAAF12C96F88E007CDB45 /* Log In */,
+				AB5CCD832C9D192000A0135E /* CategoryAndAnalytics */,
 				ABAFAB1D2C9A7D83007CDB45 /* TreasurePage */,
 				ABAFAAFA2C980F9F007CDB45 /* DepositPage */,
 				ABAFAADA2C95427A007CDB45 /* Supporting file */,
@@ -327,6 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */,
+				AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */,
 				ABAFAAD22C94153E007CDB45 /* LogInPage.swift in Sources */,
 				ABAFAB252C9A8533007CDB45 /* TreasureAnnotation.swift in Sources */,
 				ABAFAAEC2C95EDE9007CDB45 /* LocationManager.swift in Sources */,
@@ -344,6 +362,7 @@
 				ABAFAB212C9A7EEB007CDB45 /* CustomMapView.swift in Sources */,
 				ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */,
 				ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */,
+				AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */,
 				ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */,
 				ABAFAB042C98907E007CDB45 /* SaveButtonView.swift in Sources */,
 				ABAFAB1F2C9A7D9E007CDB45 /* TreasureManager.swift in Sources */,
@@ -355,6 +374,7 @@
 				ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */,
 				ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */,
 				ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */,
+				AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */,
 				ABAFAAD02C9414AE007CDB45 /* HomePage.swift in Sources */,
 				ABAFAAF32C971045007CDB45 /* MapView.swift in Sources */,
 				ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */,

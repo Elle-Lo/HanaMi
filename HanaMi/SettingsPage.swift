@@ -15,7 +15,7 @@ struct SettingsPage: View {
                 .padding()
 
             // 這裡可以添加各種設定選項
-            Text("預計做登出和更換背景設定")
+            Text("預計做登出和更換背景、和收藏")
                 .padding()
 
             Spacer()
