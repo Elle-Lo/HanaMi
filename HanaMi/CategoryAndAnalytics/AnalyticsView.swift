@@ -70,14 +70,18 @@ struct AnalyticsView: View {
 
                                 Spacer()
 
+                                // 确保 totalCount 不为 0
+                                let percentage = totalCount > 0 ? CGFloat(categoryCounts[category, default: 0]) / CGFloat(totalCount) : 0
+                                
                                 RoundedRectangle(cornerRadius: 5)
                                     .fill(Color.orange.opacity(0.2))
-                                    .frame(width: CGFloat(categoryCounts[category, default: 0]) / CGFloat(totalCount) * 200, height: 10)
+                                    .frame(width: percentage * 200, height: 10)  // 防止除以0的问题
 
-                                Text(String(format: "%.0f%%", Double(categoryCounts[category, default: 0]) / Double(totalCount) * 100))
+                                Text(String(format: "%.0f%%", percentage * 100))
                                     .font(.subheadline)
                                     .foregroundColor(.gray)
                             }
+
                         }
                     }
                 }
