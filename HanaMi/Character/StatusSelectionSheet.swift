@@ -9,7 +9,7 @@ struct StatusSelectionSheet: View {
     
     var body: some View {
         VStack {
-            Text("選擇角色狀態")
+            Text("角色狀態")
                 .font(.headline)
                 .padding()
                 .foregroundColor(.brown)  // 顏色與圖片中的文字相符

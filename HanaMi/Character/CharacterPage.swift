@@ -6,7 +6,7 @@ struct CharacterPage: View {
     
     @State private var scene = CharacterAnimationScene(size: UIScreen.main.bounds.size)  // 創建場景實例
     @State private var showSheet = false  // 控制狀態 Sheet 顯示
-    @State private var currentStatusText = "喵咪睡著了"  // 初始狀態欄文字
+    @State private var currentStatusText = "葉子帶著寶藏回來喔～"  // 初始狀態欄文字
     let statusMessages = ["喵咪睡著了", "葉子帶著寶藏回來喔～", "風兒輕輕吹", "狗狗在看書"]  // 寫死的狀態文字
     
     var body: some View {
@@ -26,13 +26,14 @@ struct CharacterPage: View {
                 Text(currentStatusText)
                     .font(.headline)
                     .padding()
-                    .frame(width: 200)  // 調整通知欄的寬度
+                    .frame(maxWidth: .infinity)
                     .background(
-                        RoundedRectangle(cornerRadius: 15)  // 圓角
+                        RoundedRectangle(cornerRadius: 25)  // 圓角
                             .fill(Color.white.opacity(0.6))  // 半透明白色背景
                             .shadow(radius: 5)  // 添加陰影效果
                     )
-                    .padding(.top, 50)  // 調整到頂部
+                    .padding(.horizontal, 16)
+                    .padding(.top, 30)  // 調整到頂部
                 
                 Spacer()
                 
