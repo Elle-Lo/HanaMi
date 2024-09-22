@@ -5,20 +5,20 @@ import SpriteKit
 class CharacterAnimationScene: SKScene {
     
     var character: SKSpriteNode!
-    var currentActionName: String = "walk"  // 当前动作名称，用于判断是否需要移动
+    var currentActionName: String = "idle"  // 当前动作名称，用于判断是否需要移动
     
     override func didMove(to view: SKView) {
         // 设置场景的背景颜色为透明
         self.backgroundColor = .clear
         
         // 初始化角色精灵，展示默认动作的第一帧
-        character = SKSpriteNode(imageNamed: "walk_00")
+        character = SKSpriteNode(imageNamed: "Idle_00")
         character.setScale(0.5)  // 将角色缩小
         character.position = CGPoint(x: size.width / 2, y: size.height / 2)
         addChild(character)
         
         // 执行默认的走路动画
-        performAction(named: "walk")
+        performAction(named: "idle")
         
         // 开始角色在屏幕上的随机移动
         startRandomMovement()
@@ -27,6 +27,9 @@ class CharacterAnimationScene: SKScene {
     // 根据传入的动作名称加载对应的动画
     func performAction(named actionName: String) {
         currentActionName = actionName  // 保存当前动作名称
+        
+        // 停止所有与移动相关的行为，但保留动画
+        character.removeAction(forKey: "movement")  // 停止移动相关的行为
         
         // 加载对应的 Sprite Atlas
         let textureAtlas = SKTextureAtlas(named: "Sprites_\(actionName)")
@@ -55,13 +58,13 @@ class CharacterAnimationScene: SKScene {
         let animateAction = SKAction.animate(with: frames, timePerFrame: 0.1)
         let repeatAction = SKAction.repeatForever(animateAction)
         
-        character.run(repeatAction)
+        // 停止之前的动画并运行动画
+        character.removeAction(forKey: "animation")
+        character.run(repeatAction, withKey: "animation")
         
         // 只有在走路时才会移动
         if actionName == "walk" {
-            startRandomMovement()
-        } else {
-            character.removeAllActions()  // 停止其他动作时的移动行为
+            startRandomMovement()  // 开始走路时的随机移动
         }
     }
     
@@ -87,7 +90,7 @@ class CharacterAnimationScene: SKScene {
             
             // 移动到随机位置
             let moveToRandomPosition = SKAction.move(to: randomPosition, duration: moveDuration)
-            self.character.run(moveToRandomPosition)
+            self.character.run(moveToRandomPosition, withKey: "movement")  // 使用 key 标识该移动行为
         }
         
         let delayAction = SKAction.wait(forDuration: moveDuration)
@@ -95,6 +98,6 @@ class CharacterAnimationScene: SKScene {
         let repeatForever = SKAction.repeatForever(sequence)
         
         // 开始角色随机移动
-        character.run(repeatForever)
+        character.run(repeatForever, withKey: "movement")  // 使用 key 标识该移动行为
     }
 }
