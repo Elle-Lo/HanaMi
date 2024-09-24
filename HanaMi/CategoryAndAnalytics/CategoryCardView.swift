@@ -108,8 +108,8 @@ struct CategoryCardView: View {
         .cornerRadius(15)
         .shadow(radius: 5)
         // 使用新的 alert 语法
-        .alert("确认删除吗？", isPresented: $viewModel.showTreasureDeleteAlert) {
-            Button("确认", role: .destructive) {
+        .alert("確認删除嗎？", isPresented: $viewModel.showTreasureDeleteAlert) {
+            Button("確認", role: .destructive) {
                 viewModel.deleteTreasure { success in
                     if success {
                         onDelete()
@@ -118,7 +118,7 @@ struct CategoryCardView: View {
             }
             Button("取消", role: .cancel) { }
         } message: {
-            Text("确认删除这项宝藏吗？这个动作无法撤回！")
+            Text("確認删除這項寶藏嗎？這個動作無法撤回！")
         }
     }
 }
