@@ -3,7 +3,7 @@ import FirebaseFirestore
 
 struct CategoryView: View {
     @State private var categories: [String] = []
-    @State private var selectedCategory: String? = nil
+    @State private var selectedCategory: String?
     @State private var treasures: [Treasure] = []
     @State private var isAddingCategory = false  // 是否顯示添加類別的彈窗
     @State private var newCategoryName = ""      // 存儲新類別的名稱
@@ -31,10 +31,11 @@ struct CategoryView: View {
                             loadAllTreasures()  // 加載所有寶藏
                         }) {
                             Text("All")
-                                .padding()
+                                .padding(.vertical, 13)
+                                .padding(.horizontal, 18)
                                 .background(selectedCategory == "All" ? Color.blue : Color.gray.opacity(0.2))
                                 .foregroundColor(selectedCategory == "All" ? Color.white : Color.black)
-                                .cornerRadius(10)
+                                .cornerRadius(25)
                         }
                         
                         // 其餘的動態加載類別按鈕
@@ -44,10 +45,11 @@ struct CategoryView: View {
                                 loadTreasuresDetail(for: category)  // 加載該類別的寶藏
                             }) {
                                 Text(category)
-                                    .padding()
+                                    .padding(.vertical, 13)
+                                    .padding(.horizontal, 18)
                                     .background(selectedCategory == category ? Color.blue : Color.gray.opacity(0.2))
                                     .foregroundColor(selectedCategory == category ? Color.white : Color.black)
-                                    .cornerRadius(10)
+                                    .cornerRadius(25)
                             }
                         }
                         
@@ -56,10 +58,11 @@ struct CategoryView: View {
                             isAddingCategory = true  // 顯示添加類別的彈窗
                         }) {
                             Label("Add Category", systemImage: "plus")  // 使用系統圖標
-                                .padding()
+                                .padding(.vertical, 13)
+                                .padding(.horizontal, 18)
                                 .background(Color.gray.opacity(0.2))
                                 .foregroundColor(.black)
-                                .cornerRadius(10)
+                                .cornerRadius(25)
                         }
                     }
                     .padding(.horizontal)
@@ -100,16 +103,18 @@ struct CategoryView: View {
                             .padding()
                     } else {
                         ForEach(treasures) { treasure in
-                            CategoryCardView(treasure: treasure)
-                                .padding(.horizontal, 30)
-                                .padding(.vertical, 10)
+                            CategoryCardView(treasure: treasure, userID: userID) {
+                                // 刪除後的回調，從 treasures 中移除該寶藏
+                                treasures.removeAll { $0.id == treasure.id }
+                            }
+                            .padding(.horizontal, 30)
+                            .padding(.vertical, 10)
                         }
                     }
                 }
                 .frame(maxWidth: .infinity)  // ScrollView 占滿可用寬度
                 .ignoresSafeArea(edges: .horizontal)
                 .background(Color.clear)
-//                Spacer()
             }
             .onAppear {
                 loadCategories() // 頁面加載時加載類別

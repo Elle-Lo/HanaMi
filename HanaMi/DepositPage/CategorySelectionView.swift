@@ -6,13 +6,12 @@ struct CategorySelectionView: View {
     @Binding var categories: [String]
     @State private var showAddCategorySheet: Bool = false
     @State private var newCategory: String = ""
-    let firestoreService = FirestoreService() // 使用 FirestoreService 管理 Firebase 交互
+    let firestoreService = FirestoreService()
     let userID: String
-    let defaultCategories = ["Creative", "Energetic", "Happy"] // 預設的三個類別
+    let defaultCategories = ["Creative", "Energetic", "Happy"]
 
     var body: some View {
-        HStack(spacing: 20) {
-            // 類別選擇按鈕
+        HStack(spacing: 10) {
             Menu {
                 ForEach(categories, id: \.self) { category in
                     Button(action: {
@@ -22,7 +21,6 @@ struct CategorySelectionView: View {
                     }
                 }
 
-                // 顯示新增類別的選項
                 Button(action: {
                     showAddCategorySheet = true
                 }) {
@@ -33,26 +31,23 @@ struct CategorySelectionView: View {
                 }
             } label: {
                 Text(selectedCategory)
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
-                    .padding()
-                    .frame(width: 120)
-                    .foregroundColor(.black)
-                    .background(Color(UIColor.systemGray5))
-                    .cornerRadius(10)
+                    .font(.system(size: 13))
+                    .fontWeight(.bold)
+                    .padding(.vertical, 13)
+                    .padding(.horizontal, 20)
+                    .foregroundColor(Color(hex: "#FFF7EF"))
+                    .background(Color(hex: "#CDCDCD"))
+                    .cornerRadius(25)
             }
         }
         .padding(.horizontal)
         .onAppear {
             firestoreService.loadCategories(userID: userID, defaultCategories: defaultCategories) { loadedCategories in
                 categories = loadedCategories
-                if !loadedCategories.isEmpty {
-                    selectedCategory = loadedCategories.first ?? "Creative"
-                }
+                // 不再修改 selectedCategory，以避免覆盖父视图的值
             }
         }
         .sheet(isPresented: $showAddCategorySheet) {
-            // Sheet 內容
             VStack {
                 Text("新增類別")
                     .font(.headline)
@@ -65,7 +60,7 @@ struct CategorySelectionView: View {
                 HStack {
                     Button("取消") {
                         showAddCategorySheet = false
-                        newCategory = "" // 清空輸入框
+                        newCategory = ""
                     }
                     .foregroundColor(.red)
 
@@ -78,7 +73,7 @@ struct CategorySelectionView: View {
                                     selectedCategory = newCategory
                                     categories.append(newCategory)
                                     showAddCategorySheet = false
-                                    newCategory = "" // 清空輸入框
+                                    newCategory = ""
                                 }
                             }
                         }

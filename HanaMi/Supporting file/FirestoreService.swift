@@ -48,7 +48,7 @@ class FirestoreService {
         }
     }
     
-    // 保存新宝藏及其内容
+    // 保存新宝藏及其内容 並將寶藏id存取到treasureList中
     func saveTreasure(userID: String, coordinate: CLLocationCoordinate2D, locationName: String, category: String, isPublic: Bool, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
         let treasureID = db.collection("Users").document(userID).collection("Treasures").document().documentID
         let treasureData: [String: Any] = [
@@ -79,7 +79,7 @@ class FirestoreService {
         }
     }
     
-    // 保存宝藏内容
+    // 保存宝藏詳細内容
     func saveTreasureContents(treasureID: String, userID: String, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
         let contentCollectionRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID).collection("Contents")
         let dispatchGroup = DispatchGroup()
@@ -106,7 +106,7 @@ class FirestoreService {
         }
     }
     
-    // 将宝藏ID加入用户的宝藏列表
+    // 将宝藏ID加入用户的treasure list
      func addTreasureIDToUser(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let userDocRef = db.collection("Users").document(userID)
         userDocRef.updateData([
@@ -120,6 +120,7 @@ class FirestoreService {
         }
     }
     
+    //抓取treasure的資料
     func fetchTreasure(userID: String, treasureID: String, completion: @escaping (Result<Treasure, Error>) -> Void) {
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
         
@@ -192,7 +193,6 @@ class FirestoreService {
     }
     
     // MARK: - 查找附近的宝藏
-    
     func fetchAllTreasuresNear(userID: String, minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
         // 首先获取用户自己的所有宝藏（包括公开和私人）
         fetchUserTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { userResult in
@@ -379,6 +379,33 @@ class FirestoreService {
             }
         }
     }
+    func updateTreasureFields(userID: String, treasureID: String, category: String, isPublic: Bool) {
+        let documentRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+        documentRef.updateData([
+            "category": category,
+            "isPublic": isPublic
+        ]) { error in
+            if let error = error {
+                print("Error updating treasure: \(error)")
+            } else {
+                print("Treasure successfully updated")
+                print("更新宝藏，路径：\(documentRef.path)")
+                    print("新类别：\(category)，isPublic：\(isPublic)")
+            }
+        }
+    }
+
+    func deleteSingleTreasure(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+        treasureRef.delete { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+
     
     func updateCategoryNameAndTreasures(userID: String, oldName: String, newName: String, completion: @escaping (Bool) -> Void) {
         // 先更新 Firestore 中的類別名稱
