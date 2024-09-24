@@ -41,7 +41,7 @@ struct DepositPage: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(alignment: .leading, spacing: 20) {
-                HStack(spacing: 10) {
+                HStack(spacing: 0) {
                     ToggleButton(isPublic: $isPublic)
                     CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
                 }
@@ -52,7 +52,8 @@ struct DepositPage: View {
                     selectedLocationName: $selectedLocationName,
                     shouldZoomToUserLocation: $shouldZoomToUserLocation,
                     locationManager: locationManager,
-                    searchViewModel: searchViewModel
+                    searchViewModel: searchViewModel,
+                    userID: userID
                 )
                 
                 ScrollView {

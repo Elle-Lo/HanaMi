@@ -44,3 +44,9 @@ struct LinkMetadata {
     var description: String
     var imageUrl: String?
 }
+
+struct TreasureSummary {
+    let id: String
+    let latitude: Double
+    let longitude: Double
+}

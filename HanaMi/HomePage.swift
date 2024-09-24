@@ -87,7 +87,7 @@ struct TreasureCardView: View {
             Text(treasure.category)
                 .font(.headline)
                 .foregroundColor(.black)
-                .padding(.top, 10)
+                 .padding(.top, 10)
 
             Text("地點: \(treasure.locationName)")
                 .font(.subheadline)

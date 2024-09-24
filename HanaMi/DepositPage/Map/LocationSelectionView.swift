@@ -4,7 +4,6 @@ import MapKit
 enum ActiveSheet: Identifiable {
     case map, search
     
-    // 使用枚舉實例本身作為標識符
     var id: ActiveSheet { self }
 }
 
@@ -12,15 +11,17 @@ struct LocationSelectionView: View {
     @Binding var selectedCoordinate: CLLocationCoordinate2D?
     @Binding var selectedLocationName: String?
     @Binding var shouldZoomToUserLocation: Bool
-    @ObservedObject var locationManager: LocationManager // 傳遞 LocationManager
-    @ObservedObject var searchViewModel: LocationSearchViewModel // 傳遞 SearchViewModel
-    @State private var activeSheet: ActiveSheet? = nil // 管理當前活動的 sheet
-
+    @ObservedObject var locationManager: LocationManager
+    
+    @ObservedObject var searchViewModel: LocationSearchViewModel
+    @State private var activeSheet: ActiveSheet? = nil
+    let userID: String
+    
     var body: some View {
         HStack {
             // 顯示地圖選擇地點的按鈕
             Button(action: {
-                shouldZoomToUserLocation = true
+                shouldZoomToUserLocation = true // 確保縮放到使用者位置
                 activeSheet = .map // 打開地圖 sheet
             }) {
                 HStack {
@@ -42,6 +43,7 @@ struct LocationSelectionView: View {
             }
             
             Spacer()
+            
             // 搜尋按鈕
             Button(action: {
                 activeSheet = .search // 打開搜索 sheet
@@ -57,11 +59,19 @@ struct LocationSelectionView: View {
         .sheet(item: $activeSheet) { item in
             switch item {
             case .map:
-                MapView(
+                CustomMapView(
                     selectedCoordinate: $selectedCoordinate,
                     selectedLocationName: $selectedLocationName,
-                    shouldZoomToUserLocation: $shouldZoomToUserLocation
+                    shouldZoomToUserLocation: $shouldZoomToUserLocation,
+                    selectedTreasure: .constant(nil),
+                    showTreasureDetail: .constant(false),
+                    isShowingAllTreasures: .constant(false),
+                    locationManager: locationManager,
+                    treasureManager: TreasureManager(), // 傳入空的 treasureManager
+                    mode: .selectLocation,
+                    userID: userID
                 )
+                
             case .search:
                 LocationSearchView(
                     viewModel: searchViewModel,

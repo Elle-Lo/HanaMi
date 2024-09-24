@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB06AA032CA0101800E49F5C /* CharacterAnimationScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA022CA0101800E49F5C /* CharacterAnimationScene.swift */; };
+		AB06AA052CA01CC300E49F5C /* StatusSelectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA042CA01CC300E49F5C /* StatusSelectionSheet.swift */; };
+		AB06AA072CA01CE700E49F5C /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA062CA01CE700E49F5C /* ActionButton.swift */; };
+		AB06AA092CA021C500E49F5C /* SpriteKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA082CA021C500E49F5C /* SpriteKitView.swift */; };
+		AB06AA0D2CA28E9D00E49F5C /* CategoryCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA0C2CA28E9D00E49F5C /* CategoryCardViewModel.swift */; };
+		AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD842C9D1B4500A0135E /* CategoryView.swift */; };
+		AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */; };
+		AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */; };
 		ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */; };
 		ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */; };
 		ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */; };
@@ -45,9 +53,22 @@
 		ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */; };
 		ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */; };
 		ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */; };
+		ABAFAB1F2C9A7D9E007CDB45 /* TreasureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1E2C9A7D9E007CDB45 /* TreasureManager.swift */; };
+		ABAFAB212C9A7EEB007CDB45 /* CustomMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB202C9A7EEB007CDB45 /* CustomMapView.swift */; };
+		ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */; };
+		ABAFAB252C9A8533007CDB45 /* TreasureAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */; };
+		ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB06AA022CA0101800E49F5C /* CharacterAnimationScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterAnimationScene.swift; sourceTree = "<group>"; };
+		AB06AA042CA01CC300E49F5C /* StatusSelectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusSelectionSheet.swift; sourceTree = "<group>"; };
+		AB06AA062CA01CE700E49F5C /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
+		AB06AA082CA021C500E49F5C /* SpriteKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteKitView.swift; sourceTree = "<group>"; };
+		AB06AA0C2CA28E9D00E49F5C /* CategoryCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardViewModel.swift; sourceTree = "<group>"; };
+		AB5CCD842C9D1B4500A0135E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
+		AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanaMi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaMiApp.swift; sourceTree = "<group>"; };
 		ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,6 +102,11 @@
 		ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSheet.swift; sourceTree = "<group>"; };
+		ABAFAB1E2C9A7D9E007CDB45 /* TreasureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureManager.swift; sourceTree = "<group>"; };
+		ABAFAB202C9A7EEB007CDB45 /* CustomMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapView.swift; sourceTree = "<group>"; };
+		ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureMapView.swift; sourceTree = "<group>"; };
+		ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureAnnotation.swift; sourceTree = "<group>"; };
+		ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +126,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB06AA012CA00FED00E49F5C /* Character */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAAE32C958650007CDB45 /* CharacterPage.swift */,
+				AB06AA022CA0101800E49F5C /* CharacterAnimationScene.swift */,
+				AB06AA042CA01CC300E49F5C /* StatusSelectionSheet.swift */,
+				AB06AA062CA01CE700E49F5C /* ActionButton.swift */,
+				AB06AA082CA021C500E49F5C /* SpriteKitView.swift */,
+			);
+			path = Character;
+			sourceTree = "<group>";
+		};
+		AB5CCD832C9D192000A0135E /* CategoryAndAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */,
+				AB5CCD842C9D1B4500A0135E /* CategoryView.swift */,
+				AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */,
+				AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */,
+				AB06AA0C2CA28E9D00E49F5C /* CategoryCardViewModel.swift */,
+			);
+			path = CategoryAndAnalytics;
+			sourceTree = "<group>";
+		};
 		ABAFAAAA2C93DBBF007CDB45 = {
 			isa = PBXGroup;
 			children = (
@@ -119,16 +169,16 @@
 		ABAFAAB52C93DBBF007CDB45 /* HanaMi */ = {
 			isa = PBXGroup;
 			children = (
-				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				ABAFAAD82C9540EB007CDB45 /* Model.swift */,
 				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
 				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
 				ABAFAACF2C9414AE007CDB45 /* HomePage.swift */,
-				ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */,
-				ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */,
-				ABAFAAE32C958650007CDB45 /* CharacterPage.swift */,
 				ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */,
+				ABAFAAF12C96F88E007CDB45 /* Log In */,
+				AB5CCD832C9D192000A0135E /* CategoryAndAnalytics */,
+				ABAFAB1D2C9A7D83007CDB45 /* TreasurePage */,
 				ABAFAAFA2C980F9F007CDB45 /* DepositPage */,
+				AB06AA012CA00FED00E49F5C /* Character */,
 				ABAFAADA2C95427A007CDB45 /* Supporting file */,
 				ABAFAABC2C93DBC1007CDB45 /* Preview Content */,
 			);
@@ -171,8 +221,8 @@
 		ABAFAAFA2C980F9F007CDB45 /* DepositPage */ = {
 			isa = PBXGroup;
 			children = (
-				ABAFAB112C996B5B007CDB45 /* Map */,
 				ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */,
+				ABAFAB112C996B5B007CDB45 /* Map */,
 				ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */,
 				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
 				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
@@ -186,6 +236,7 @@
 		ABAFAB112C996B5B007CDB45 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				ABAFAB202C9A7EEB007CDB45 /* CustomMapView.swift */,
 				ABAFAAF22C971045007CDB45 /* MapView.swift */,
 				ABAFAAEB2C95EDE9007CDB45 /* LocationManager.swift */,
 				ABAFAAF42C973BF8007CDB45 /* LocationSearchViewModel.swift */,
@@ -193,6 +244,18 @@
 				ABAFAAFB2C980FFC007CDB45 /* LocationSelectionView.swift */,
 			);
 			path = Map;
+			sourceTree = "<group>";
+		};
+		ABAFAB1D2C9A7D83007CDB45 /* TreasurePage */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAAE12C9585B5007CDB45 /* TreasureMapPage.swift */,
+				ABAFAB1E2C9A7D9E007CDB45 /* TreasureManager.swift */,
+				ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */,
+				ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */,
+				ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */,
+			);
+			path = TreasurePage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,35 +366,48 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB06AA092CA021C500E49F5C /* SpriteKitView.swift in Sources */,
 				ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */,
+				AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */,
 				ABAFAAD22C94153E007CDB45 /* LogInPage.swift in Sources */,
+				ABAFAB252C9A8533007CDB45 /* TreasureAnnotation.swift in Sources */,
 				ABAFAAEC2C95EDE9007CDB45 /* LocationManager.swift in Sources */,
 				ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */,
 				ABAFAB022C988FEF007CDB45 /* ToggleButton.swift in Sources */,
+				AB06AA032CA0101800E49F5C /* CharacterAnimationScene.swift in Sources */,
 				ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */,
 				ABAFAB002C988FA1007CDB45 /* FirestoreService.swift in Sources */,
 				ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */,
+				AB06AA0D2CA28E9D00E49F5C /* CategoryCardViewModel.swift in Sources */,
 				ABAFAAF52C973BF8007CDB45 /* LocationSearchViewModel.swift in Sources */,
 				ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */,
 				ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */,
 				ABAFAAF72C973C1E007CDB45 /* LocationSearchView.swift in Sources */,
 				ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */,
 				ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */,
+				AB06AA052CA01CC300E49F5C /* StatusSelectionSheet.swift in Sources */,
+				ABAFAB212C9A7EEB007CDB45 /* CustomMapView.swift in Sources */,
 				ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */,
 				ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */,
+				AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */,
 				ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */,
 				ABAFAB042C98907E007CDB45 /* SaveButtonView.swift in Sources */,
+				ABAFAB1F2C9A7D9E007CDB45 /* TreasureManager.swift in Sources */,
+				ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */,
 				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
 				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,
 				ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */,
 				ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */,
 				ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */,
+				ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */,
+				AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */,
 				ABAFAAD02C9414AE007CDB45 /* HomePage.swift in Sources */,
 				ABAFAAF32C971045007CDB45 /* MapView.swift in Sources */,
 				ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */,
 				ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */,
 				ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */,
+				AB06AA072CA01CE700E49F5C /* ActionButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -483,6 +559,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tzuninglo.HanaMi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -515,6 +594,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tzuninglo.HanaMi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

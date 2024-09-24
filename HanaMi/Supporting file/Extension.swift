@@ -1,17 +1,29 @@
 import SwiftUI
 
+//extension Color {
+//    init(hex: String) {
+//        let scanner = Scanner(string: hex)
+//        scanner.currentIndex = hex.startIndex
+//        var rgbValue: UInt64 = 0
+//        scanner.scanHexInt64(&rgbValue)
+//        
+//        let red = Double((rgbValue >> 16) & 0xff) / 255
+//        let green = Double((rgbValue >> 8) & 0xff) / 255
+//        let blue = Double(rgbValue & 0xff) / 255
+//        
+//        self.init(red: red, green: green, blue: blue)
+//    }
+//}
 extension Color {
     init(hex: String) {
         let scanner = Scanner(string: hex)
-        scanner.currentIndex = hex.startIndex
-        var rgbValue: UInt64 = 0
-        scanner.scanHexInt64(&rgbValue)
-        
-        let red = Double((rgbValue >> 16) & 0xff) / 255
-        let green = Double((rgbValue >> 8) & 0xff) / 255
-        let blue = Double(rgbValue & 0xff) / 255
-        
-        self.init(red: red, green: green, blue: blue)
+        _ = scanner.scanString("#") // 跳過 #
+        var rgb: UInt64 = 0
+        scanner.scanHexInt64(&rgb)
+        let r = Double((rgb >> 16) & 0xFF) / 255.0
+        let g = Double((rgb >> 8) & 0xFF) / 255.0
+        let b = Double(rgb & 0xFF) / 255.0
+        self.init(red: r, green: g, blue: b)
     }
 }
 
@@ -38,5 +50,16 @@ extension UIView {
         return renderer.image { rendererContext in
             layer.render(in: rendererContext.cgContext)
         }
+    }
+}
+
+extension UIImage {
+    // 缩放图片到指定尺寸
+    func resized(to size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        self.draw(in: CGRect(origin: .zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return resizedImage
     }
 }
