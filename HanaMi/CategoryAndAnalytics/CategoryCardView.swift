@@ -17,7 +17,7 @@ struct CategoryCardView: View {
             // 顶部 HStack，包含 ToggleButton 和 CategorySelectionView
             HStack(alignment: .top) {
                 ToggleButton(isPublic: $viewModel.isPublic)
-                    .onChange(of: viewModel.isPublic) { newValue in
+                    .onChange(of: viewModel.isPublic) { _ in
                         viewModel.updateTreasureFields()
                     }
 
@@ -26,7 +26,7 @@ struct CategoryCardView: View {
                     categories: $viewModel.categories,
                     userID: viewModel.userID
                 )
-                .onChange(of: viewModel.selectedCategory) { newCategory in
+                .onChange(of: viewModel.selectedCategory) { _ in
                     viewModel.updateTreasureFields()
                     onCategoryChange()
                 }
@@ -45,20 +45,6 @@ struct CategoryCardView: View {
                         .foregroundColor(.red)
                         .padding(.trailing, 5)
                         .padding(.top, 5)
-                }
-                .alert(isPresented: $viewModel.showTreasureDeleteAlert) {
-                    Alert(
-                        title: Text("确认删除"),
-                        message: Text("确定要删除这个宝藏吗？这个操作无法撤销。"),
-                        primaryButton: .destructive(Text("删除")) {
-                            viewModel.deleteTreasure { success in
-                                if success {
-                                    onDelete()
-                                }
-                            }
-                        },
-                        secondaryButton: .cancel()
-                    )
                 }
             }
             .padding(.top, 5)
@@ -121,5 +107,18 @@ struct CategoryCardView: View {
         .background(Color.white.opacity(0.8))
         .cornerRadius(15)
         .shadow(radius: 5)
+        // 使用新的 alert 语法
+        .alert("確認刪除嗎？", isPresented: $viewModel.showTreasureDeleteAlert) {
+            Button("確認", role: .destructive) {
+                viewModel.deleteTreasure { success in
+                    if success {
+                        onDelete()
+                    }
+                }
+            }
+            Button("取消", role: .cancel) { }
+        } message: {
+            Text("確認刪除這項寶藏嗎？這個動作無法撤回！")
+        }
     }
 }
