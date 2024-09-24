@@ -6,6 +6,7 @@ struct CategorySelectionView: View {
     @Binding var categories: [String]
     @State private var showAddCategorySheet: Bool = false
     @State private var newCategory: String = ""
+    @State private var validationMessage: String? = nil
     let firestoreService = FirestoreService()
     let userID: String
     let defaultCategories = ["Creative", "Energetic", "Happy"]
@@ -44,7 +45,6 @@ struct CategorySelectionView: View {
         .onAppear {
             firestoreService.loadCategories(userID: userID, defaultCategories: defaultCategories) { loadedCategories in
                 categories = loadedCategories
-                // 不再修改 selectedCategory，以避免覆盖父视图的值
             }
         }
         .sheet(isPresented: $showAddCategorySheet) {
@@ -56,29 +56,40 @@ struct CategorySelectionView: View {
                 TextField("請輸入新的類別名稱", text: $newCategory)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
+                    .onChange(of: newCategory) { _ in
+                        validateCategory()
+                    }
+
+                if let message = validationMessage {
+                    Text(message)
+                        .foregroundColor(.red)
+                        .padding(.horizontal)
+                }
 
                 HStack {
                     Button("取消") {
                         showAddCategorySheet = false
                         newCategory = ""
+                        validationMessage = nil
                     }
                     .foregroundColor(.red)
 
                     Spacer()
 
                     Button("完成") {
-                        if !newCategory.isEmpty {
-                            firestoreService.addCategory(userID: userID, category: newCategory) { success in
-                                if success {
-                                    selectedCategory = newCategory
-                                    categories.append(newCategory)
-                                    showAddCategorySheet = false
-                                    newCategory = ""
-                                }
+                        let trimmedCategory = newCategory.trimmingCharacters(in: .whitespaces)
+                        firestoreService.addCategory(userID: userID, category: trimmedCategory) { success in
+                            if success {
+                                selectedCategory = trimmedCategory
+                                categories.append(trimmedCategory)
+                                showAddCategorySheet = false
+                                newCategory = ""
+                                validationMessage = nil
                             }
                         }
                     }
                     .foregroundColor(.blue)
+                    .disabled(validationMessage != nil)
                 }
                 .padding()
 
@@ -86,6 +97,17 @@ struct CategorySelectionView: View {
             }
             .frame(height: 200)
             .presentationDetents([.fraction(0.25)])
+        }
+    }
+
+    private func validateCategory() {
+        let trimmedCategory = newCategory.trimmingCharacters(in: .whitespaces)
+        if trimmedCategory.isEmpty {
+            validationMessage = "類別名稱不能為空或全為空格"
+        } else if categories.contains(trimmedCategory) {
+            validationMessage = "類別已存在"
+        } else {
+            validationMessage = nil
         }
     }
 }

@@ -144,8 +144,8 @@
 				ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */,
 				AB5CCD842C9D1B4500A0135E /* CategoryView.swift */,
 				AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */,
-				AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */,
 				AB06AA0C2CA28E9D00E49F5C /* CategoryCardViewModel.swift */,
+				AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */,
 			);
 			path = CategoryAndAnalytics;
 			sourceTree = "<group>";

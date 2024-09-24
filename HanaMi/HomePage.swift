@@ -32,6 +32,7 @@ struct HomePage: View {
                                     .padding(.vertical, 10)
                             }
                         }
+                        .scrollIndicators(.hidden)
                     }
 
                     Spacer()

@@ -86,7 +86,8 @@ struct AnalyticsView: View {
                     }
                 }
             }
-            .padding(.horizontal)  // 增加左右間距
+            .padding(.horizontal) 
+            .scrollIndicators(.hidden)
 
             Spacer()
         }
