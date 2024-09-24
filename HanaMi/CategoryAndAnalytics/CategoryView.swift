@@ -37,7 +37,7 @@ struct CategoryView: View {
                                 .cornerRadius(25)
                         }
 
-                        // 其余的动态加载类别按钮
+                        // 动态加载类别按钮
                         ForEach(categories, id: \.self) { category in
                             Button(action: {
                                 selectedCategory = category
@@ -75,7 +75,7 @@ struct CategoryView: View {
                             .font(.headline)
                             .padding(.top, 10)  // 控制标题和顶部的间距
 
-                        TextField("输入新類別名稱", text: $newCategoryName)
+                        TextField("輸入新類別名稱", text: $newCategoryName)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .frame(width: 250)  // 控制 TextField 的宽度
                             .padding(.horizontal, 20)
@@ -117,8 +117,6 @@ struct CategoryView: View {
                                             loadTreasuresDetail(for: selectedCategory)
                                         }
                                     } else {
-                                        // 处理 selectedCategory 为 nil 的情况
-                                        // 例如，可以加载所有宝藏，或者显示一个提示
                                         loadAllTreasures()
                                     }
                                 }
@@ -129,15 +127,14 @@ struct CategoryView: View {
                         }
                     }
                 }
-                .frame(maxWidth: .infinity)  // ScrollView 占满可用宽度
-                .ignoresSafeArea(edges: .horizontal)
+                .frame(maxWidth: .infinity)
                 .background(Color.clear)
             }
             .onAppear {
                 loadCategories() // 页面加载时加载类别
             }
 
-            // 在右下角添加编辑按钮（若选中的不是 "All" 和 "Add Category" 时显示）
+            // 在右下角添加编辑按钮（若选中的不是 "All" 且非空）
             if selectedCategory != "All" && selectedCategory != nil {
                 VStack {
                     Spacer()
@@ -157,52 +154,44 @@ struct CategoryView: View {
             }
         }
 
-        // 弹出操作选项
-        .actionSheet(isPresented: $showEditOptions) {
-            ActionSheet(
-                title: Text("編輯類別"),
-                buttons: [
-                    .destructive(Text("刪除類別")) {
-                        showCategoryDeleteAlert = true  // 显示删除确认框
-                    },
-                    .default(Text("更改名稱")) {
-                        showChangeNameAlert = true  // 显示更改名称输入框
-                    },
-                    .cancel()
-                ]
-            )
+        // 弹出操作选项，使用新的 confirmationDialog 语法
+        .confirmationDialog("編輯類別", isPresented: $showEditOptions, titleVisibility: .visible) {
+            Button("刪除類別", role: .destructive) {
+                showCategoryDeleteAlert = true  // 显示删除确认框
+            }
+            Button("更改名稱") {
+                showChangeNameAlert = true  // 显示更改名称输入框
+            }
+            Button("取消", role: .cancel) { }
         }
 
-        // 删除类别确认框
-        .alert(isPresented: $showCategoryDeleteAlert) {
-            Alert(
-                title: Text("删除類別"),
-                message: Text("您確認要刪除该類別及其所有寶藏嗎？"),
-                primaryButton: .destructive(Text("確認")) {
-                    if let category = selectedCategory {
-                        deleteCategory(category)  // 删除类别及所有宝藏
-                    }
-                },
-                secondaryButton: .cancel()
-            )
+        // 删除类别确认框，使用新的 alert 语法
+        .alert("刪除類別", isPresented: $showCategoryDeleteAlert) {
+            Button("確認", role: .destructive) {
+                if let category = selectedCategory {
+                    deleteCategory(category)  // 删除类别及所有宝藏
+                }
+            }
+            Button("取消", role: .cancel) { }
+        } message: {
+            Text("您確認要刪除該類別及其所有寶藏嗎？")
         }
 
-        // 更改名称弹窗
+        // 更改名称弹窗，使用新的 alert 语法
         .alert("更改類別名稱", isPresented: $showChangeNameAlert) {
             TextField("新類別名稱", text: $editedCategoryName)
             Button("送出") {
                 if !editedCategoryName.isEmpty, let category = selectedCategory {
                     FirestoreService().updateCategoryNameAndTreasures(userID: userID, oldName: category, newName: editedCategoryName) { success in
                         if success {
-                            print("類别名稱和寶藏更新成功")
+                            print("類別名稱和寶藏更新成功")
                             loadCategories()
                         } else {
-                            print("類别名稱或寶藏更新失敗")
+                            print("類別名稱或寶藏更新失败")
                         }
                     }
                 }
             }
-
             Button("取消", role: .cancel) { }
         }
     }

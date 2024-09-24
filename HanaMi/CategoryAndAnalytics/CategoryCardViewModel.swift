@@ -1,6 +1,4 @@
 import SwiftUI
-
-import SwiftUI
 import Combine
 
 class CategoryCardViewModel: ObservableObject {
@@ -29,15 +27,14 @@ class CategoryCardViewModel: ObservableObject {
     }
 
     func updateTreasureFields() {
-        if let treasureID = treasure.id {
-            firestoreService.updateTreasureFields(
-                userID: userID,
-                treasureID: treasureID,
-                category: selectedCategory,
-                isPublic: isPublic
-            ) { success in
-                // Handle success or error if needed
-            }
+        guard let treasureID = treasure.id else { return }
+        firestoreService.updateTreasureFields(
+            userID: userID,
+            treasureID: treasureID,
+            category: selectedCategory,
+            isPublic: isPublic
+        ) { success in
+            // 根据需要处理成功或错误
         }
     }
 
