@@ -12,11 +12,13 @@ struct CategoryCardView: View {
     var firestoreService = FirestoreService()
     let userID: String
     var onDelete: () -> Void
+    var onCategoryChange: () -> Void  // 新增的回调 closure
 
-    init(treasure: Treasure, userID: String, onDelete: @escaping () -> Void) {
+    init(treasure: Treasure, userID: String, onDelete: @escaping () -> Void, onCategoryChange: @escaping () -> Void) {
         self.treasure = treasure
         self.userID = userID
         self.onDelete = onDelete
+        self.onCategoryChange = onCategoryChange  // 初始化
         _isPublic = State(initialValue: treasure.isPublic)
         _selectedCategory = State(initialValue: treasure.category)
     }
@@ -33,7 +35,9 @@ struct CategoryCardView: View {
                                 treasureID: treasureID,
                                 category: selectedCategory,
                                 isPublic: newValue
-                            )
+                            ) { success in
+                                // 可根据需要处理更新结果
+                            }
                         }
                     }
 
@@ -43,14 +47,18 @@ struct CategoryCardView: View {
                     userID: userID
                 )
                 .onChange(of: selectedCategory) { newCategory in
-                    print("宝藏 ID：\(treasure.id ?? "无 ID")，新类别：\(newCategory)") 
                     if let treasureID = treasure.id {
                         firestoreService.updateTreasureFields(
                             userID: userID,
                             treasureID: treasureID,
                             category: newCategory,
                             isPublic: isPublic
-                        )
+                        ) { success in
+                            if success {
+                                // 调用回调，通知父视图
+                                onCategoryChange()
+                            }
+                        }
                     }
                 }
                 .onAppear {
@@ -74,7 +82,7 @@ struct CategoryCardView: View {
 
             // 显示经纬度
             HStack(spacing: 4) {
-                Image(systemName: "mappin")
+                Image("pin")
                     .resizable()
                     .frame(width: 10, height: 10)
                 Text("\(treasure.longitude), \(treasure.latitude)")

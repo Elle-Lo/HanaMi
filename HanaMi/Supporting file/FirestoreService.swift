@@ -379,7 +379,7 @@ class FirestoreService {
             }
         }
     }
-    func updateTreasureFields(userID: String, treasureID: String, category: String, isPublic: Bool) {
+    func updateTreasureFields(userID: String, treasureID: String, category: String, isPublic: Bool, completion: @escaping (Bool) -> Void) {
         let documentRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
         documentRef.updateData([
             "category": category,
@@ -387,13 +387,14 @@ class FirestoreService {
         ]) { error in
             if let error = error {
                 print("Error updating treasure: \(error)")
+                completion(false)
             } else {
                 print("Treasure successfully updated")
-                print("更新宝藏，路径：\(documentRef.path)")
-                    print("新类别：\(category)，isPublic：\(isPublic)")
+                completion(true)
             }
         }
     }
+
 
     func deleteSingleTreasure(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)

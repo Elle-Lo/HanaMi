@@ -103,10 +103,28 @@ struct CategoryView: View {
                             .padding()
                     } else {
                         ForEach(treasures) { treasure in
-                            CategoryCardView(treasure: treasure, userID: userID) {
-                                // 刪除後的回調，從 treasures 中移除該寶藏
-                                treasures.removeAll { $0.id == treasure.id }
-                            }
+                            CategoryCardView(
+                                treasure: treasure,
+                                userID: userID,
+                                onDelete: {
+                                    treasures.removeAll { $0.id == treasure.id }
+                                },
+                                onCategoryChange: {
+                                    // 宝藏类别更改后的回调，重新加载宝藏列表
+                                    if let selectedCategory = selectedCategory {
+                                        if selectedCategory == "All" {
+                                            loadAllTreasures()
+                                        } else {
+                                            loadTreasuresDetail(for: selectedCategory)
+                                        }
+                                    } else {
+                                        // 处理 selectedCategory 为 nil 的情况
+                                        // 例如，可以加载所有宝藏，或者显示一个提示
+                                        loadAllTreasures()
+                                    }
+
+                                }
+                            )
                             .padding(.horizontal, 30)
                             .padding(.vertical, 10)
                         }
