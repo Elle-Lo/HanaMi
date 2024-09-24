@@ -1,74 +1,43 @@
 import SwiftUI
-import FirebaseFirestore
 import Kingfisher
 
 struct CategoryCardView: View {
-    let treasure: Treasure
-    @State private var showingDeleteAlert = false
-    @State private var categories: [String] = []
-    @State private var isPublic: Bool
-    @State private var selectedCategory: String
-
-    var firestoreService = FirestoreService()
-    let userID: String
+    @StateObject private var viewModel: CategoryCardViewModel
     var onDelete: () -> Void
-    var onCategoryChange: () -> Void  // 新增的回调 closure
+    var onCategoryChange: () -> Void
 
     init(treasure: Treasure, userID: String, onDelete: @escaping () -> Void, onCategoryChange: @escaping () -> Void) {
-        self.treasure = treasure
-        self.userID = userID
+        _viewModel = StateObject(wrappedValue: CategoryCardViewModel(treasure: treasure, userID: userID))
         self.onDelete = onDelete
-        self.onCategoryChange = onCategoryChange  // 初始化
-        _isPublic = State(initialValue: treasure.isPublic)
-        _selectedCategory = State(initialValue: treasure.category)
+        self.onCategoryChange = onCategoryChange
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // 顶部 HStack，包含 ToggleButton 和 CategorySelectionView
             HStack(alignment: .top) {
-                ToggleButton(isPublic: $isPublic)
-                    .onChange(of: isPublic) { newValue in
-                        if let treasureID = treasure.id {
-                            firestoreService.updateTreasureFields(
-                                userID: userID,
-                                treasureID: treasureID,
-                                category: selectedCategory,
-                                isPublic: newValue
-                            ) { success in
-                                // 可根据需要处理更新结果
-                            }
-                        }
+                ToggleButton(isPublic: $viewModel.isPublic)
+                    .onChange(of: viewModel.isPublic) { newValue in
+                        viewModel.updateTreasureFields()
                     }
 
                 CategorySelectionView(
-                    selectedCategory: $selectedCategory,
-                    categories: $categories,
-                    userID: userID
+                    selectedCategory: $viewModel.selectedCategory,
+                    categories: $viewModel.categories,
+                    userID: viewModel.userID
                 )
-                .onChange(of: selectedCategory) { newCategory in
-                    if let treasureID = treasure.id {
-                        firestoreService.updateTreasureFields(
-                            userID: userID,
-                            treasureID: treasureID,
-                            category: newCategory,
-                            isPublic: isPublic
-                        ) { success in
-                            if success {
-                                // 调用回调，通知父视图
-                                onCategoryChange()
-                            }
-                        }
-                    }
+                .onChange(of: viewModel.selectedCategory) { newCategory in
+                    viewModel.updateTreasureFields()
+                    onCategoryChange()
                 }
                 .onAppear {
-                    loadCategories()
+                    viewModel.loadCategories()
                 }
 
                 Spacer()
 
                 Button(action: {
-                    showingDeleteAlert = true
+                    viewModel.showTreasureDeleteAlert = true
                 }) {
                     Image(systemName: "xmark.circle")
                         .resizable()
@@ -76,6 +45,20 @@ struct CategoryCardView: View {
                         .foregroundColor(.red)
                         .padding(.trailing, 5)
                         .padding(.top, 5)
+                }
+                .alert(isPresented: $viewModel.showTreasureDeleteAlert) {
+                    Alert(
+                        title: Text("确认删除"),
+                        message: Text("确定要删除这个宝藏吗？这个操作无法撤销。"),
+                        primaryButton: .destructive(Text("删除")) {
+                            viewModel.deleteTreasure { success in
+                                if success {
+                                    onDelete()
+                                }
+                            }
+                        },
+                        secondaryButton: .cancel()
+                    )
                 }
             }
             .padding(.top, 5)
@@ -85,7 +68,7 @@ struct CategoryCardView: View {
                 Image("pin")
                     .resizable()
                     .frame(width: 10, height: 10)
-                Text("\(treasure.longitude), \(treasure.latitude)")
+                Text("\(viewModel.treasure.longitude), \(viewModel.treasure.latitude)")
                     .font(.caption)
                     .foregroundColor(.black)
             }
@@ -97,7 +80,7 @@ struct CategoryCardView: View {
                 .padding(.vertical, 10)
 
             // 显示宝藏内容
-            ForEach(treasure.contents.sorted(by: { $0.index < $1.index })) { content in
+            ForEach(viewModel.treasure.contents.sorted(by: { $0.index < $1.index })) { content in
                 VStack(alignment: .leading, spacing: 10) {
                     switch content.type {
                     case .text:
@@ -138,38 +121,5 @@ struct CategoryCardView: View {
         .background(Color.white.opacity(0.8))
         .cornerRadius(15)
         .shadow(radius: 5)
-        .alert(isPresented: $showingDeleteAlert) {
-            Alert(
-                title: Text("确认删除"),
-                message: Text("确定要删除这个宝藏吗？这个操作无法撤销。"),
-                primaryButton: .destructive(Text("删除")) {
-                    deleteTreasure()
-                },
-                secondaryButton: .cancel(Text("取消"))
-            )
-        }
-    }
-
-    private func loadCategories() {
-        firestoreService.loadCategories(userID: userID, defaultCategories: []) { fetchedCategories in
-            self.categories = fetchedCategories
-        }
-    }
-
-    private func deleteTreasure() {
-        guard let treasureID = treasure.id else {
-            print("Error: Treasure ID is nil. Cannot delete.")
-            return
-        }
-
-        firestoreService.deleteSingleTreasure(userID: userID, treasureID: treasureID) { result in
-            switch result {
-            case .success:
-                print("Treasure successfully deleted")
-                onDelete()
-            case .failure(let error):
-                print("Error deleting treasure: \(error)")
-            }
-        }
     }
 }
