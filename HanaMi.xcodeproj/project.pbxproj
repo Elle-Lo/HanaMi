@@ -50,7 +50,6 @@
 		ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB0D2C993707007CDB45 /* SwiftSoup */; };
 		ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */; };
 		ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */; };
-		ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */; };
 		ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */; };
 		ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */; };
 		ABAFAB1F2C9A7D9E007CDB45 /* TreasureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1E2C9A7D9E007CDB45 /* TreasureManager.swift */; };
@@ -100,7 +99,6 @@
 		ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditorView.swift; sourceTree = "<group>"; };
 		ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewView.swift; sourceTree = "<group>"; };
 		ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
-		ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
 		ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSheet.swift; sourceTree = "<group>"; };
 		ABAFAB1E2C9A7D9E007CDB45 /* TreasureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureManager.swift; sourceTree = "<group>"; };
 		ABAFAB202C9A7EEB007CDB45 /* CustomMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapView.swift; sourceTree = "<group>"; };
@@ -174,6 +172,7 @@
 				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
 				ABAFAACF2C9414AE007CDB45 /* HomePage.swift */,
 				ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */,
+				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
 				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				AB5CCD832C9D192000A0135E /* CategoryAndAnalytics */,
 				ABAFAB1D2C9A7D83007CDB45 /* TreasurePage */,
@@ -213,7 +212,6 @@
 				ABAFAACD2C941493007CDB45 /* StarterPage.swift */,
 				ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */,
 				ABAFAAD12C94153E007CDB45 /* LogInPage.swift */,
-				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
 			);
 			path = "Log In";
 			sourceTree = "<group>";
@@ -227,7 +225,6 @@
 				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
 				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
 				ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */,
-				ABAFAB142C998719007CDB45 /* AudioRecorderView.swift */,
 				ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */,
 			);
 			path = DepositPage;
@@ -375,7 +372,6 @@
 				ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */,
 				ABAFAB022C988FEF007CDB45 /* ToggleButton.swift in Sources */,
 				AB06AA032CA0101800E49F5C /* CharacterAnimationScene.swift in Sources */,
-				ABAFAB152C998719007CDB45 /* AudioRecorderView.swift in Sources */,
 				ABAFAB002C988FA1007CDB45 /* FirestoreService.swift in Sources */,
 				ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */,
 				AB06AA0D2CA28E9D00E49F5C /* CategoryCardViewModel.swift in Sources */,

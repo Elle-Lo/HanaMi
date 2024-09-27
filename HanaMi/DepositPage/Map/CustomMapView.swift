@@ -26,7 +26,7 @@ struct CustomMapView: UIViewRepresentable {
     class Coordinator: NSObject, MKMapViewDelegate {
         var parent: CustomMapView
         var mode: MapMode
-        var userID: String // 动态传递 userID
+        var userID: String 
 
 
         init(_ parent: CustomMapView, mode: MapMode, userID: String) {

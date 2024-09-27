@@ -83,18 +83,16 @@ struct CategoryCardView: View {
                                 .frame(maxWidth: .infinity)
                                 .cornerRadius(10)
                         }
-
+                        
                     case .link:
                         if let url = URL(string: content.content) {
-                            Text(content.displayText ?? url.absoluteString)
-                                .font(.body)
-                                .foregroundColor(.blue)
-                                .underline()
-                                .onTapGesture {
-                                    UIApplication.shared.open(url)
-                                }
-                        }
+                            LinkPreviewView(url: url)
+                                .cornerRadius(10)  // 保持圆角
+                                .shadow(radius: 5)  // 阴影
+                                .padding(.vertical, 5)  // 垂直间距
 
+                        }
+                        
                     default:
                         EmptyView()
                     }
@@ -120,5 +118,7 @@ struct CategoryCardView: View {
         } message: {
             Text("確認删除這項寶藏嗎？這個動作無法撤回！")
         }
+        .id(viewModel.selectedCategory)  // 添加這行強制重繪
     }
+       
 }

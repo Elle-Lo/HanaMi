@@ -10,6 +10,12 @@ enum ContentType: String, Codable {
     case audio
 }
 
+enum LinkType {
+    case youtube
+    case googleMaps
+    case regular
+}
+
 struct Users: Identifiable, Codable {
     @DocumentID var id: String? 
     var name: String

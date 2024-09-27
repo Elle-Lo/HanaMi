@@ -34,9 +34,15 @@ class CategoryCardViewModel: ObservableObject {
             category: selectedCategory,
             isPublic: isPublic
         ) { success in
-            // 根据需要处理成功或错误
+            if success {
+                // 成功更新後強制刷新視圖
+                DispatchQueue.main.async {
+                    self.selectedCategory = self.selectedCategory // 觸發 UI 刷新
+                }
+            }
         }
     }
+
 
     func deleteTreasure(completion: @escaping (Bool) -> Void) {
         guard let treasureID = treasure.id else {
