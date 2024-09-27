@@ -118,7 +118,7 @@ struct CategoryCardView: View {
         } message: {
             Text("確認删除這項寶藏嗎？這個動作無法撤回！")
         }
-        .id(viewModel.selectedCategory)  // 添加這行強制重繪
+//        .id(viewModel.selectedCategory)  
     }
        
 }
