@@ -8,15 +8,17 @@ struct StarterPage: View {
     @State private var showAlert: Bool = false
     @State private var isLoading: Bool = false
     @State private var nonce: String?
+    @State private var showSmallSheet = false // 控制小型 sheet 的顯示
     @AppStorage("log_Status") private var logStatus: Bool = false
     
     var body: some View {
         if logStatus {
             MainTabView()
         } else {
-            VStack {
+            VStack(spacing: 20) {
                 Text("Welcome")
                     .font(.largeTitle)
+                    .foregroundColor(Color(hex: "#522504"))
                     .padding()
                 Image("Cat")
                     .resizable()
@@ -25,39 +27,66 @@ struct StarterPage: View {
                 
                 NavigationLink(destination: LogInPage()) {
                     Text("LOG IN")
-                        .foregroundColor(.white)
+                        .foregroundColor(Color(hex: "#522504"))
                         .padding()
                         .frame(width: 250, height: 50)
-                        .background(Color.blue)
+                        .background(Color(hex: "#FFF7EF"))
                         .cornerRadius(25)
                 }
                 
-                NavigationLink(destination: GmailLogInPage()) {
-                    Text("LOG IN WITH GMAIL")
-                        .foregroundColor(.white)
+                // 其他登入方式按鈕
+                Button(action: {
+                    showSmallSheet.toggle() // 點擊時顯示小型 sheet
+                }) {
+                    Text("Other login methods")
+                        .foregroundColor(Color(hex: "#522504"))
                         .padding()
                         .frame(width: 250, height: 50)
-                        .background(Color.blue)
+                        .background(Color(hex: "#FFF7EF"))
                         .cornerRadius(25)
                 }
-                SignInWithAppleButton(.signIn) { request in
-                    let nonce = randomNonceString()
-                    self.nonce = nonce
-                    
-                    request.requestedScopes = [.email, .fullName]
-                    request.nonce = sha256(nonce)
-                } onCompletion: { result in
-                    switch result {
-                    case .success(let authorization):
-                        loginWithFirebase(authorization)
-                    case .failure(let error):
-                        showError(error.localizedDescription)
+                .sheet(isPresented: $showSmallSheet) {
+                    // 使用自定義的 small sheet 模仿 ActionSheet 大小
+                    VStack {
+                        Text("Select a login method")
+                            .font(.subheadline) // 字體變小
+                            .padding(.top, 10) // 調整字和按鈕間距
+                        
+                        // 原本的 Sign in with Apple 按鈕，會自動使用預設樣式
+                        SignInWithAppleButton(.signIn) { request in
+                            let nonce = randomNonceString()
+                            self.nonce = nonce
+                            request.requestedScopes = [.email, .fullName]
+                            request.nonce = sha256(nonce)
+                        } onCompletion: { result in
+                            switch result {
+                            case .success(let authorization):
+                                loginWithFirebase(authorization)
+                            case .failure(let error):
+                                showError(error.localizedDescription)
+                            }
+                        }
+                        .frame(width: 250, height: 50)
+                        .cornerRadius(25)
+                        .padding()
+                    }
+                    .padding()
+                    .presentationDetents([.fraction(0.2)]) // 設定大小接近 ActionSheet
+                }
+
+                HStack {
+                    Text("Don’t have an account?")
+                        .foregroundColor(.gray)
+                        .font(.footnote) // 調整字體大小變小
+                    NavigationLink(destination: SignUpPage()) {
+                        Text("Sign Up")
+                            .foregroundColor(Color(hex: "#522504"))
+                            .font(.footnote) // 調整字體大小變小
                     }
                 }
-                .frame(width: 250, height: 50)
-                .clipShape(.capsule)
+                .padding(.top, -5) 
             }
-            .alert(errorMessge,isPresented: $showAlert) { }
+            .alert(errorMessge, isPresented: $showAlert) { }
             .overlay {
                 if isLoading {
                     LoadingScreen()
@@ -69,14 +98,17 @@ struct StarterPage: View {
     @ViewBuilder
     func LoadingScreen() -> some View {
         ZStack {
-            Rectangle()
-                .fill(.ultraThinMaterial)
+//            Rectangle()
+//                .fill(.ultraThinMaterial)
+//                .ignoresSafeArea() // 確保背景充滿整個螢幕
             
             ProgressView()
                 .frame(width: 45, height: 45)
-                .background(.background, in: .rect(cornerRadius: 5))
+//                .background(Color.white.opacity(0.8))
+                .cornerRadius(5)
         }
     }
+
     
     func showError(_ message: String) {
         errorMessge = message
@@ -90,33 +122,24 @@ struct StarterPage: View {
             isLoading = true
             
             guard let nonce else {
-                //fatalError("Invalid state: A login callback was received, but no login request was sent.")
                 showError("Cannot process your request")
                 return
             }
             guard let appleIDToken = appleIDCredential.identityToken else {
-                //print("Unable to fetch identity token")
                 showError("Cannot process your request")
                 return
             }
             guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                //print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                 showError("Cannot process your request")
                 return
             }
-            // Initialize a Firebase credential, including the user's full name.
             let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
                                                            rawNonce: nonce,
                                                            fullName: appleIDCredential.fullName)
-            // Sign in with Firebase.
             Auth.auth().signIn(with: credential) { (authResult, error) in
                 if let error {
-                    // Error. If error.code == .MissingOrInvalidNonce, make sure
-                    // you're sending the SHA256-hashed nonce as a hex string with
-                    // your request to Apple.
                     showError(error.localizedDescription)
                 }
-                // User is signed in to Firebase with Apple.
                 logStatus = true
                 isLoading = false
             }
@@ -128,16 +151,13 @@ struct StarterPage: View {
         var randomBytes = [UInt8](repeating: 0, count: length)
         let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
         if errorCode != errSecSuccess {
-            fatalError(
-                "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-            )
+            fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
         }
         
         let charset: [Character] =
         Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
         
         let nonce = randomBytes.map { byte in
-            // Pick a random character from the set, wrapping around if needed.
             charset[Int(byte) % charset.count]
         }
         
