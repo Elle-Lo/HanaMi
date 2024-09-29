@@ -1,5 +1,5 @@
 import SwiftUI
-import Firebase
+import FirebaseAuth
 
 struct SettingsPage: View {
     @AppStorage("log_Status") private var logStatus: Bool = false

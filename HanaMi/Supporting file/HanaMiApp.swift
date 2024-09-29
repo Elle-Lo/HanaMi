@@ -17,7 +17,6 @@ struct HanaMiApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
-        FirebaseApp.configure()
             IQKeyboardManager.shared.enable = true
         }
     

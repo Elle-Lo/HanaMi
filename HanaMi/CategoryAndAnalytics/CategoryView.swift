@@ -6,12 +6,12 @@ struct CategoryView: View {
     @State private var treasures: [Treasure] = []
     @State private var isAddingCategory = false
     @State private var newCategoryName = ""
-    @State private var newCategoryValidationMessage: String? = nil
+    @State private var newCategoryValidationMessage: String?
     @State private var showEditOptions = false
     @State private var showCategoryDeleteAlert = false
     @State private var showChangeNameAlert = false
     @State private var editedCategoryName = ""
-    @State private var editCategoryValidationMessage: String? = nil
+    @State private var editCategoryValidationMessage: String?
     private var userID: String = "g61HUemIJIRIC1wvvIqa"
 
     var body: some View {
