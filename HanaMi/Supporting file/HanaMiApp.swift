@@ -1,4 +1,5 @@
 import SwiftUI
+import Firebase
 import FirebaseCore
 import IQKeyboardManagerSwift
 
@@ -16,6 +17,7 @@ struct HanaMiApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
+        FirebaseApp.configure()
             IQKeyboardManager.shared.enable = true
         }
     

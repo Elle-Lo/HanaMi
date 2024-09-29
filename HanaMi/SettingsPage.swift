@@ -1,13 +1,9 @@
-//
-//  SettingsPage.swift
-//  HanaMi
-//
-//  Created by Tzu ning Lo on 2024/9/15.
-//
-
 import SwiftUI
+import Firebase
 
 struct SettingsPage: View {
+    @AppStorage("log_Status") private var logStatus: Bool = false
+    
     var body: some View {
         VStack {
             Text("設定頁面")
@@ -17,7 +13,10 @@ struct SettingsPage: View {
             // 這裡可以添加各種設定選項
             Text("預計做登出和更換背景、和收藏")
                 .padding()
-
+            Button("Log Out") {
+                try? Auth.auth().signOut()
+                logStatus = false
+            }
             Spacer()
         }
         .navigationTitle("設定")
