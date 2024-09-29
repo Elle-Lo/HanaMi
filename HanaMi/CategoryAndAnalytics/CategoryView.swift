@@ -17,133 +17,58 @@ struct CategoryView: View {
     var body: some View {
         ZStack {
             VStack(alignment: .leading) {
-                // 类别标题
                 Text("Category")
                     .font(.largeTitle)
                     .bold()
                     .padding([.top, .leading])
 
-                // 类别 Collection View
+                // 類別選擇按鈕
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        // "All" 按钮
-                        Button(action: {
-                            selectedCategory = "All"
-                            loadAllTreasures()
-                        }) {
-                            Text("All")
-                                .padding(.vertical, 13)
-                                .padding(.horizontal, 18)
-                                .background(selectedCategory == "All" ? Color.blue : Color.gray.opacity(0.2))
-                                .foregroundColor(selectedCategory == "All" ? Color.white : Color.black)
-                                .cornerRadius(25)
-                        }
-
-                        // 动态加载类别按钮
-                        ForEach(categories, id: \.self) { category in
-                            Button(action: {
-                                selectedCategory = category
+                    CategorySelectionButtons(
+                        categories: $categories,
+                        selectedCategory: $selectedCategory,
+                        onSelectCategory: { category in
+                            if category == "All" {
+                                loadAllTreasures()
+                            } else {
                                 loadTreasuresDetail(for: category)
-                            }) {
-                                Text(category)
-                                    .padding(.vertical, 13)
-                                    .padding(.horizontal, 18)
-                                    .background(selectedCategory == category ? Color.blue : Color.gray.opacity(0.2))
-                                    .foregroundColor(selectedCategory == category ? Color.white : Color.black)
-                                    .cornerRadius(25)
                             }
-                        }
-
-                        // 添加新类别按钮
-                        Button(action: {
+                        },
+                        onAddCategory: {
                             isAddingCategory = true
-                        }) {
-                            Label("Add Category", systemImage: "plus")
-                                .padding(.vertical, 13)
-                                .padding(.horizontal, 18)
-                                .background(Color.gray.opacity(0.2))
-                                .foregroundColor(.black)
-                                .cornerRadius(25)
                         }
-                    }
-                    .padding(.horizontal)
+                    )
                 }
+
                 Spacer().frame(height: 20)
-
-                // 显示添加类别的对话框
+                
+                // 顯示添加類別的對話框
                 .sheet(isPresented: $isAddingCategory) {
-                    VStack(spacing: 15) {
-                        Text("新增類別")
-                            .font(.headline)
-                            .padding(.top, 10)
-
-                        TextField("輸入新類別名稱", text: $newCategoryName)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .frame(width: 250)
-                            .padding(.horizontal, 20)
-                            .onChange(of: newCategoryName) { _ in
-                                validateNewCategoryName()
-                            }
-
-                        if let message = newCategoryValidationMessage {
-                            Text(message)
-                                .foregroundColor(.red)
-                                .padding(.horizontal)
+                    AddCategoryForm(
+                        newCategoryName: $newCategoryName,
+                        newCategoryValidationMessage: $newCategoryValidationMessage,
+                        categories: $categories,
+                        userID: userID,
+                        onAddSuccess: {
+                            loadCategories()
+                            isAddingCategory = false
+                            newCategoryName = ""
+                            newCategoryValidationMessage = nil
                         }
-
-                        Button("添加類別") {
-                            let trimmedName = newCategoryName.trimmingCharacters(in: .whitespaces)
-                            FirestoreService().addCategory(userID: userID, category: trimmedName) { success in
-                                if success {
-                                    loadCategories()
-                                    isAddingCategory = false
-                                    newCategoryName = ""
-                                    newCategoryValidationMessage = nil
-                                }
-                            }
-                        }
-                        .frame(width: 100)
-                        .disabled(newCategoryValidationMessage != nil)
-                    }
-                    .padding()
-                    .frame(width: 300, height: 300)
+                    )
                 }
 
-                // 类别下的宝藏列表
-                ScrollView {
-                    if treasures.isEmpty {
-                        Text("No treasures found")
-                            .padding()
-                    } else {
-                        ForEach(treasures) { treasure in
-                            CategoryCardView(
-                                treasure: treasure,
-                                userID: userID,
-                                onDelete: {
-                                    treasures.removeAll { $0.id == treasure.id }
-                                },
-                                onCategoryChange: { newCategory in
-                                    if !categories.contains(newCategory) {
-                                        categories.append(newCategory)
-                                    }
-                                    // 重新加载宝藏列表
-                                    if let selectedCategory = selectedCategory {
-                                        if selectedCategory == "All" {
-                                            loadAllTreasures()
-                                        } else {
-                                            loadTreasuresDetail(for: selectedCategory)
-                                        }
-                                    } else {
-                                        loadAllTreasures()
-                                    }
-                                }
-                            )
-                            .id(treasure.id)
-                            .padding(.horizontal, 30)
-                            .padding(.vertical, 10)
-                        }
+                // 顯示寶藏列表
+                TreasureListView(
+                    treasures: $treasures,
+                    categories: $categories,
+                    selectedCategory: $selectedCategory,
+                    loadAllTreasures: loadAllTreasures,
+                    loadTreasuresDetail: loadTreasuresDetail,
+                    onDeleteTreasure: { treasure in
+                        treasures.removeAll { $0.id == treasure.id }
                     }
-                }
+                )
                 .frame(maxWidth: .infinity)
                 .background(Color.clear)
             }
@@ -153,7 +78,7 @@ struct CategoryView: View {
                 loadCategories()
             }
 
-            // 在右下角添加编辑按钮
+            // 添加编辑按钮
             if selectedCategory != "All" && selectedCategory != nil {
                 VStack {
                     Spacer()
@@ -173,7 +98,7 @@ struct CategoryView: View {
             }
         }
 
-        // 弹出操作选项
+        // 彈出操作選項
         .confirmationDialog("編輯類別", isPresented: $showEditOptions, titleVisibility: .visible) {
             Button("刪除類別", role: .destructive) {
                 showCategoryDeleteAlert = true
@@ -184,7 +109,7 @@ struct CategoryView: View {
             Button("取消", role: .cancel) { }
         }
 
-        // 删除类别确认框
+        // 刪除類別確認框
         .alert("刪除類別", isPresented: $showCategoryDeleteAlert) {
             Button("確認", role: .destructive) {
                 if let category = selectedCategory {
@@ -196,7 +121,7 @@ struct CategoryView: View {
             Text("您確認要删除該類別及其所有寶藏嗎？")
         }
 
-        // 更改名称弹窗
+        // 更改名稱彈窗
         .alert("更改類別名稱", isPresented: $showChangeNameAlert) {
             TextField("新類別名稱", text: $editedCategoryName)
                 .onChange(of: editedCategoryName) { _ in
@@ -210,8 +135,11 @@ struct CategoryView: View {
                             print("類別名稱和寶藏更新成功")
                             loadCategories()
                             selectedCategory = trimmedName
-                            editedCategoryName = ""
-                            editCategoryValidationMessage = nil
+                            loadTreasuresDetail(for: trimmedName)
+                            DispatchQueue.main.async {
+                                editedCategoryName = ""
+                                editCategoryValidationMessage = nil
+                            }
                         } else {
                             print("類別名稱或寶藏更新失敗")
                         }
@@ -248,28 +176,19 @@ struct CategoryView: View {
     private func validateEditedCategoryName() {
         let trimmedName = editedCategoryName.trimmingCharacters(in: .whitespaces)
         
-        // 名称不能为空
         if trimmedName.isEmpty {
             editCategoryValidationMessage = "類別名稱不能為空或全為空格"
-        
-        // 检查用户输入的新名称是否与当前选中的类别相同
         } else if trimmedName == selectedCategory {
             editCategoryValidationMessage = "新名稱不能與當前類別名稱相同"
-        
-        // 检查新名称是否已经存在
         } else if categories.contains(trimmedName) {
             editCategoryValidationMessage = "類別已存在"
-        
-        // 否则通过验证
         } else {
             editCategoryValidationMessage = nil
         }
     }
 
-
     // 加载所有类别
     private func loadCategories() {
-        
         FirestoreService().loadCategories(userID: userID, defaultCategories: []) { fetchedCategories in
             DispatchQueue.main.async {
                 self.categories = fetchedCategories

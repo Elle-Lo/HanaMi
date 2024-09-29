@@ -2,22 +2,27 @@ import SwiftUI
 import Kingfisher
 
 struct CategoryCardView: View {
+    @Binding var selectedCategory: String?
+    @Binding var categories: [String]      // 改为使用 @Binding
     @StateObject private var viewModel: CategoryCardViewModel
     var onDelete: () -> Void
     var onCategoryChange: (_ newCategory: String) -> Void
 
-    init(treasure: Treasure, userID: String, onDelete: @escaping () -> Void, onCategoryChange: @escaping (_ newCategory: String) -> Void) {
-        _viewModel = StateObject(wrappedValue: CategoryCardViewModel(treasure: treasure, userID: userID))
-        self.onDelete = onDelete
-        self.onCategoryChange = onCategoryChange
-    }
+    // 更新 init，使其接受 selectedCategory 和 categories 的 Binding 参数
+    init(treasure: Treasure, userID: String, selectedCategory: Binding<String?>, categories: Binding<[String]>, onDelete: @escaping () -> Void, onCategoryChange: @escaping (_ newCategory: String) -> Void) {
+           _viewModel = StateObject(wrappedValue: CategoryCardViewModel(treasure: treasure, userID: userID))
+           self._selectedCategory = selectedCategory  // 绑定 selectedCategory
+           self._categories = categories              // 绑定 categories
+           self.onDelete = onDelete
+           self.onCategoryChange = onCategoryChange
+       }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // 顶部 HStack，包含 ToggleButton 和 CategorySelectionView
             HStack(alignment: .top) {
                 ToggleButton(isPublic: $viewModel.isPublic)
-                    .onChange(of: viewModel.isPublic) { _ in
+                    .onChange(of: viewModel.isPublic) { oldValue, newValue in
                         viewModel.updateTreasureFields()
                     }
 
@@ -26,7 +31,7 @@ struct CategoryCardView: View {
                     categories: $viewModel.categories,
                     userID: viewModel.userID
                 )
-                .onChange(of: viewModel.selectedCategory) { newCategory in
+                .onChange(of: viewModel.selectedCategory) { oldCategory, newCategory in
                     viewModel.updateTreasureFields()
                     onCategoryChange(newCategory)
                 }

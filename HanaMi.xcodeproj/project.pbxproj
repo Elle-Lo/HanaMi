@@ -12,6 +12,9 @@
 		AB06AA072CA01CE700E49F5C /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA062CA01CE700E49F5C /* ActionButton.swift */; };
 		AB06AA092CA021C500E49F5C /* SpriteKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA082CA021C500E49F5C /* SpriteKitView.swift */; };
 		AB06AA0D2CA28E9D00E49F5C /* CategoryCardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA0C2CA28E9D00E49F5C /* CategoryCardViewModel.swift */; };
+		AB06AA492CA93E7C00E49F5C /* CategorySelectionButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA482CA93E7C00E49F5C /* CategorySelectionButtons.swift */; };
+		AB06AA4B2CA93EF400E49F5C /* AddCategoryForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA4A2CA93EF400E49F5C /* AddCategoryForm.swift */; };
+		AB06AA4D2CA9420D00E49F5C /* TreasureListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA4C2CA9420D00E49F5C /* TreasureListView.swift */; };
 		AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD842C9D1B4500A0135E /* CategoryView.swift */; };
 		AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */; };
 		AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */; };
@@ -65,6 +68,9 @@
 		AB06AA062CA01CE700E49F5C /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		AB06AA082CA021C500E49F5C /* SpriteKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteKitView.swift; sourceTree = "<group>"; };
 		AB06AA0C2CA28E9D00E49F5C /* CategoryCardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardViewModel.swift; sourceTree = "<group>"; };
+		AB06AA482CA93E7C00E49F5C /* CategorySelectionButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionButtons.swift; sourceTree = "<group>"; };
+		AB06AA4A2CA93EF400E49F5C /* AddCategoryForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategoryForm.swift; sourceTree = "<group>"; };
+		AB06AA4C2CA9420D00E49F5C /* TreasureListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureListView.swift; sourceTree = "<group>"; };
 		AB5CCD842C9D1B4500A0135E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
 		AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
@@ -144,6 +150,9 @@
 				AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */,
 				AB06AA0C2CA28E9D00E49F5C /* CategoryCardViewModel.swift */,
 				AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */,
+				AB06AA482CA93E7C00E49F5C /* CategorySelectionButtons.swift */,
+				AB06AA4A2CA93EF400E49F5C /* AddCategoryForm.swift */,
+				AB06AA4C2CA9420D00E49F5C /* TreasureListView.swift */,
 			);
 			path = CategoryAndAnalytics;
 			sourceTree = "<group>";
@@ -384,6 +393,7 @@
 				AB06AA052CA01CC300E49F5C /* StatusSelectionSheet.swift in Sources */,
 				ABAFAB212C9A7EEB007CDB45 /* CustomMapView.swift in Sources */,
 				ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */,
+				AB06AA4B2CA93EF400E49F5C /* AddCategoryForm.swift in Sources */,
 				ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */,
 				AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */,
 				ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */,
@@ -393,6 +403,7 @@
 				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
 				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,
+				AB06AA4D2CA9420D00E49F5C /* TreasureListView.swift in Sources */,
 				ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */,
 				ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */,
 				ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */,
@@ -403,6 +414,7 @@
 				ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */,
 				ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */,
 				ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */,
+				AB06AA492CA93E7C00E49F5C /* CategorySelectionButtons.swift in Sources */,
 				AB06AA072CA01CE700E49F5C /* ActionButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
