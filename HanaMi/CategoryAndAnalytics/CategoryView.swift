@@ -247,14 +247,25 @@ struct CategoryView: View {
     // 验证编辑的类别名称
     private func validateEditedCategoryName() {
         let trimmedName = editedCategoryName.trimmingCharacters(in: .whitespaces)
+        
+        // 名称不能为空
         if trimmedName.isEmpty {
             editCategoryValidationMessage = "類別名稱不能為空或全為空格"
-        } else if categories.contains(trimmedName) && trimmedName != selectedCategory {
+        
+        // 检查用户输入的新名称是否与当前选中的类别相同
+        } else if trimmedName == selectedCategory {
+            editCategoryValidationMessage = "新名稱不能與當前類別名稱相同"
+        
+        // 检查新名称是否已经存在
+        } else if categories.contains(trimmedName) {
             editCategoryValidationMessage = "類別已存在"
+        
+        // 否则通过验证
         } else {
             editCategoryValidationMessage = nil
         }
     }
+
 
     // 加载所有类别
     private func loadCategories() {
