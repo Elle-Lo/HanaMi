@@ -468,15 +468,28 @@ class FirestoreService {
 
     func deleteSingleTreasure(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+        
+        // 首先刪除寶藏文檔
         treasureRef.delete { error in
             if let error = error {
                 completion(.failure(error))
             } else {
-                completion(.success(()))
+                // 刪除成功後，從 treasureList 中移除該 treasureID
+                let userDocRef = self.db.collection("Users").document(userID)
+                userDocRef.updateData([
+                    "treasureList": FieldValue.arrayRemove([treasureID])
+                ]) { error in
+                    if let error = error {
+                        print("從 treasureList 移除 treasureID 失敗: \(error.localizedDescription)")
+                        completion(.failure(error))
+                    } else {
+                        print("成功刪除寶藏並從 treasureList 移除")
+                        completion(.success(()))
+                    }
+                }
             }
         }
     }
-
     
     func updateCategoryNameAndTreasures(userID: String, oldName: String, newName: String, completion: @escaping (Bool) -> Void) {
         // 先更新 Firestore 中的類別名稱

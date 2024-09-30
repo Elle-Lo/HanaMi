@@ -131,23 +131,32 @@ struct CategoryView: View {
                 }
             Button("送出") {
                 let trimmedName = editedCategoryName.trimmingCharacters(in: .whitespaces)
-                if let category = selectedCategory {
-                    FirestoreService().updateCategoryNameAndTreasures(userID: userID, oldName: category, newName: trimmedName) { success in
-                        if success {
-                            print("類別名稱和寶藏更新成功")
-                            loadCategories()
-                            selectedCategory = trimmedName
-                            loadTreasuresDetail(for: trimmedName)
-                            DispatchQueue.main.async {
-                                editedCategoryName = ""
-                                editCategoryValidationMessage = nil
-                            }
-                        } else {
-                            print("類別名稱或寶藏更新失敗")
-                        }
-                    }
-                }
-            }
+                               if let category = selectedCategory {
+                                   FirestoreService().updateCategoryNameAndTreasures(userID: userID, oldName: category, newName: trimmedName) { success in
+                                       if success {
+                                           // 更新 categories 和 selectedCategory
+                                           if let index = categories.firstIndex(of: category) {
+                                               categories[index] = trimmedName
+                                           }
+                                           selectedCategory = trimmedName
+                                           
+                                           // 為了強制視圖更新，賦值 categories 來觸發 SwiftUI 重繪
+                                           let updatedCategories = categories
+                                           categories = updatedCategories
+                                           
+                                           // 重新加載更新後的寶藏
+                                           loadTreasuresDetail(for: trimmedName)
+                                           
+                                           DispatchQueue.main.async {
+                                               editedCategoryName = ""
+                                               editCategoryValidationMessage = nil
+                                           }
+                                       } else {
+                                           print("類別名稱或寶藏更新失敗")
+                                       }
+                                   }
+                               }
+                           }
             .disabled(editCategoryValidationMessage != nil)
             Button("取消", role: .cancel) {
                 editedCategoryName = ""
