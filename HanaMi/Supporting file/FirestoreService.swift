@@ -232,8 +232,8 @@ class FirestoreService {
                 
                 // 查询其他用户的公开宝藏
                 let publicTreasuresQuery = self.db.collectionGroup("Treasures")
-                    .whereField("isPublic", isEqualTo: true)  // 只查询公开的宝藏
-                    .whereField("userID", isNotEqualTo: userID)  // 排除当前用户的宝藏
+                    .whereField("isPublic", isEqualTo: true)
+                    .whereField("userID", isNotEqualTo: userID)
                     .whereField("latitude", isGreaterThanOrEqualTo: minLat)
                     .whereField("latitude", isLessThanOrEqualTo: maxLat)
                     .whereField("longitude", isGreaterThanOrEqualTo: minLng)
@@ -305,40 +305,43 @@ class FirestoreService {
         }
         
         // MARK: - 類別處理
-        func loadCategories(userID: String, defaultCategories: [String], completion: @escaping ([String]) -> Void) {
-            let userDocument = db.collection("Users").document(userID)
-            
-            userDocument.getDocument { documentSnapshot, error in
-                if let error = error {
-                    print("Error fetching Firestore document: \(error)")
-                    completion(defaultCategories)
-                } else if let document = documentSnapshot, document.exists {
-                    if let categoryArray = document.data()?["categories"] as? [String], !categoryArray.isEmpty {
-                        completion(categoryArray)
-                    } else {
-                        self.setDefaultCategories(userID: userID, defaultCategories: defaultCategories) {
-                            completion(defaultCategories)
-                        }
-                    }
+    func loadCategories(userID: String, completion: @escaping ([String]) -> Void) {
+        let defaultCategories = ["Creative", "Energetic", "Happy"]  // 設置預設的類別
+        let userDocument = db.collection("Users").document(userID)
+        
+        userDocument.getDocument { documentSnapshot, error in
+            if let error = error {
+                print("Error fetching Firestore document: \(error)")
+                completion(defaultCategories)  // 如果加載出錯，返回預設類別
+            } else if let document = documentSnapshot, document.exists {
+                if let categoryArray = document.data()?["categories"] as? [String], !categoryArray.isEmpty {
+                    completion(categoryArray)  // 加載到已有類別
                 } else {
+                    // 如果 categories 不存在或為空，設置預設類別
                     self.setDefaultCategories(userID: userID, defaultCategories: defaultCategories) {
-                        completion(defaultCategories)
+                        completion(defaultCategories)  // 返回預設類別
                     }
+                }
+            } else {
+                // 文檔不存在時，設置預設類別
+                self.setDefaultCategories(userID: userID, defaultCategories: defaultCategories) {
+                    completion(defaultCategories)  // 返回預設類別
                 }
             }
         }
-        
+    }
+
     func setDefaultCategories(userID: String, defaultCategories: [String], completion: @escaping () -> Void) {
         let userDocument = db.collection("Users").document(userID)
         userDocument.updateData([
-            "category": defaultCategories
+            "categories": defaultCategories  // 正確寫入 categories 字段
         ]) { error in
             if let error = error {
                 print("Error setting default categories: \(error)")
             } else {
                 print("Default categories set in Firestore")
             }
-            completion()
+            completion()  // 完成回調
         }
     }
 

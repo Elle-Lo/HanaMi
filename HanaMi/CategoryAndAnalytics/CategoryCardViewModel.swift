@@ -19,7 +19,7 @@ class CategoryCardViewModel: ObservableObject {
     }
 
     func loadCategories() {
-        firestoreService.loadCategories(userID: userID, defaultCategories: []) { fetchedCategories in
+        firestoreService.loadCategories(userID: userID) { fetchedCategories in
             DispatchQueue.main.async {
                 self.categories = fetchedCategories
             }

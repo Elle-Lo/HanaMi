@@ -9,8 +9,7 @@ struct CategorySelectionView: View {
     @State private var validationMessage: String? = nil
     let firestoreService = FirestoreService()
     let userID: String
-    let defaultCategories = ["Creative", "Energetic", "Happy"]
-
+    
     var body: some View {
         HStack(spacing: 10) {
             Menu {
@@ -21,7 +20,7 @@ struct CategorySelectionView: View {
                         Text(category)
                     }
                 }
-
+                
                 Button(action: {
                     showAddCategorySheet = true
                 }) {
@@ -43,7 +42,7 @@ struct CategorySelectionView: View {
         }
         .padding(.horizontal)
         .onAppear {
-            firestoreService.loadCategories(userID: userID, defaultCategories: defaultCategories) { loadedCategories in
+            firestoreService.loadCategories(userID: userID) { loadedCategories in
                 categories = loadedCategories
             }
         }
@@ -52,20 +51,20 @@ struct CategorySelectionView: View {
                 Text("新增類別")
                     .font(.headline)
                     .padding(.top)
-
+                
                 TextField("請輸入新的類別名稱", text: $newCategory)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
                     .onChange(of: newCategory) { _ in
                         validateCategory()
                     }
-
+                
                 if let message = validationMessage {
                     Text(message)
                         .foregroundColor(.red)
                         .padding(.horizontal)
                 }
-
+                
                 HStack {
                     Button("取消") {
                         showAddCategorySheet = false
@@ -73,9 +72,9 @@ struct CategorySelectionView: View {
                         validationMessage = nil
                     }
                     .foregroundColor(.red)
-
+                    
                     Spacer()
-
+                    
                     Button("完成") {
                         let trimmedCategory = newCategory.trimmingCharacters(in: .whitespaces)
                         firestoreService.addCategory(userID: userID, category: trimmedCategory) { success in
@@ -92,14 +91,14 @@ struct CategorySelectionView: View {
                     .disabled(validationMessage != nil)
                 }
                 .padding()
-
+                
                 Spacer()
             }
             .frame(height: 200)
             .presentationDetents([.fraction(0.25)])
         }
     }
-
+    
     private func validateCategory() {
         let trimmedCategory = newCategory.trimmingCharacters(in: .whitespaces)
         if trimmedCategory.isEmpty {

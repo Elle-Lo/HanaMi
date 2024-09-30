@@ -200,7 +200,7 @@ struct CategoryView: View {
 
     // 加载所有类别
     private func loadCategories() {
-        FirestoreService().loadCategories(userID: userID, defaultCategories: []) { fetchedCategories in
+        FirestoreService().loadCategories(userID: userID) { fetchedCategories in
             DispatchQueue.main.async {
                 self.categories = fetchedCategories
             }

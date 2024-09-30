@@ -102,7 +102,7 @@ struct AnalyticsView: View {
     // 從 Firestore 獲取類別寶藏數據
     private func fetchCategoryData() {
         isLoading = true
-        firestoreService.loadCategories(userID: userID, defaultCategories: []) { fetchedCategories in
+        firestoreService.loadCategories(userID: userID) { fetchedCategories in
             self.categories = fetchedCategories  // 保存所有類別
 
             firestoreService.fetchAllTreasures(userID: userID) { result in
