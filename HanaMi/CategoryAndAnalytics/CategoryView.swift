@@ -228,7 +228,7 @@ struct CategoryView: View {
 
     // 删除选中的类别及其宝藏
     private func deleteCategory(_ category: String) {
-        FirestoreService().deleteCategory(userID: userID, category: category) { success in
+        FirestoreService().deleteCategoryAndTreasures(userID: userID, category: category) { success in
             if success {
                 loadCategories()
                 selectedCategory = "All"
@@ -236,4 +236,5 @@ struct CategoryView: View {
             }
         }
     }
+
 }

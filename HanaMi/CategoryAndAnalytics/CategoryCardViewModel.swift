@@ -34,12 +34,7 @@ class CategoryCardViewModel: ObservableObject {
             category: selectedCategory,
             isPublic: isPublic
         ) { success in
-//            if success {
-//                // 成功更新後強制刷新視圖
-//                DispatchQueue.main.async {
-//                    self.selectedCategory = self.selectedCategory // 觸發 UI 刷新
-//                }
-//            }
+
         }
     }
 

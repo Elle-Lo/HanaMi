@@ -6,7 +6,7 @@ class FirestoreService {
     private let db = Firestore.firestore()
     
         func checkUserExists(uid: String, completion: @escaping (Bool) -> Void) {
-            let docRef = db.collection("users").document(uid)
+            let docRef = db.collection("Users").document(uid)
             docRef.getDocument { (document, error) in
                 if let document = document, document.exists {
                     completion(true) // 用戶已經存在
@@ -21,8 +21,8 @@ class FirestoreService {
         let userData: [String: Any] = [
             "name": name,
             "email": email,
-            "treasureList": [], // 初始為空
-            "categories": []    // 初始為空
+            "treasureList": [],
+            "categories": []
         ]
         
         db.collection("Users").document(uid).setData(userData) { error in
@@ -42,12 +42,12 @@ class FirestoreService {
         
         userDocument.getDocument { [weak self] (document, error) in
             guard let self = self, let document = document, document.exists else {
-                completion(.failure(error ?? NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "文档不存在或宝藏列表为空"])))
+                completion(.failure(error ?? NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "文黨不存在或寶藏列表為空"])))
                 return
             }
             
             guard let treasureList = document.data()?["treasureList"] as? [String], !treasureList.isEmpty else {
-                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "宝藏列表为空"])))
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "寶藏列表為空"])))
                 return
             }
             
@@ -70,7 +70,7 @@ class FirestoreService {
             
             dispatchGroup.notify(queue: .main) {
                 if fetchedTreasures.isEmpty {
-                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "没有找到宝藏"])))
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "没有找到寶藏"])))
                 } else {
                     completion(.success(fetchedTreasures))
                 }
@@ -162,7 +162,7 @@ class FirestoreService {
             }
             
             guard let document = document, document.exists else {
-                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "宝藏不存在"])))
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "寶藏不存在"])))
                 return
             }
             
@@ -174,7 +174,7 @@ class FirestoreService {
                   let locationName = data["locationName"] as? String,
                   let isPublic = data["isPublic"] as? Bool,
                   let timestamp = data["createdTime"] as? Timestamp else {
-                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "数据格式不匹配"])))
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "數據格式不匹配"])))
                 return
             }
 
@@ -313,7 +313,7 @@ class FirestoreService {
                     print("Error fetching Firestore document: \(error)")
                     completion(defaultCategories)
                 } else if let document = documentSnapshot, document.exists {
-                    if let categoryArray = document.data()?["category"] as? [String], !categoryArray.isEmpty {
+                    if let categoryArray = document.data()?["categories"] as? [String], !categoryArray.isEmpty {
                         completion(categoryArray)
                     } else {
                         self.setDefaultCategories(userID: userID, defaultCategories: defaultCategories) {
@@ -328,67 +328,79 @@ class FirestoreService {
             }
         }
         
-         func setDefaultCategories(userID: String, defaultCategories: [String], completion: @escaping () -> Void) {
-            let userDocument = db.collection("Users").document(userID)
-            userDocument.setData([
-                "category": defaultCategories
-            ]) { error in
-                if let error = error {
-                    print("Error setting default categories: \(error)")
-                } else {
-                    print("Default categories set in Firestore")
-                }
-                completion()
+    func setDefaultCategories(userID: String, defaultCategories: [String], completion: @escaping () -> Void) {
+        let userDocument = db.collection("Users").document(userID)
+        userDocument.updateData([
+            "category": defaultCategories
+        ]) { error in
+            if let error = error {
+                print("Error setting default categories: \(error)")
+            } else {
+                print("Default categories set in Firestore")
             }
+            completion()
         }
+    }
+
         
         // 更新用户类别
         func addCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
             let userDocument = db.collection("Users").document(userID)
             userDocument.updateData([
-                "category": FieldValue.arrayUnion([category])
+                "categories": FieldValue.arrayUnion([category])
             ]) { error in
                 completion(error == nil)
             }
         }
         
-        func deleteCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
-            let userDocument = db.collection("Users").document(userID)
-            userDocument.updateData([
-                "category": FieldValue.arrayRemove([category])
-            ]) { error in
-                completion(error == nil)
-            }
-        }
+//        func deleteCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
+//            let userDocument = db.collection("Users").document(userID)
+//            userDocument.updateData([
+//                "categories": FieldValue.arrayRemove([category])
+//            ]) { error in
+//                completion(error == nil)
+//            }
+//        }
     
     func deleteCategoryAndTreasures(userID: String, category: String, completion: @escaping (Bool) -> Void) {
-        // 首先查詢並刪除該類別下的所有寶藏
+        // 首先查詢該類別下的所有寶藏
         fetchTreasuresForCategory(userID: userID, category: category) { result in
             switch result {
             case .success(let treasures):
                 let dispatchGroup = DispatchGroup()
                 
                 for treasure in treasures {
-                                guard let treasureID = treasure.id else {
-                                    print("無法刪除，寶藏 ID 為 nil")
-                                    dispatchGroup.leave()
-                                    continue
-                                }
-                                
-                                dispatchGroup.enter()
-                                self.deleteTreasure(userID: userID, treasureID: treasureID) { success in
-                                    if success {
-                                        print("成功刪除寶藏: \(treasureID)")
-                                    } else {
-                                        print("刪除寶藏失敗: \(treasureID)")
-                                    }
-                                    dispatchGroup.leave()
-                                }
-                            }
+                    guard let treasureID = treasure.id else {
+                        print("無法刪除，寶藏 ID 為 nil")
+                        continue
+                    }
+                    
+                    // 刪除寶藏及其內容，並從 treasureList 中移除
+                    dispatchGroup.enter()
+                    self.deleteTreasureAndRemoveFromList(userID: userID, treasureID: treasureID) { success in
+                        if success {
+                            print("成功刪除寶藏: \(treasureID)")
+                        } else {
+                            print("刪除寶藏失敗: \(treasureID)")
+                        }
+                        dispatchGroup.leave()
+                    }
+                }
                 
                 dispatchGroup.notify(queue: .main) {
-                    // 當所有寶藏刪除完成後，刪除該類別
-                    self.deleteCategory(userID: userID, category: category, completion: completion)
+                    // 當所有寶藏刪除完成後，直接在這裡刪除類別
+                    let userDocRef = self.db.collection("Users").document(userID)
+                    userDocRef.updateData([
+                        "categories": FieldValue.arrayRemove([category])
+                    ]) { error in
+                        if let error = error {
+                            print("類別刪除失敗: \(error.localizedDescription)")
+                            completion(false)
+                        } else {
+                            print("類別和所有寶藏刪除成功")
+                            completion(true)
+                        }
+                    }
                 }
                 
             case .failure(let error):
@@ -397,6 +409,34 @@ class FirestoreService {
             }
         }
     }
+
+    
+    func deleteTreasureAndRemoveFromList(userID: String, treasureID: String, completion: @escaping (Bool) -> Void) {
+        let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+        
+        // 刪除寶藏文檔
+        treasureRef.delete { error in
+            if let error = error {
+                print("刪除寶藏錯誤: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                // 從 treasureList 中移除寶藏 ID
+                let userDocRef = self.db.collection("Users").document(userID)
+                userDocRef.updateData([
+                    "treasureList": FieldValue.arrayRemove([treasureID])
+                ]) { error in
+                    if let error = error {
+                        print("從 treasureList 移除寶藏 ID 失敗: \(error.localizedDescription)")
+                        completion(false)
+                    } else {
+                        print("成功從 treasureList 移除寶藏 ID")
+                        completion(true)
+                    }
+                }
+            }
+        }
+    }
+
 
     func deleteTreasure(userID: String, treasureID: String, completion: @escaping (Bool) -> Void) {
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
@@ -466,7 +506,19 @@ class FirestoreService {
                         }
                         
                         dispatchGroup.notify(queue: .main) {
-                            completion(true)
+                            // 更新完所有寶藏後，強制重新加載新的類別資料
+                            self.fetchTreasuresForCategory(userID: userID, category: newName) { result in
+                                switch result {
+                                case .success(let updatedTreasures):
+                                    print("寶藏名稱和類別成功更新")
+                                    // 在這裡你可以直接觸發 UI 刷新，例如通過回調或者發送通知來更新 UI
+                                    // 例如：self.delegate?.didUpdateCategory(newName: newName, treasures: updatedTreasures)
+                                    completion(true)
+                                case .failure(let error):
+                                    print("更新後加載寶藏失敗: \(error.localizedDescription)")
+                                    completion(false)
+                                }
+                            }
                         }
                         
                     case .failure(let error):
@@ -484,11 +536,11 @@ class FirestoreService {
     func updateCategoryName(userID: String, oldName: String, newName: String, completion: @escaping (Bool) -> Void) {
         let userDocRef = db.collection("Users").document(userID)
         userDocRef.updateData([
-            "category": FieldValue.arrayRemove([oldName])  // 先刪除舊名稱
+            "categories": FieldValue.arrayRemove([oldName])  // 先刪除舊名稱
         ]) { error in
             if error == nil {
                 userDocRef.updateData([
-                    "category": FieldValue.arrayUnion([newName])  // 再添加新名稱
+                    "categories": FieldValue.arrayUnion([newName])  // 再添加新名稱
                 ]) { error in
                     completion(error == nil)
                 }
