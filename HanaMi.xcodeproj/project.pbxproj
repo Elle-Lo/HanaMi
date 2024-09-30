@@ -34,7 +34,6 @@
 		ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAACD2C941493007CDB45 /* StarterPage.swift */; };
 		ABAFAAD02C9414AE007CDB45 /* HomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAACF2C9414AE007CDB45 /* HomePage.swift */; };
 		ABAFAAD22C94153E007CDB45 /* LogInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD12C94153E007CDB45 /* LogInPage.swift */; };
-		ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */; };
 		ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */; };
 		ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAD82C9540EB007CDB45 /* Model.swift */; };
 		ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */; };
@@ -90,7 +89,6 @@
 		ABAFAACD2C941493007CDB45 /* StarterPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarterPage.swift; sourceTree = "<group>"; };
 		ABAFAACF2C9414AE007CDB45 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		ABAFAAD12C94153E007CDB45 /* LogInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInPage.swift; sourceTree = "<group>"; };
-		ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GmailLogInPage.swift; sourceTree = "<group>"; };
 		ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepositPage.swift; sourceTree = "<group>"; };
 		ABAFAAD82C9540EB007CDB45 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		ABAFAADD2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAndAnalyticsPage.swift; sourceTree = "<group>"; };
@@ -231,7 +229,6 @@
 			isa = PBXGroup;
 			children = (
 				ABAFAACD2C941493007CDB45 /* StarterPage.swift */,
-				ABAFAAD32C94158C007CDB45 /* GmailLogInPage.swift */,
 				ABAFAAD12C94153E007CDB45 /* LogInPage.swift */,
 				AB06AA682CA982BB00E49F5C /* SignUpPage.swift */,
 			);
@@ -395,7 +392,6 @@
 				ABAFAAD22C94153E007CDB45 /* LogInPage.swift in Sources */,
 				ABAFAB252C9A8533007CDB45 /* TreasureAnnotation.swift in Sources */,
 				ABAFAAEC2C95EDE9007CDB45 /* LocationManager.swift in Sources */,
-				ABAFAAD42C94158C007CDB45 /* GmailLogInPage.swift in Sources */,
 				ABAFAB022C988FEF007CDB45 /* ToggleButton.swift in Sources */,
 				AB06AA032CA0101800E49F5C /* CharacterAnimationScene.swift in Sources */,
 				ABAFAB002C988FA1007CDB45 /* FirestoreService.swift in Sources */,

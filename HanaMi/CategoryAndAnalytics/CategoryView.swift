@@ -12,8 +12,10 @@ struct CategoryView: View {
     @State private var showChangeNameAlert = false
     @State private var editedCategoryName = ""
     @State private var editCategoryValidationMessage: String?
-    private var userID: String = "g61HUemIJIRIC1wvvIqa"
-
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
+    
     var body: some View {
         ZStack {
             VStack(alignment: .leading) {

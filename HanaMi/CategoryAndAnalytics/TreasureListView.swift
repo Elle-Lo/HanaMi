@@ -7,6 +7,9 @@ struct TreasureListView: View {
     var loadAllTreasures: () -> Void
     var loadTreasuresDetail: (String) -> Void
     var onDeleteTreasure: (Treasure) -> Void
+    private var userID: String {
+           return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+       }
     
     var body: some View {
         ScrollView {
@@ -17,7 +20,7 @@ struct TreasureListView: View {
                 ForEach(treasures) { treasure in
                     CategoryCardView(
                         treasure: treasure,
-                        userID: "g61HUemIJIRIC1wvvIqa",
+                        userID: userID,
                         selectedCategory: $selectedCategory, // 传递 Binding<String?>
                         categories: $categories,
                         onDelete: {

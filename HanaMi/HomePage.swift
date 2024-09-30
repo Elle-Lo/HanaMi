@@ -5,10 +5,12 @@ import Kingfisher
 struct HomePage: View {
     @State private var treasures: [Treasure] = []
     @State private var isLoading = false
-
-    private let userId = "g61HUemIJIRIC1wvvIqa"
+    
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
     private let firestoreService = FirestoreService()
-
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -66,12 +68,12 @@ struct HomePage: View {
 
     func fetchRandomTreasures() {
         isLoading = true
-        firestoreService.fetchRandomTreasures(userID: userId) { result in
+        firestoreService.fetchRandomTreasures(userID: userID) { result in
             switch result {
             case .success(let fetchedTreasures):
                 treasures = fetchedTreasures
             case .failure(let error):
-                print("获取宝藏失败: \(error.localizedDescription)")
+                print("獲取寶藏失敗: \(error.localizedDescription)")
             }
             isLoading = false
         }

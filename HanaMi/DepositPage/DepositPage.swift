@@ -33,7 +33,9 @@ struct DepositPage: View {
     @StateObject private var locationManager = LocationManager()
     @StateObject private var searchViewModel = LocationSearchViewModel()
 
-    let userID = "g61HUemIJIRIC1wvvIqa"
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {

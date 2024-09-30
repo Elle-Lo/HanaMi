@@ -1,8 +1,38 @@
 import FirebaseFirestore
+import FirebaseAuth
 import CoreLocation
 
 class FirestoreService {
     private let db = Firestore.firestore()
+    
+        func checkUserExists(uid: String, completion: @escaping (Bool) -> Void) {
+            let docRef = db.collection("users").document(uid)
+            docRef.getDocument { (document, error) in
+                if let document = document, document.exists {
+                    completion(true) // 用戶已經存在
+                } else {
+                    completion(false) // 用戶不存在
+                }
+            }
+        }
+
+    func createUserInFirestore(uid: String, name: String, email: String) {
+        let db = Firestore.firestore()
+        let userData: [String: Any] = [
+            "name": name,
+            "email": email,
+            "treasureList": [], // 初始為空
+            "categories": []    // 初始為空
+        ]
+        
+        db.collection("Users").document(uid).setData(userData) { error in
+            if let error = error {
+                print("Error creating user in Firestore: \(error.localizedDescription)")
+            } else {
+                print("User document successfully created in Firestore!")
+            }
+        }
+    }
     
     // MARK: - Treasure Handling
     

@@ -1,9 +1,11 @@
 import SwiftUI
 
 struct MainTabView: View {
-    private var userID: String = "g61HUemIJIRIC1wvvIqa"
-    @State private var selectedTab: Int = 0 // 用於追蹤當前選中的 Tab 頁面
+    @State private var selectedTab: Int = 0
     @State private var showCategory = true
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
     
     init() {
         // 修改选中的 tab 颜色

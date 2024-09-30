@@ -17,10 +17,9 @@ enum LinkType {
 }
 
 struct Users: Identifiable, Codable {
-    @DocumentID var id: String? 
+    @DocumentID var id: String? // 用戶的 Firestore document ID
     var name: String
     var email: String
-    var password: String
     var treasureList: [String]
     var categories: [String]
 }

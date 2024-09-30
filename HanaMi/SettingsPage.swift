@@ -15,6 +15,8 @@ struct SettingsPage: View {
                 .padding()
             Button("Log Out") {
                 try? Auth.auth().signOut()
+                UserDefaults.standard.removeObject(forKey: "userID")
+                print("User successfully logged out.")
                 logStatus = false
             }
             Spacer()

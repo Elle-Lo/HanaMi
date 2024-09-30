@@ -15,15 +15,18 @@ struct StarterPage: View {
         if logStatus {
             MainTabView()
         } else {
-            VStack(spacing: 20) {
+            VStack(spacing: 10) { // 設置較小的間距以控制元素之間的距離
+                // 調整 Welcome 和 Capybara 的上方 padding，使其往上移動
                 Text("Welcome")
                     .font(.largeTitle)
                     .foregroundColor(Color(hex: "#522504"))
-                    .padding()
-                Image("Cat")
+                    .padding(.bottom, 30)
+                
+                Image("capybara")
                     .resizable()
-                    .frame(width: 200, height: 220)
+                    .frame(width: 200, height: 150)
                     .scaledToFit()
+                    .padding(.bottom, 30) // 增加與 LOG IN 按鈕之間的距離
                 
                 NavigationLink(destination: LogInPage()) {
                     Text("LOG IN")
@@ -33,12 +36,13 @@ struct StarterPage: View {
                         .background(Color(hex: "#FFF7EF"))
                         .cornerRadius(25)
                 }
+                .padding(.bottom, 10) // 增加 LOG IN 和 Other login methods 之間的距離
                 
                 // 其他登入方式按鈕
                 Button(action: {
                     showSmallSheet.toggle() // 點擊時顯示小型 sheet
                 }) {
-                    Text("Other login methods")
+                    Text("OTHER LOGIN METHODS")
                         .foregroundColor(Color(hex: "#522504"))
                         .padding()
                         .frame(width: 250, height: 50)
@@ -71,7 +75,7 @@ struct StarterPage: View {
                         .padding()
                     }
                     .padding()
-                    .presentationDetents([.fraction(0.2)]) // 設定大小接近 ActionSheet
+                    .presentationDetents([.fraction(0.2)])
                 }
 
                 HStack {
@@ -82,9 +86,10 @@ struct StarterPage: View {
                         Text("Sign Up")
                             .foregroundColor(Color(hex: "#522504"))
                             .font(.footnote) // 調整字體大小變小
+                            .fontWeight(.bold)
                     }
                 }
-                .padding(.top, -5) 
+                .padding(.top, 5)
             }
             .alert(errorMessge, isPresented: $showAlert) { }
             .overlay {
@@ -98,13 +103,8 @@ struct StarterPage: View {
     @ViewBuilder
     func LoadingScreen() -> some View {
         ZStack {
-//            Rectangle()
-//                .fill(.ultraThinMaterial)
-//                .ignoresSafeArea() // 確保背景充滿整個螢幕
-            
             ProgressView()
                 .frame(width: 45, height: 45)
-//                .background(Color.white.opacity(0.8))
                 .cornerRadius(5)
         }
     }
@@ -117,7 +117,6 @@ struct StarterPage: View {
     }
     
     func loginWithFirebase(_ authorization: ASAuthorization) {
-        
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             isLoading = true
             
@@ -133,18 +132,43 @@ struct StarterPage: View {
                 showError("Cannot process your request")
                 return
             }
+            
             let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
                                                            rawNonce: nonce,
                                                            fullName: appleIDCredential.fullName)
+            
             Auth.auth().signIn(with: credential) { (authResult, error) in
-                if let error {
+                if let error = error {
                     showError(error.localizedDescription)
+                    return
                 }
+                
+                // 登錄成功，檢查 Firestore 中是否已有該用戶
+                if let uid = authResult?.user.uid {
+                    let email = authResult?.user.email ?? "Unknown email"
+                    let fullName = appleIDCredential.fullName?.formatted() ?? "Unknown name"
+                    
+                    createUserInFirestoreIfNeeded(uid: uid, name: fullName, email: email)
+                    // 將 userID 存入 UserDefaults
+                    UserDefaults.standard.set(uid, forKey: "userID")
+                }
+                
                 logStatus = true
                 isLoading = false
             }
         }
     }
+
+    func createUserInFirestoreIfNeeded(uid: String, name: String, email: String) {
+        let firestoreService = FirestoreService()
+        
+        firestoreService.checkUserExists(uid: uid) { exists in
+            if !exists {
+                firestoreService.createUserInFirestore(uid: uid, name: name, email: email)
+            }
+        }
+    }
+
     
     private func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)

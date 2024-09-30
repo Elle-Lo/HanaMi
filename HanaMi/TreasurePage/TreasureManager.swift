@@ -6,7 +6,9 @@ class TreasureManager: ObservableObject {
     @Published var displayedTreasures: [TreasureSummary] = [] // 地圖範圍內要顯示的寶藏
     let firestoreService = FirestoreService()
     
-    private let userID = "g61HUemIJIRIC1wvvIqa" // 使用當前用戶的ID
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
     
     // 加載所有公開的寶藏
     func fetchAllPublicTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {

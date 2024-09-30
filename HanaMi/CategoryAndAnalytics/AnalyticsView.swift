@@ -9,9 +9,11 @@ struct AnalyticsView: View {
     @State private var isLoading = true
     @State private var categories: [String] = []
 
-    private let userID = "g61HUemIJIRIC1wvvIqa"
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
     private let firestoreService = FirestoreService()
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             // 標題
