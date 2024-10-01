@@ -5,287 +5,267 @@ import Kingfisher
 
 struct SettingsPage: View {
     @AppStorage("log_Status") private var logStatus: Bool = false
-    @State private var userName: String = "Loading..."
-    @State private var selectedProfileImage: UIImage?
-    @State private var userProfileImageUrl: URL?
-    @State private var backgroundImageUrl: URL?
-    @State private var selectedBackgroundImage: UIImage?
-    @State private var isPhotoPickerPresented = false
-    @State private var isSelectingProfileImage = false
-    @State private var isSelectingBackgroundImage = false
-    @State private var isRemoveBackgroundEnabled = false
-    @State private var showCharacterAlert = false
-    @State private var newCharacterName: String = ""
-    @State private var characterName: String = "Loading..."
-    @State private var isEditingName = false  // 狀態來控制編輯模式
-    @State private var newUserName: String = ""
+        @State private var userName: String = "Loading..."
+        @State private var selectedProfileImage: UIImage?
+        @State private var userProfileImageUrl: URL?
+        @State private var backgroundImageUrl: URL?
+        @State private var selectedBackgroundImage: UIImage?
+        @State private var showActionSheet = false
+        @State private var isProfilePhotoPickerPresented = false
+        @State private var isBackgroundPhotoPickerPresented = false
+        @State private var isRemoveBackgroundEnabled = false
+        @State private var showCharacterAlert = false
+        @State private var newCharacterName: String = ""
+        @State private var characterName: String = "Loading..."
+        @State private var isEditingName = false  // 狀態來控制編輯模式
+        @State private var newUserName: String = ""
+    
     private let firestoreService = FirestoreService()
     private let storageRef = Storage.storage().reference()
     private let uid = Auth.auth().currentUser!.uid  // 直接获取 uid
 
     var body: some View {
         ZStack {
-            VStack {
-                // 頭像和名字部分
-                ZStack {
-                    Color.white
-                        .frame(height: 250) // 固定白色背景區域高度
-                        .edgesIgnoringSafeArea(.all)
+            // 背景圓弧包裹 ScrollView
+            RoundedRectangle(cornerRadius: 60, style: .continuous)
+                .fill(Color(hex: "#FFF7EF"))
+                .frame(height: UIScreen.main.bounds.height * 0.75)  // 設定圓弧高度
+                .offset(y: UIScreen.main.bounds.height * 0.2)  // 上移圓弧使它能覆蓋底部
+            
+            VStack(spacing: 0) {
+                // 頭像與名字
+                VStack {
                     
-                    VStack {
-                        Button(action: {
-                            isSelectingProfileImage = true
-                            isPhotoPickerPresented = true
-                        }) {
-                            if let profileImageUrl = userProfileImageUrl {
-                                KFImage(profileImageUrl)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 100, height: 100)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                                    .shadow(radius: 5)
-                            } else {
-                                Circle()
-                                    .fill(Color.gray.opacity(0.5))
-                                    .frame(width: 100, height: 100)
-                                    .overlay(Text("T").font(.largeTitle).foregroundColor(.white))
-                            }
+                    Button(action: {
+                        showActionSheet = true
+                    }) {
+                        if let profileImageUrl = userProfileImageUrl {
+                            KFImage(profileImageUrl)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                                .shadow(radius: 5)
+                        } else {
+                            Image("userImagePlaceholder")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 100, height: 100)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                                .shadow(radius: 5)
                         }
-                        .onChange(of: selectedProfileImage) { newImage in
-                            if let newImage = newImage {
-                                uploadProfileImageToStorage(image: newImage)
-                            }
-                        }
-                        
-                        HStack {
-                            if isEditingName {
-                                // 编辑模式：TextField 显示用户可以编辑的名称
-                                TextField("輸入新名稱", text: $newUserName)
-                                    .background(Color.clear)
-                                    .onSubmit {
-                                        saveUserName()
-                                    }
-                                
-                                // 完成編輯按鈕
-                                Button("完成") {
-                                    saveUserName()
-                                }
-                            } else {
-                                // 顯示用戶名稱及編輯圖示
-                                Text(userName)
-                                    .font(.headline)
-                                    .foregroundColor(Color(hex: "#522504"))
-                                
-                                // 編輯圖示按鈕
-                                Button(action: {
-                                    isEditingName.toggle() // 切換到編輯模式
-                                    newUserName = userName // 將當前名稱填入編輯框
-                                }) {
-                                    Image(systemName: "pencil")
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                        }
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 80)
                     }
-                    .padding(.top, 40)
-                }
-                
-                ZStack {
-                    GeometryReader { geometry in
-                        // 圓弧背景
-                        RoundedRectangle(cornerRadius: 60, style: .continuous)
-                                       .fill(Color(hex: "#FFF7EF"))
-                                       .frame(maxHeight: geometry.size.height * 3) // 設定圓弧背景高度
-                                       .offset(y: 50)
-                            .overlay(
-                                ScrollView {
-                                    VStack(spacing: 10) {
-                                        // 更換背景按鈕
-                                        SettingsButton(iconName: "photo.on.rectangle", text: "更換背景") {
-                                            isSelectingBackgroundImage = true
-                                            isPhotoPickerPresented = true
+                    .actionSheet(isPresented: $showActionSheet) {
+                                            ActionSheet(title: Text("選擇操作"), buttons: [
+                                                .default(Text("更換大頭貼")) {
+                                                    isProfilePhotoPickerPresented = true
+                                                },
+                                                .destructive(Text("刪除大頭貼")) {
+                                                    removeProfileImage()
+                                                },
+                                                .cancel()
+                                            ])
                                         }
-                                        .onChange(of: selectedBackgroundImage) { newImage in
-                                            if let newImage = newImage {
-                                                uploadBackgroundImageToStorage(image: newImage)
-                                            }
-                                        }
-                                        
-                                        // 移除背景按鈕
-                                        SettingsButton(iconName: "trash", text: "移除背景圖") {
-                                            isRemoveBackgroundEnabled = true
-                                            removeBackgroundImage()
-                                        }
-                                        
-                                        // 登出按鈕
-                                        SettingsButton(iconName: "arrow.right.square", text: "登出") {
-                                            try? Auth.auth().signOut()
-                                            UserDefaults.standard.removeObject(forKey: "userID")
-                                            logStatus = false
-                                        }
-                                    }
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 30)
-                                }
-                            )
-                        
-                        // 收藏和角色按鈕
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 30)
-                                .fill(Color(hex: "#F1F1F1"))
-                                .frame(width: 250, height: 50)
-                            
-                            HStack {
-                                NavigationLink(destination: FavoritesPage()) {
-                                    Text("收藏")
-                                        .font(.system(size: 18, weight: .bold))
-                                        .foregroundColor(Color(hex: "#522504"))
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 10)
-                                }
-                                .background(Color.clear)
-                                
-                                Button(action: {
-                                    showCharacterAlert = true // 顯示角色名字修改警告框
-                                }) {
-                                    Text("角色")
-                                        .font(.system(size: 18, weight: .bold))
-                                        .foregroundColor(Color(hex: "#522504"))
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 10)
-                                }
-                                .background(Color.clear)
-                            }
-                        }
-                        .frame(width: 250, height: 50)
-                        .position(x: geometry.size.width / 2, y: geometry.size.height * 0.01) // 動態調整按鈕位置
-                    }
-                }
-            }
-        }
-            .navigationTitle("設定")
-            .navigationBarTitleDisplayMode(.inline)
-            .sheet(isPresented: $isPhotoPickerPresented, onDismiss: {
-                // 重置选择标记
-                isSelectingProfileImage = false
-                isSelectingBackgroundImage = false
-            }) {
-                if isSelectingProfileImage {
-                    PhotoPicker(image: $selectedProfileImage)
-                } else if isSelectingBackgroundImage {
-                    PhotoPicker(image: $selectedBackgroundImage)
-                }
-            }
-            .onAppear {
-                        fetchUserNameAndProfileImage()
-                    }
-                    .alert("修改角色名字", isPresented: $showCharacterAlert, actions: {
-                        TextField("輸入新角色名字", text: $newCharacterName)
-                        Button("確認", action: updateCharacterName)
-                        Button("取消", role: .cancel, action: {})
-                    }, message: {
-                        Text("請輸入新的角色名字")
-                    })
-        }
-    
-    func saveUserName() {
-            guard !newUserName.isEmpty else { return }
-        firestoreService.updateUserName(uid: uid, name: newUserName)
-            userName = newUserName
-            isEditingName = false // 結束編輯模式
-        }
-    
-    func updateCharacterName() {
-        guard !newCharacterName.isEmpty else { return }
 
-        firestoreService.updateUserCharacterName(uid: uid, characterName: newCharacterName)
-        characterName = newCharacterName
-        print("角色名字已更新：\(newCharacterName)")
+                    Text(userName)
+                        .font(.headline)
+                        .foregroundColor(Color(hex: "#522504"))
+                    
+                    Text(characterName)
+                        .font(.subheadline)
+                        .foregroundColor(Color.gray)
+                }
+                .padding(.top, 40)
+
+                // Capybara 圖片，站在圓弧上
+                Image("capybaraRight")
+                    .resizable()
+                    .frame(width: 60, height: 40)
+                    .offset(x: -120, y: 10)  // 調整 Capybara 的位置
+                
+                ScrollView {
+                    VStack(spacing: 10) {
+                        // 更換背景按鈕
+                        SettingsButton(iconName: "photo.on.rectangle", text: "更換背景") {
+                            isBackgroundPhotoPickerPresented = true
+                        }
+//                        .onChange(of: selectedBackgroundImage) { newImage in
+//                            if let newImage = newImage {
+//                                uploadBackgroundImageToStorage(image: newImage)
+//                            }
+//                        }
+                        
+                        // 移除背景按鈕
+                        SettingsButton(iconName: "trash", text: "移除背景圖") {
+                            isRemoveBackgroundEnabled = true
+                            removeBackgroundImage()
+                        }
+                        
+                        // 登出按鈕
+                        SettingsButton(iconName: "arrow.right.square", text: "登出") {
+                            try? Auth.auth().signOut()
+                            UserDefaults.standard.removeObject(forKey: "userID")
+                            logStatus = false
+                        }
+                        
+                        // 收藏按鈕
+                        NavigationLink(destination: FavoritesPage()) {
+                            SettingsButton(iconName: "heart", text: "收藏") {
+                                // 收藏動作
+                            }
+                        }
+
+                        // 角色按鈕
+                        Button(action: {
+                            showCharacterAlert = true
+                        }) {
+                            SettingsButton(iconName: "hare", text: "更改角色名稱") {
+                                showCharacterAlert = true
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
+                }
+            }
+        }
+        .navigationTitle("設定")
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $isProfilePhotoPickerPresented, onDismiss: {
+                   // 在这里无需清空 selectedProfileImage，因为我们需要在 .onChange 中获取它的值
+               }) {
+                   PhotoPicker(image: $selectedProfileImage)
+               }
+               // 监听 selectedProfileImage 的变化
+               .onChange(of: selectedProfileImage) { newImage in
+                   if let newImage = newImage {
+                       uploadProfileImageToStorage(image: newImage)
+                   }
+               }
+                // 背景圖片選擇器的 sheet
+               .sheet(isPresented: $isBackgroundPhotoPickerPresented, onDismiss: {
+                          // 同样，这里无需清空 selectedBackgroundImage
+                      }) {
+                          PhotoPicker(image: $selectedBackgroundImage)
+                      }
+                      // 监听 selectedBackgroundImage 的变化
+                      .onChange(of: selectedBackgroundImage) { newImage in
+                          if let newImage = newImage {
+                              uploadBackgroundImageToStorage(image: newImage)
+                          }
+                      }
+
+        
+        .alert("修改角色名字", isPresented: $showCharacterAlert, actions: {
+            TextField("輸入新角色名字", text: $newCharacterName)
+            Button("確認", action: updateCharacterName)
+            Button("取消", role: .cancel, action: {})
+        }, message: {
+            Text("請輸入新的角色名字")
+        })
+        .onAppear {
+            fetchUserNameAndProfileImage()
+        }
     }
 
-        // 上传头像到 Firebase Storage
-        func uploadProfileImageToStorage(image: UIImage) {
-            let imageName = UUID().uuidString
-            let imagePath = "user_images/\(uid)/profile/\(imageName).jpg"
-            guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
+    func saveUserName() {
+        guard !newUserName.isEmpty else { return }
+        firestoreService.updateUserName(uid: uid, name: newUserName)
+        userName = newUserName
+        isEditingName = false // 結束編輯模式
+    }
 
-            let storagePath = storageRef.child(imagePath)
+    func updateCharacterName() {
+        guard !newCharacterName.isEmpty else { return }
+        firestoreService.updateUserCharacterName(uid: uid, characterName: newCharacterName)
+        characterName = newCharacterName
+    }
 
-            storagePath.putData(imageData, metadata: nil) { _, error in
+    func uploadProfileImageToStorage(image: UIImage) {
+        let imageName = UUID().uuidString
+        let imagePath = "user_images/\(uid)/profile/\(imageName).jpg"
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
+
+        let storagePath = storageRef.child(imagePath)
+        storagePath.putData(imageData, metadata: nil) { _, error in
+            if let error = error {
+                print("上傳頭像失敗: \(error.localizedDescription)")
+                return
+            }
+            storagePath.downloadURL { url, error in
                 if let error = error {
-                    print("上傳頭像失敗: \(error.localizedDescription)")
+                    print("獲取頭像下載 URL 失敗: \(error.localizedDescription)")
                     return
                 }
-
-                // 获取下载 URL 并保存到 Firestore
-                storagePath.downloadURL { url, error in
-                    if let error = error {
-                        print("獲取頭像下載 URL 失敗: \(error.localizedDescription)")
-                        return
-                    }
-
-                    if let downloadURL = url {
-                        // 更新 Firestore 中的 userImage 字段
-                        firestoreService.updateUserProfileImage(uid: uid, imageUrl: downloadURL.absoluteString)
-
-                        // 更新界面显示
-                        self.userProfileImageUrl = downloadURL
-                    }
+                if let downloadURL = url {
+                    firestoreService.updateUserProfileImage(uid: uid, imageUrl: downloadURL.absoluteString)
+                    self.userProfileImageUrl = downloadURL
                 }
             }
-
-            // 重置状态
-            selectedProfileImage = nil
-            isSelectingProfileImage = false
         }
+        selectedProfileImage = nil
+//        isSelectingProfileImage = false
+    }
 
-        // 上传背景图片到 Firebase Storage
-        func uploadBackgroundImageToStorage(image: UIImage) {
-            let imageName = UUID().uuidString
-            let imagePath = "background_images/\(uid)/\(imageName).jpg"
-            guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
+    func uploadBackgroundImageToStorage(image: UIImage) {
+        let imageName = UUID().uuidString
+        let imagePath = "background_images/\(uid)/\(imageName).jpg"
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
 
-            let storagePath = storageRef.child(imagePath)
-
-            storagePath.putData(imageData, metadata: nil) { _, error in
+        let storagePath = storageRef.child(imagePath)
+        storagePath.putData(imageData, metadata: nil) { _, error in
+            if let error = error {
+                print("上傳背景圖片失敗: \(error.localizedDescription)")
+                return
+            }
+            storagePath.downloadURL { url, error in
                 if let error = error {
-                    print("上傳背景圖片失敗: \(error.localizedDescription)")
+                    print("獲取下載背景圖片 URL 失敗: \(error.localizedDescription)")
                     return
                 }
-
-                // 获取下载 URL 并保存到 Firestore
-                storagePath.downloadURL { url, error in
-                    if let error = error {
-                        print("獲取下載背景圖片 URL 失敗: \(error.localizedDescription)")
-                        return
-                    }
-
-                    if let downloadURL = url {
-                        // 更新 Firestore 中的 backgroundImage 字段
-                        firestoreService.updateUserBackgroundImage(uid: uid, imageUrl: downloadURL.absoluteString)
-
-                        // 更新界面显示
-                        self.backgroundImageUrl = downloadURL
-                    }
+                if let downloadURL = url {
+                    firestoreService.updateUserBackgroundImage(uid: uid, imageUrl: downloadURL.absoluteString)
+                    self.backgroundImageUrl = downloadURL
                 }
             }
-
-            // 重置状态
-            selectedBackgroundImage = nil
-            isSelectingBackgroundImage = false
         }
+        selectedBackgroundImage = nil
+//        isSelectingBackgroundImage = false
+    }
 
-        // 移除背景图片
-        func removeBackgroundImage() {
-            firestoreService.updateUserBackgroundImage(uid: uid, imageUrl: "")
-            self.backgroundImageUrl = nil
-            print("背景圖片已移除！")
+    
+    func removeProfileImage() {
+        guard let currentImageUrl = userProfileImageUrl?.absoluteString else {
+            print("No profile image to remove.")
+            return
         }
+        
+        firestoreService.removeUserProfileImage(uid: uid, currentImageUrl: currentImageUrl) { success in
+            if success {
+                self.userProfileImageUrl = nil  // 清除 UI 上的圖片
+                print("大頭貼已成功移除")
+            } else {
+                print("大頭貼移除失敗")
+            }
+        }
+    }
 
-    // 从 Firestore 加载用户名字和头像/背景 URL
+    func removeBackgroundImage() {
+        guard let imageUrl = backgroundImageUrl?.absoluteString else { return }
+        
+        firestoreService.removeUserBackgroundImage(uid: uid, imageUrl: imageUrl) { success in
+            if success {
+                self.backgroundImageUrl = nil  // UI 更新，移除背景圖片
+                print("背景圖片已刪除")
+            } else {
+                print("刪除背景圖片失敗")
+            }
+        }
+    }
+
+
     func fetchUserNameAndProfileImage() {
         firestoreService.fetchUserData(uid: uid) { name, profileImageUrl, backgroundImageUrl, characterName in
             self.userName = name ?? "No name"
@@ -295,11 +275,9 @@ struct SettingsPage: View {
             if let backgroundImageUrlString = backgroundImageUrl, let url = URL(string: backgroundImageUrlString) {
                 self.backgroundImageUrl = url
             }
-            // Fetch character name and update it
             self.characterName = characterName ?? "No character"
         }
     }
-    
 }
 
 struct SettingsButton: View {

@@ -22,7 +22,7 @@ struct StarterPage: View {
                     .foregroundColor(Color(hex: "#522504"))
                     .padding(.bottom, 30)
                 
-                Image("capybara")
+                Image("capybaraLeft")
                     .resizable()
                     .frame(width: 200, height: 150)
                     .scaledToFit()

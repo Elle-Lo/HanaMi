@@ -115,7 +115,7 @@ struct LogInPage: View {
             Spacer() // 保證內容區塊在中間
 
             // 放置底部圖像
-            Image("capybara")
+            Image("capybaraRight")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 150, height: 150)

@@ -1,4 +1,5 @@
 import FirebaseFirestore
+import FirebaseStorage
 import FirebaseAuth
 import CoreLocation
 
@@ -123,6 +124,59 @@ class FirestoreService {
             }
         }
     }
+    // 刪除用戶頭像 URL 並刪除 Firebase Storage 上的圖片
+    func removeUserProfileImage(uid: String, currentImageUrl: String, completion: @escaping (Bool) -> Void) {
+        // 確認圖片 URL 不為空
+        guard !currentImageUrl.isEmpty else {
+            // 如果沒有圖片，直接從 Firestore 中刪除連結
+            updateUserProfileImage(uid: uid, imageUrl: "")
+            completion(true)
+            return
+        }
+
+        // 取得 Firebase Storage 的圖片參考
+        let storageRef = Storage.storage().reference(forURL: currentImageUrl)
+        
+        // 刪除 Firebase Storage 上的圖片
+        storageRef.delete { error in
+            if let error = error {
+                print("Error deleting image from Firebase Storage: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                print("Image successfully deleted from Firebase Storage.")
+                
+                // 成功刪除圖片後，更新 Firestore，將圖片 URL 設置為空
+                self.updateUserProfileImage(uid: uid, imageUrl: "")
+                completion(true)
+            }
+        }
+    }
+    
+    func removeUserBackgroundImage(uid: String, imageUrl: String, completion: @escaping (Bool) -> Void) {
+        let storageRef = Storage.storage().reference(forURL: imageUrl) // 透過 URL 獲取 Firebase Storage 中的參考
+
+        // 刪除 Firebase Storage 中的圖片
+        storageRef.delete { error in
+            if let error = error {
+                print("Error deleting background image from Firebase Storage: \(error.localizedDescription)")
+                completion(false)
+            } else {
+                // 圖片刪除成功，更新 Firestore 中的 URL
+                let docRef = self.db.collection("Users").document(uid)
+                docRef.updateData(["backgroundImage": ""]) { error in
+                    if let error = error {
+                        print("Error updating Firestore background image: \(error.localizedDescription)")
+                        completion(false)
+                    } else {
+                        print("Background image successfully removed from Firestore and Storage!")
+                        completion(true)
+                    }
+                }
+            }
+        }
+    }
+
+
     
     // MARK: - Treasure Handling
     
