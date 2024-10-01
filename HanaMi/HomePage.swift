@@ -15,22 +15,9 @@ struct HomePage: View {
     private let firestoreService = FirestoreService()
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             ZStack {
 
-                // 根據選擇的背景圖顯示或使用默認背景
-                if let backgroundImageUrl = backgroundImageUrl, !isUsingDefaultBackground {
-                    KFImage(backgroundImageUrl)
-                        .resizable()
-                        .scaledToFill()
-                        .edgesIgnoringSafeArea(.all)
-                } else {
-                    Image("Homebg")  // 默認背景圖
-                        .resizable()
-                        .scaledToFill()
-                        .edgesIgnoringSafeArea(.all)
-                }
-                
                 // 半透明黑色遮罩
                 Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
 
@@ -70,7 +57,22 @@ struct HomePage: View {
                     }
                 }
             }
-        }
+            .background(
+                            Group {
+                                if let backgroundImageUrl = backgroundImageUrl, !isUsingDefaultBackground {
+                                    KFImage(backgroundImageUrl)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .edgesIgnoringSafeArea(.all) // 背景延伸到安全区域外
+                                } else {
+                                    Image("Homebg")
+                                        .resizable()
+                                        .scaledToFill()
+                                        .edgesIgnoringSafeArea(.all) // 使用默认背景
+                                }
+                            }
+                        )
+//        }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
                    fetchBackgroundImage()  // 加載用戶背景圖片

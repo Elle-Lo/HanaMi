@@ -36,12 +36,12 @@ class FirestoreService {
         }
     }
     
-    func fetchUserNameAndProfileImage(uid: String, completion: @escaping (String?, String?, String?) -> Void) {
+    func fetchUserData(uid: String, completion: @escaping (String?, String?, String?, String?) -> Void) {
         let docRef = db.collection("Users").document(uid)
         docRef.getDocument { snapshot, error in
             if let error = error {
                 print("Error fetching user data: \(error.localizedDescription)")
-                completion(nil, nil, nil)
+                completion(nil, nil, nil, nil)
                 return
             }
             
@@ -49,12 +49,14 @@ class FirestoreService {
                 let name = snapshot.get("name") as? String
                 let profileImageUrl = snapshot.get("userImage") as? String
                 let backgroundImageUrl = snapshot.get("backgroundImage") as? String
-                completion(name, profileImageUrl, backgroundImageUrl)
+                let characterName = snapshot.get("characterName") as? String // 新增 characterName 的讀取
+                completion(name, profileImageUrl, backgroundImageUrl, characterName)
             } else {
-                completion(nil, nil, nil)
+                completion(nil, nil, nil, nil)
             }
         }
     }
+
     
     func fetchUserBackgroundImage(uid: String, completion: @escaping (String?) -> Void) {
         let docRef = db.collection("Users").document(uid)
@@ -82,6 +84,18 @@ class FirestoreService {
                 print("Error updating user name: \(error.localizedDescription)")
             } else {
                 print("User name successfully updated in Firestore!")
+            }
+        }
+    }
+    
+    func updateUserCharacterName(uid: String, characterName: String) {
+        let docRef = db.collection("Users").document(uid)
+
+        docRef.updateData(["characterName": characterName]) { error in
+            if let error = error {
+                print("Error updating character name: \(error.localizedDescription)")
+            } else {
+                print("Character name successfully updated")
             }
         }
     }
