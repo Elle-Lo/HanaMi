@@ -26,17 +26,17 @@ struct TreasureMapPage: View {
             
             // CustomMapView 顯示地圖與寶藏標註
             CustomMapView(
-                            selectedCoordinate: $selectedCoordinate,
-                            selectedLocationName: $selectedLocationName,
-                            shouldZoomToUserLocation: $shouldZoomToUserLocation,
-                            selectedTreasure: $selectedTreasure,
-                            showTreasureDetail: $showTreasureDetail,
-                            isShowingAllTreasures: $isShowingAllTreasures, // 傳遞是否顯示全部寶藏
-                            locationManager: locationManager,
-                            treasureManager: treasureManager,
-                            mode: .viewTreasures,
-                            userID: userID
-                        )
+                selectedCoordinate: $selectedCoordinate,
+                selectedLocationName: $selectedLocationName,
+                shouldZoomToUserLocation: $shouldZoomToUserLocation,
+                selectedTreasure: $selectedTreasure,
+                showTreasureDetail: $showTreasureDetail,
+                isShowingAllTreasures: $isShowingAllTreasures, // 傳遞是否顯示全部寶藏
+                locationManager: locationManager,
+                treasureManager: treasureManager,
+                mode: .viewTreasures,
+                userID: userID
+            )
             .edgesIgnoringSafeArea(.all) // 地圖填滿整個頁面
             
             // 控制顯示模式的兩個按鈕
@@ -74,6 +74,7 @@ struct TreasureMapPage: View {
         }
     }
     
+    // 根據是否顯示所有寶藏來加載地圖範圍內的寶藏
     func fetchTreasuresForCurrentBounds() {
         if let location = locationManager.location {
             let region = MKCoordinateRegion(center: location.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05))
@@ -83,9 +84,9 @@ struct TreasureMapPage: View {
             let minLng = region.center.longitude - region.span.longitudeDelta / 2
             let maxLng = region.center.longitude + region.span.longitudeDelta / 2
             
+            // 抓取所有公開和個人寶藏
             if isShowingAllTreasures {
-                // 抓取所有公開和個人寶藏
-                treasureManager.fetchAllPublicTreasures(minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { treasures in
+                treasureManager.fetchAllPublicAndUserTreasures(minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { treasures in
                     treasureManager.displayedTreasures = treasures
                 }
             } else {
@@ -96,5 +97,4 @@ struct TreasureMapPage: View {
             }
         }
     }
-
 }

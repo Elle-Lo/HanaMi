@@ -22,6 +22,9 @@ struct Users: Identifiable, Codable {
     var email: String
     var treasureList: [String]
     var categories: [String]
+    var characterName: String
+    var image: String
+    var backgroundImage: String
 }
 
 struct Treasure: Identifiable, Codable {
@@ -54,4 +57,6 @@ struct TreasureSummary {
     let id: String
     let latitude: Double
     let longitude: Double
+    let userID: String // 添加 userID
 }
+

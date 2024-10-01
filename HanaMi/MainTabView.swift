@@ -14,7 +14,7 @@ struct MainTabView: View {
     }
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             TabView(selection: $selectedTab) {
                 HomePage()
                     .tabItem {
@@ -59,7 +59,7 @@ struct MainTabView: View {
                 }
                 settingsButton // 全局設定按鈕
             })
-        }
+//        }
     }
 
     // 切換顯示 Category 或 Analytics 的按鈕

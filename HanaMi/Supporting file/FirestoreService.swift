@@ -5,24 +5,26 @@ import CoreLocation
 class FirestoreService {
     private let db = Firestore.firestore()
     
-        func checkUserExists(uid: String, completion: @escaping (Bool) -> Void) {
-            let docRef = db.collection("Users").document(uid)
-            docRef.getDocument { (document, error) in
-                if let document = document, document.exists {
-                    completion(true) // 用戶已經存在
-                } else {
-                    completion(false) // 用戶不存在
-                }
+    func checkUserExists(uid: String, completion: @escaping (Bool) -> Void) {
+        let docRef = db.collection("Users").document(uid)
+        docRef.getDocument { (document, error) in
+            if let document = document, document.exists {
+                completion(true) // 用戶已經存在
+            } else {
+                completion(false) // 用戶不存在
             }
         }
-
+    }
+    
     func createUserInFirestore(uid: String, name: String, email: String) {
-        let db = Firestore.firestore()
         let userData: [String: Any] = [
             "name": name,
             "email": email,
             "treasureList": [],
-            "categories": []
+            "categories": [],
+            "characterName": "Hanami",
+            "userImage": "",
+            "backgroundImage": ""
         ]
         
         db.collection("Users").document(uid).setData(userData) { error in
@@ -30,6 +32,80 @@ class FirestoreService {
                 print("Error creating user in Firestore: \(error.localizedDescription)")
             } else {
                 print("User document successfully created in Firestore!")
+            }
+        }
+    }
+    
+    func fetchUserNameAndProfileImage(uid: String, completion: @escaping (String?, String?, String?) -> Void) {
+        let docRef = db.collection("Users").document(uid)
+        docRef.getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching user data: \(error.localizedDescription)")
+                completion(nil, nil, nil)
+                return
+            }
+            
+            if let snapshot = snapshot, snapshot.exists {
+                let name = snapshot.get("name") as? String
+                let profileImageUrl = snapshot.get("userImage") as? String
+                let backgroundImageUrl = snapshot.get("backgroundImage") as? String
+                completion(name, profileImageUrl, backgroundImageUrl)
+            } else {
+                completion(nil, nil, nil)
+            }
+        }
+    }
+    
+    func fetchUserBackgroundImage(uid: String, completion: @escaping (String?) -> Void) {
+        let docRef = db.collection("Users").document(uid)
+        docRef.getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching background image: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            if let snapshot = snapshot, snapshot.exists {
+                let imageUrl = snapshot.get("backgroundImage") as? String
+                completion(imageUrl)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
+    // 更新 Firestore 中的用戶名稱
+    func updateUserName(uid: String, name: String) {
+        let docRef = db.collection("Users").document(uid)
+        docRef.updateData(["name": name]) { error in
+            if let error = error {
+                print("Error updating user name: \(error.localizedDescription)")
+            } else {
+                print("User name successfully updated in Firestore!")
+            }
+        }
+    }
+    
+    // 更新用戶的背景圖片 URL
+    func updateUserBackgroundImage(uid: String, imageUrl: String) {
+        let docRef = db.collection("Users").document(uid)
+        docRef.updateData(["backgroundImage": imageUrl]) { error in
+            if let error = error {
+                print("Error updating background image: \(error.localizedDescription)")
+            } else {
+                print("Background image successfully updated in Firestore!")
+            }
+        }
+    }
+    
+    // 更新用戶頭像 URL
+    func updateUserProfileImage(uid: String, imageUrl: String) {
+        let docRef = db.collection("Users").document(uid)
+        docRef.updateData(["userImage": imageUrl]) { error in
+            if let error = error {
+                print("Error updating user image: \(error.localizedDescription)")
+            } else {
+                print("User profile image successfully updated in Firestore!")
             }
         }
     }
@@ -137,7 +213,7 @@ class FirestoreService {
     }
     
     // 将宝藏ID加入用户的treasure list
-     func addTreasureIDToUser(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func addTreasureIDToUser(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let userDocRef = db.collection("Users").document(userID)
         userDocRef.updateData([
             "treasureList": FieldValue.arrayUnion([treasureID])
@@ -177,7 +253,7 @@ class FirestoreService {
                 completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "數據格式不匹配"])))
                 return
             }
-
+            
             // 创建一个 Treasure 对象，不包含内容
             var treasure = Treasure(
                 id: treasureID,
@@ -222,54 +298,38 @@ class FirestoreService {
         }
     }
     
-    // MARK: - 查找附近的宝藏
-    func fetchAllTreasuresNear(userID: String, minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
-        // 首先获取用户自己的所有宝藏（包括公开和私人）
-        fetchUserTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { userResult in
-            switch userResult {
-            case .success(let userTreasures):
-            var allTreasures = userTreasures
-                
-                // 查询其他用户的公开宝藏
-                let publicTreasuresQuery = self.db.collectionGroup("Treasures")
-                    .whereField("isPublic", isEqualTo: true)
-                    .whereField("userID", isNotEqualTo: userID)
-                    .whereField("latitude", isGreaterThanOrEqualTo: minLat)
-                    .whereField("latitude", isLessThanOrEqualTo: maxLat)
-                    .whereField("longitude", isGreaterThanOrEqualTo: minLng)
-                    .whereField("longitude", isLessThanOrEqualTo: maxLng)
-
-                publicTreasuresQuery.getDocuments { snapshot, error in
-                    if let error = error {
-                        // 如果公开宝藏查询失败，仍然返回用户自己的宝藏
-                        completion(.success(allTreasures))
-                    } else {
-                        let publicTreasures = snapshot?.documents.compactMap { document -> TreasureSummary? in
-                            let data = document.data()
-                            guard let latitude = data["latitude"] as? Double,
-                                  let longitude = data["longitude"] as? Double else {
-                                return nil
-                            }
-                            let treasureID = document.documentID
-                            return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude)
-                        } ?? []
-
-                        // 合并用户自己的宝藏和其他用户的公开宝藏
-                        allTreasures.append(contentsOf: publicTreasures)
-
-                        // 返回去重后的结果（如果需要）
-                        completion(.success(allTreasures))
+    // 不需要 userID 參數，因為你只需要抓取公開的寶藏
+    func fetchAllTreasuresNear(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
+        let publicTreasuresQuery = db.collectionGroup("Treasures")
+            .whereField("isPublic", isEqualTo: true) // 只抓取公開寶藏
+            .whereField("latitude", isGreaterThanOrEqualTo: minLat)
+            .whereField("latitude", isLessThanOrEqualTo: maxLat)
+            .whereField("longitude", isGreaterThanOrEqualTo: minLng)
+            .whereField("longitude", isLessThanOrEqualTo: maxLng)
+        
+        publicTreasuresQuery.getDocuments { snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                let treasures = snapshot?.documents.compactMap { document -> TreasureSummary? in
+                    let data = document.data()
+                    guard let latitude = data["latitude"] as? Double,
+                          let longitude = data["longitude"] as? Double,
+                          let userID = data["userID"] as? String else {
+                        return nil
                     }
-                }
-            case .failure(let error):
-                completion(.failure(error))  // 用户宝藏查询失败时返回错误
+                    let treasureID = document.documentID
+                    return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude, userID: userID)
+                } ?? []
+                completion(.success(treasures))
             }
         }
     }
-
+    
+    
     // 查询用户自己的宝藏
     func fetchUserTreasuresNear(userID: String, minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
-        // 在用户的 "Treasures" 子集合中按经纬度过滤
+        
         let userTreasuresQuery = db.collection("Users").document(userID).collection("Treasures")
             .whereField("latitude", isGreaterThanOrEqualTo: minLat)
             .whereField("latitude", isLessThanOrEqualTo: maxLat)
@@ -287,24 +347,28 @@ class FirestoreService {
                         return nil
                     }
                     let treasureID = document.documentID
-                    return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude)
+                    return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude, userID: userID)
                 }
                 completion(.success(treasures ?? []))
             }
         }
     }
-        
-        // 将 Firestore document 转换为 TreasureSummary
-        func documentToTreasureSummary(_ document: DocumentSnapshot) -> TreasureSummary? {
-            let data = document.data()
-            guard let latitude = data?["latitude"] as? Double,
-                  let longitude = data?["longitude"] as? Double else {
-                return nil
-            }
-            return TreasureSummary(id: document.documentID, latitude: latitude, longitude: longitude)
+    
+    // 将 Firestore document 转换为 TreasureSummary
+    func documentToTreasureSummary(_ document: DocumentSnapshot) -> TreasureSummary? {
+        let data = document.data()
+        guard let latitude = data?["latitude"] as? Double,
+              let longitude = data?["longitude"] as? Double,
+              let userID = data?["userID"] as? String else {
+            return nil
         }
         
-        // MARK: - 類別處理
+        let treasureID = document.documentID // 从 DocumentSnapshot 获取 documentID 作为 treasureID
+        return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude, userID: userID)
+    }
+    
+    
+    // MARK: - 類別處理
     func loadCategories(userID: String, completion: @escaping ([String]) -> Void) {
         let defaultCategories = ["Creative", "Energetic", "Happy"]  // 設置預設的類別
         let userDocument = db.collection("Users").document(userID)
@@ -330,7 +394,7 @@ class FirestoreService {
             }
         }
     }
-
+    
     func setDefaultCategories(userID: String, defaultCategories: [String], completion: @escaping () -> Void) {
         let userDocument = db.collection("Users").document(userID)
         userDocument.updateData([
@@ -344,26 +408,26 @@ class FirestoreService {
             completion()  // 完成回調
         }
     }
-
-        
-        // 更新用户类别
-        func addCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
-            let userDocument = db.collection("Users").document(userID)
-            userDocument.updateData([
-                "categories": FieldValue.arrayUnion([category])
-            ]) { error in
-                completion(error == nil)
-            }
+    
+    
+    // 更新用户类别
+    func addCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
+        let userDocument = db.collection("Users").document(userID)
+        userDocument.updateData([
+            "categories": FieldValue.arrayUnion([category])
+        ]) { error in
+            completion(error == nil)
         }
-        
-//        func deleteCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
-//            let userDocument = db.collection("Users").document(userID)
-//            userDocument.updateData([
-//                "categories": FieldValue.arrayRemove([category])
-//            ]) { error in
-//                completion(error == nil)
-//            }
-//        }
+    }
+    
+    //        func deleteCategory(userID: String, category: String, completion: @escaping (Bool) -> Void) {
+    //            let userDocument = db.collection("Users").document(userID)
+    //            userDocument.updateData([
+    //                "categories": FieldValue.arrayRemove([category])
+    //            ]) { error in
+    //                completion(error == nil)
+    //            }
+    //        }
     
     func deleteCategoryAndTreasures(userID: String, category: String, completion: @escaping (Bool) -> Void) {
         // 首先查詢該類別下的所有寶藏
@@ -412,7 +476,7 @@ class FirestoreService {
             }
         }
     }
-
+    
     
     func deleteTreasureAndRemoveFromList(userID: String, treasureID: String, completion: @escaping (Bool) -> Void) {
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
@@ -439,8 +503,8 @@ class FirestoreService {
             }
         }
     }
-
-
+    
+    
     func deleteTreasure(userID: String, treasureID: String, completion: @escaping (Bool) -> Void) {
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
         treasureRef.delete { error in
@@ -467,8 +531,8 @@ class FirestoreService {
             }
         }
     }
-
-
+    
+    
     func deleteSingleTreasure(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
         
@@ -547,7 +611,7 @@ class FirestoreService {
             }
         }
     }
-
+    
     
     func updateCategoryName(userID: String, oldName: String, newName: String, completion: @escaping (Bool) -> Void) {
         let userDocRef = db.collection("Users").document(userID)
@@ -565,7 +629,7 @@ class FirestoreService {
             }
         }
     }
-
+    
     func fetchTreasuresForCategory(userID: String, category: String, completion: @escaping (Result<[Treasure], Error>) -> Void) {
         let treasuresCollection = db.collection("Users").document(userID).collection("Treasures")
         
@@ -637,7 +701,7 @@ class FirestoreService {
             }
         }
     }
-
+    
     
     func fetchAllTreasures(userID: String, completion: @escaping (Result<[Treasure], Error>) -> Void) {
         let treasuresCollection = db.collection("Users").document(userID).collection("Treasures")

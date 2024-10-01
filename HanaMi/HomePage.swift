@@ -5,6 +5,9 @@ import Kingfisher
 struct HomePage: View {
     @State private var treasures: [Treasure] = []
     @State private var isLoading = false
+    @State private var selectedBackgroundImage: UIImage?
+    @State private var isUsingDefaultBackground = true
+    @State private var backgroundImageUrl: URL?  // 用戶背景圖片 URL
     
     private var userID: String {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
@@ -14,12 +17,20 @@ struct HomePage: View {
     var body: some View {
         NavigationView {
             ZStack {
-                // 背景圖片
-                Image("Homebg")
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
 
+                // 根據選擇的背景圖顯示或使用默認背景
+                if let backgroundImageUrl = backgroundImageUrl, !isUsingDefaultBackground {
+                    KFImage(backgroundImageUrl)
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                } else {
+                    Image("Homebg")  // 默認背景圖
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all)
+                }
+                
                 // 半透明黑色遮罩
                 Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
 
@@ -62,10 +73,22 @@ struct HomePage: View {
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
-            fetchRandomTreasures()
-        }
+                   fetchBackgroundImage()  // 加載用戶背景圖片
+                   fetchRandomTreasures()
+               }
     }
-
+    
+    func fetchBackgroundImage() {
+            firestoreService.fetchUserBackgroundImage(uid: userID) { imageUrlString in
+                if let imageUrlString = imageUrlString, let url = URL(string: imageUrlString) {
+                    self.backgroundImageUrl = url
+                    self.isUsingDefaultBackground = false  // 使用自定義背景
+                } else {
+                    self.isUsingDefaultBackground = true  // 沒有背景圖片，使用默認背景
+                }
+            }
+        }
+    
     func fetchRandomTreasures() {
         isLoading = true
         firestoreService.fetchRandomTreasures(userID: userID) { result in

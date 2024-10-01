@@ -147,10 +147,11 @@ struct StarterPage: View {
                 if let uid = authResult?.user.uid {
                     let email = authResult?.user.email ?? "Unknown email"
                     let fullName = appleIDCredential.fullName?.formatted() ?? "Unknown name"
-                    
+                    print("Apple Full Name: \(fullName)")
                     createUserInFirestoreIfNeeded(uid: uid, name: fullName, email: email)
                     // 將 userID 存入 UserDefaults
                     UserDefaults.standard.set(uid, forKey: "userID")
+//                    UserDefaults.standard.set(fullName, forKey: "userName")
                 }
                 
                 logStatus = true
