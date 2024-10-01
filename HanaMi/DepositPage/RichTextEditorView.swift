@@ -2,10 +2,12 @@ import SwiftUI
 import UIKit
 import AVFoundation
 import FirebaseStorage
+import LinkPresentation
 
 struct RichTextEditorView: UIViewRepresentable {
     @Binding var text: NSAttributedString
     @State private var lastInsertedAudioURL: URL? // 保存最新插入的音頻 URL
+    @State private var lastInsertedLinkURL: URL?
 
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
@@ -70,7 +72,7 @@ struct RichTextEditorView: UIViewRepresentable {
         let imageAttachment = NSTextAttachment()
 
         // 计算图片尺寸，保持比例
-        let targetWidth = UIScreen.main.bounds.width - 60
+        let targetWidth = UIScreen.main.bounds.width - 80
         let aspectRatio = image.size.width / image.size.height
         let targetHeight = targetWidth / aspectRatio
         
@@ -84,19 +86,77 @@ struct RichTextEditorView: UIViewRepresentable {
         mutableRichText.append(imageString)
         text = mutableRichText
     }
+    
+    func insertLinkPreview(url: URL) {
+        let provider = LPMetadataProvider()
+        provider.startFetchingMetadata(for: url) { metadata, error in
+            if let metadata = metadata {
+                DispatchQueue.main.async {
+                    let linkView = LPLinkView(metadata: metadata)
+                    linkView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 60, height: 0)
+                    linkView.sizeToFit()
+                    let image = linkView.snapshot()
 
-    // 插入链接块到富文本
-    func insertLinkBlock(_ url: URL, displayText: String) {
-        let linkString = NSMutableAttributedString(string: displayText, attributes: [
-            .link: url,
-            .foregroundColor: UIColor.blue, // 显示链接为蓝色
-            .font: UIFont.systemFont(ofSize: 16)
-        ])
-        
+                    // 插入预览图到富文本编辑器
+                    self.insertImageWithLink(image: image, url: url)
+
+                    // 不再保存到数组，直接处理当前链接
+                }
+            } else {
+                // 如果无法获取元数据，插入普通链接文本
+                DispatchQueue.main.async {
+                    self.insertPlainLink(url: url)
+                    // 不再保存到数组，直接处理当前链接
+                }
+            }
+        }
+    }
+
+
+
+    func insertImageWithLink(image: UIImage, url: URL) {
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = image
+
+        // 計算圖片顯示寬度，讓它保持距離螢幕邊框一點距離
+        let maxWidth = UIScreen.main.bounds.width - 40 // 留出適當的邊距
+        let aspectRatio = image.size.width / image.size.height
+
+        // 確保寬度為 maxWidth，高度根據寬高比計算
+        let targetWidth = maxWidth
+        let targetHeight = targetWidth / aspectRatio
+
+        // 設置 NSTextAttachment 的 bounds 來調整圖片顯示的大小，確保比例不變
+        imageAttachment.bounds = CGRect(x: 0, y: 0, width: targetWidth, height: targetHeight)
+
+        // 創建帶有附件的 NSAttributedString
+        let imageString = NSAttributedString(attachment: imageAttachment)
+
+        // 添加自定義屬性來標記這是連結預覽圖
+        let mutableImageString = NSMutableAttributedString(attributedString: imageString)
+        mutableImageString.addAttribute(.link, value: url, range: NSRange(location: 0, length: mutableImageString.length))
+        mutableImageString.addAttribute(NSAttributedString.Key("isLinkPreview"), value: true, range: NSRange(location: 0, length: mutableImageString.length))
+
+        // 將圖片插入到富文本中
         let mutableRichText = NSMutableAttributedString(attributedString: text)
-        mutableRichText.append(linkString)
+        mutableRichText.append(mutableImageString)
         text = mutableRichText
     }
+
+        // 插入普通链接文本
+        func insertPlainLink(url: URL) {
+            let linkString = NSMutableAttributedString(string: url.absoluteString, attributes: [
+                .link: url,
+                .foregroundColor: UIColor.blue,
+                .font: UIFont.systemFont(ofSize: 16)
+            ])
+
+            let mutableRichText = NSMutableAttributedString(attributedString: text)
+            mutableRichText.append(linkString)
+            text = mutableRichText
+
+            lastInsertedLinkURL = url
+        }
     
     // 插入音频链接并在末尾添加空格
     func insertAudioLink(_ url: URL) {

@@ -6,27 +6,58 @@ class TreasureManager: ObservableObject {
     @Published var displayedTreasures: [TreasureSummary] = [] // 地圖範圍內要顯示的寶藏
     let firestoreService = FirestoreService()
     
-    private let userID = "g61HUemIJIRIC1wvvIqa" // 使用當前用戶的ID
-    
-    // 加載所有公開的寶藏
-    func fetchAllPublicTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {
-        FirestoreService().fetchAllTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { [weak self] result in
-            switch result {
-            case .success(let treasures):
-                DispatchQueue.main.async {
-                    self?.displayedTreasures = treasures
-                    completion(treasures)
-                }
-            case .failure(let error):
-                print("Error fetching public treasures: \(error.localizedDescription)")
-                completion([])
-            }
-        }
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
     
-    // 加载用户自己的宝藏（包括公开和非公开）
+    // 加載所有公開的寶藏以及當前用戶的所有寶藏
+    func fetchAllPublicAndUserTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {
+        let userID = self.userID // 直接使用userID，因為它不是可選的
+        
+        // 創建 DispatchGroup 來管理兩個請求的並行處理
+        let dispatchGroup = DispatchGroup()
+        
+        var publicTreasures: [TreasureSummary] = []
+        var userTreasures: [TreasureSummary] = []
+        
+        // 先抓取所有公開寶藏
+        // 先抓取所有公開寶藏
+        dispatchGroup.enter()
+        firestoreService.fetchAllTreasuresNear(minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { result in
+            switch result {
+            case .success(let fetchedPublicTreasures):
+                publicTreasures = fetchedPublicTreasures
+            case .failure(let error):
+                print("Error fetching public treasures: \(error.localizedDescription)")
+            }
+            dispatchGroup.leave()
+        }
+
+        
+        // 再抓取當前用戶的所有寶藏
+        dispatchGroup.enter()
+        firestoreService.fetchUserTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { result in
+            switch result {
+            case .success(let fetchedUserTreasures):
+                userTreasures = fetchedUserTreasures
+            case .failure(let error):
+                print("Error fetching user's treasures: \(error.localizedDescription)")
+            }
+            dispatchGroup.leave()
+        }
+        
+        // 當兩個請求都完成後，合併結果
+        dispatchGroup.notify(queue: .main) {
+            let allTreasures = publicTreasures + userTreasures
+            self.displayedTreasures = allTreasures
+            completion(allTreasures)
+        }
+    }
+
+    
+    // 只抓取當前用戶自己的寶藏（公開和非公開）
     func fetchUserTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {
-        FirestoreService().fetchUserTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { [weak self] result in
+        firestoreService.fetchUserTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { [weak self] result in
             switch result {
             case .success(let treasures):
                 DispatchQueue.main.async {
@@ -40,20 +71,20 @@ class TreasureManager: ObservableObject {
         }
     }
     
-    // 从缓存或远程获取宝藏详细信息
+    // 從緩存或遠程獲取寶藏詳細信息
     func getTreasure(by treasureID: String, for userID: String, completion: @escaping (Treasure?) -> Void) {
-        // 首先检查缓存
+        // 先檢查緩存
         if let cachedTreasure = treasures.first(where: { $0.id == treasureID }) {
             completion(cachedTreasure)
             return
         }
         
-        // 如果缓存中没有，调用 FirestoreService 获取数据
+        // 如果緩存中沒有，調用 FirestoreService 獲取數據
         firestoreService.fetchTreasure(userID: userID, treasureID: treasureID) { result in
             switch result {
             case .success(let treasure):
                 DispatchQueue.main.async {
-                    // 将获取到的宝藏添加到缓存中
+                    // 將獲取到的寶藏添加到緩存中
                     self.treasures.append(treasure)
                     completion(treasure)
                 }

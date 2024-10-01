@@ -2,22 +2,27 @@ import SwiftUI
 import Kingfisher
 
 struct CategoryCardView: View {
+    @Binding var selectedCategory: String?
+    @Binding var categories: [String]      // 改为使用 @Binding
     @StateObject private var viewModel: CategoryCardViewModel
     var onDelete: () -> Void
-    var onCategoryChange: () -> Void
+    var onCategoryChange: (_ newCategory: String) -> Void
 
-    init(treasure: Treasure, userID: String, onDelete: @escaping () -> Void, onCategoryChange: @escaping () -> Void) {
-        _viewModel = StateObject(wrappedValue: CategoryCardViewModel(treasure: treasure, userID: userID))
-        self.onDelete = onDelete
-        self.onCategoryChange = onCategoryChange
-    }
+    // 更新 init，使其接受 selectedCategory 和 categories 的 Binding 参数
+    init(treasure: Treasure, userID: String, selectedCategory: Binding<String?>, categories: Binding<[String]>, onDelete: @escaping () -> Void, onCategoryChange: @escaping (_ newCategory: String) -> Void) {
+           _viewModel = StateObject(wrappedValue: CategoryCardViewModel(treasure: treasure, userID: userID))
+           self._selectedCategory = selectedCategory  // 绑定 selectedCategory
+           self._categories = categories              // 绑定 categories
+           self.onDelete = onDelete
+           self.onCategoryChange = onCategoryChange
+       }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // 顶部 HStack，包含 ToggleButton 和 CategorySelectionView
             HStack(alignment: .top) {
                 ToggleButton(isPublic: $viewModel.isPublic)
-                    .onChange(of: viewModel.isPublic) { _ in
+                    .onChange(of: viewModel.isPublic) { oldValue, newValue in
                         viewModel.updateTreasureFields()
                     }
 
@@ -26,9 +31,9 @@ struct CategoryCardView: View {
                     categories: $viewModel.categories,
                     userID: viewModel.userID
                 )
-                .onChange(of: viewModel.selectedCategory) { _ in
+                .onChange(of: viewModel.selectedCategory) { oldCategory, newCategory in
                     viewModel.updateTreasureFields()
-                    onCategoryChange()
+                    onCategoryChange(newCategory)
                 }
                 .onAppear {
                     viewModel.loadCategories()
@@ -83,18 +88,16 @@ struct CategoryCardView: View {
                                 .frame(maxWidth: .infinity)
                                 .cornerRadius(10)
                         }
-
+                        
                     case .link:
                         if let url = URL(string: content.content) {
-                            Text(content.displayText ?? url.absoluteString)
-                                .font(.body)
-                                .foregroundColor(.blue)
-                                .underline()
-                                .onTapGesture {
-                                    UIApplication.shared.open(url)
-                                }
-                        }
+                            LinkPreviewView(url: url)
+                                .cornerRadius(10)  // 保持圆角
+                                .shadow(radius: 5)  // 阴影
+                                .padding(.vertical, 5)  // 垂直间距
 
+                        }
+                        
                     default:
                         EmptyView()
                     }
@@ -108,7 +111,7 @@ struct CategoryCardView: View {
         .cornerRadius(15)
         .shadow(radius: 5)
         // 使用新的 alert 语法
-        .alert("確認刪除嗎？", isPresented: $viewModel.showTreasureDeleteAlert) {
+        .alert("確認删除嗎？", isPresented: $viewModel.showTreasureDeleteAlert) {
             Button("確認", role: .destructive) {
                 viewModel.deleteTreasure { success in
                     if success {
@@ -118,7 +121,9 @@ struct CategoryCardView: View {
             }
             Button("取消", role: .cancel) { }
         } message: {
-            Text("確認刪除這項寶藏嗎？這個動作無法撤回！")
+            Text("確認删除這項寶藏嗎？這個動作無法撤回！")
         }
+//        .id(viewModel.selectedCategory)  
     }
+       
 }

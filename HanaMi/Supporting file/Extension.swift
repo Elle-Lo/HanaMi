@@ -41,6 +41,20 @@ extension View {
             view?.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
         }
     }
+    
+    func asImage() -> UIImage {
+            let controller = UIHostingController(rootView: self)
+            let view = controller.view
+
+            let targetSize = controller.view.intrinsicContentSize
+            view?.bounds = CGRect(origin: .zero, size: targetSize)
+            view?.backgroundColor = .clear
+
+            let renderer = UIGraphicsImageRenderer(size: targetSize)
+            return renderer.image { _ in
+                view?.drawHierarchy(in: view!.bounds, afterScreenUpdates: true)
+            }
+        }
 }
 
 extension UIView {
@@ -51,6 +65,13 @@ extension UIView {
             layer.render(in: rendererContext.cgContext)
         }
     }
+    
+    func snapshot() -> UIImage {
+            let renderer = UIGraphicsImageRenderer(bounds: bounds)
+            return renderer.image { rendererContext in
+                layer.render(in: rendererContext.cgContext)
+            }
+        }
 }
 
 extension UIImage {

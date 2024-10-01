@@ -26,7 +26,7 @@ struct CustomMapView: UIViewRepresentable {
     class Coordinator: NSObject, MKMapViewDelegate {
         var parent: CustomMapView
         var mode: MapMode
-        var userID: String // 动态传递 userID
+        var userID: String 
 
 
         init(_ parent: CustomMapView, mode: MapMode, userID: String) {
@@ -48,30 +48,33 @@ struct CustomMapView: UIViewRepresentable {
                     let minLng = center.longitude - radius / (111.32 * cos(center.latitude * .pi / 180))
                     let maxLng = center.longitude + radius / (111.32 * cos(center.latitude * .pi / 180))
 
-                    // 加载新的标注
+                    // 調整對 `treasureManager` 的調用
                     if parent.isShowingAllTreasures {
-                        // 加载所有公开的宝藏
-                        parent.treasureManager.fetchAllPublicTreasures(minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { treasures in
+                        // 這裡需要使用 `parent.treasureManager.fetchAllPublicAndUserTreasures` 或其他方法
+                        parent.treasureManager.fetchAllPublicAndUserTreasures(minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { treasures in
                             DispatchQueue.main.async {
-                                mapView.removeAnnotations(mapView.annotations) // 清除旧的标注
-                                for treasure in treasures {
-                                    let annotation = TreasureAnnotation(treasureSummary: treasure)
-                                    mapView.addAnnotation(annotation)
+                                mapView.removeAnnotations(mapView.annotations) // 清除舊的標注
+                                let newAnnotations = treasures.map { treasure in
+                                    TreasureAnnotation(treasureSummary: treasure, isUserTreasure: treasure.userID == self.parent.userID)
                                 }
+                                
+                                // 添加標註到地圖
+                                mapView.addAnnotations(newAnnotations)
                             }
                         }
                     } else {
-                        // 加载当前用户的宝藏
+                        // 加載當前用戶的寶藏
                         parent.treasureManager.fetchUserTreasures(minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { treasures in
                             DispatchQueue.main.async {
-                                mapView.removeAnnotations(mapView.annotations) // 清除旧的标注
+                                mapView.removeAnnotations(mapView.annotations) // 清除舊的標注
                                 for treasure in treasures {
-                                    let annotation = TreasureAnnotation(treasureSummary: treasure)
+                                    let annotation = TreasureAnnotation(treasureSummary: treasure, isUserTreasure: true) // isUserTreasure 添加
                                     mapView.addAnnotation(annotation)
                                 }
                             }
                         }
                     }
+
                 }
             }
         
@@ -115,7 +118,7 @@ struct CustomMapView: UIViewRepresentable {
                 annotationView?.markerTintColor = UIColor(red: 0.54, green: 0.27, blue: 0.07, alpha: 1.0) // 自定义的气球颜色
 
                 // 启用 callout，右侧添加详细信息按钮
-                annotationView?.canShowCallout = true
+                annotationView?.canShowCallout = false
                 annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
 
                 return annotationView
@@ -173,10 +176,13 @@ struct CustomMapView: UIViewRepresentable {
         
         // 避免重复添加相同的标注
         let currentAnnotations = mapView.annotations.compactMap { $0 as? TreasureAnnotation }
-        let newAnnotations = treasureManager.displayedTreasures.filter { treasure in
-            // 过滤掉已经存在的标注
-            !currentAnnotations.contains(where: { $0.treasureID == treasure.id })
-        }.map { TreasureAnnotation(treasureSummary: $0) }
+        // 修改 TreasureManager 來使用 DetailedTreasureSummary
+        let newAnnotations = treasureManager.displayedTreasures.map { detailedTreasure in
+            let isUserTreasure = (detailedTreasure.userID == userID)
+            return TreasureAnnotation(treasureSummary: detailedTreasure, isUserTreasure: isUserTreasure)
+        }
+
+
         
         // 只添加新的标注
         if !newAnnotations.isEmpty {

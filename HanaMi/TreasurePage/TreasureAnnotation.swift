@@ -3,12 +3,12 @@ import MapKit
 
 class TreasureAnnotation: NSObject, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
-    let title: String?
-    let treasureID: String // 用于标记这个宝藏的唯一ID
-    
-    init(treasureSummary: TreasureSummary) {
+    let treasureID: String
+    let isUserTreasure: Bool // 用於區分是否為用戶的寶藏
+
+    init(treasureSummary: TreasureSummary, isUserTreasure: Bool) {
         self.coordinate = CLLocationCoordinate2D(latitude: treasureSummary.latitude, longitude: treasureSummary.longitude)
-        self.title = nil
-        self.treasureID = treasureSummary.id // 从 TreasureSummary 中获取 ID
+        self.treasureID = treasureSummary.id
+        self.isUserTreasure = isUserTreasure
     }
 }

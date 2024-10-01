@@ -5,18 +5,18 @@ import Kingfisher
 struct HomePage: View {
     @State private var treasures: [Treasure] = []
     @State private var isLoading = false
-
-    private let userId = "g61HUemIJIRIC1wvvIqa"
+    @State private var selectedBackgroundImage: UIImage?
+    @State private var isUsingDefaultBackground = true
+    @State private var backgroundImageUrl: URL?  // 用戶背景圖片 URL
+    
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
     private let firestoreService = FirestoreService()
-
+    
     var body: some View {
-        NavigationView {
+//        NavigationView {
             ZStack {
-                // 背景圖片
-                Image("Homebg")
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
 
                 // 半透明黑色遮罩
                 Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
@@ -32,6 +32,7 @@ struct HomePage: View {
                                     .padding(.vertical, 10)
                             }
                         }
+                        .scrollIndicators(.hidden)
                     }
 
                     Spacer()
@@ -56,21 +57,48 @@ struct HomePage: View {
                     }
                 }
             }
-        }
+            .background(
+                            Group {
+                                if let backgroundImageUrl = backgroundImageUrl, !isUsingDefaultBackground {
+                                    KFImage(backgroundImageUrl)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .edgesIgnoringSafeArea(.all) // 背景延伸到安全区域外
+                                } else {
+                                    Image("Homebg")
+                                        .resizable()
+                                        .scaledToFill()
+                                        .edgesIgnoringSafeArea(.all) // 使用默认背景
+                                }
+                            }
+                        )
+//        }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
-            fetchRandomTreasures()
-        }
+                   fetchBackgroundImage()  // 加載用戶背景圖片
+                   fetchRandomTreasures()
+               }
     }
-
+    
+    func fetchBackgroundImage() {
+            firestoreService.fetchUserBackgroundImage(uid: userID) { imageUrlString in
+                if let imageUrlString = imageUrlString, let url = URL(string: imageUrlString) {
+                    self.backgroundImageUrl = url
+                    self.isUsingDefaultBackground = false  // 使用自定義背景
+                } else {
+                    self.isUsingDefaultBackground = true  // 沒有背景圖片，使用默認背景
+                }
+            }
+        }
+    
     func fetchRandomTreasures() {
         isLoading = true
-        firestoreService.fetchRandomTreasures(userID: userId) { result in
+        firestoreService.fetchRandomTreasures(userID: userID) { result in
             switch result {
             case .success(let fetchedTreasures):
                 treasures = fetchedTreasures
             case .failure(let error):
-                print("获取宝藏失败: \(error.localizedDescription)")
+                print("獲取寶藏失敗: \(error.localizedDescription)")
             }
             isLoading = false
         }
@@ -116,18 +144,15 @@ struct TreasureCardView: View {
                                 .frame(maxWidth: .infinity)
                                 .cornerRadius(10)
                         }
-
+                        
                     case .link:
-                       
                         if let url = URL(string: content.content) {
-                            Text(content.displayText ?? url.absoluteString)
-                                .font(.body)
-                                .foregroundColor(.blue)
-                                .underline()
-                                .onTapGesture {
-                                    UIApplication.shared.open(url)
-                                }
-                        }
+                            LinkPreviewView(url: url)
+                                .cornerRadius(10)  // 保持圆角
+                                .shadow(radius: 5)  // 阴影
+                                .padding(.vertical, 5)  // 垂直间距
+
+                               }
 
                     default:
                         EmptyView()

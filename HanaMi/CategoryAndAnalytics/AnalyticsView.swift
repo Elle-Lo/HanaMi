@@ -9,9 +9,11 @@ struct AnalyticsView: View {
     @State private var isLoading = true
     @State private var categories: [String] = []
 
-    private let userID = "g61HUemIJIRIC1wvvIqa"
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
     private let firestoreService = FirestoreService()
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             // 標題
@@ -86,7 +88,8 @@ struct AnalyticsView: View {
                     }
                 }
             }
-            .padding(.horizontal)  // 增加左右間距
+            .padding(.horizontal) 
+            .scrollIndicators(.hidden)
 
             Spacer()
         }
@@ -99,7 +102,7 @@ struct AnalyticsView: View {
     // 從 Firestore 獲取類別寶藏數據
     private func fetchCategoryData() {
         isLoading = true
-        firestoreService.loadCategories(userID: userID, defaultCategories: []) { fetchedCategories in
+        firestoreService.loadCategories(userID: userID) { fetchedCategories in
             self.categories = fetchedCategories  // 保存所有類別
 
             firestoreService.fetchAllTreasures(userID: userID) { result in

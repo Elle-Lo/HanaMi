@@ -1,9 +1,11 @@
 import SwiftUI
 
 struct MainTabView: View {
-    private var userID: String = "g61HUemIJIRIC1wvvIqa"
-    @State private var selectedTab: Int = 0 // 用於追蹤當前選中的 Tab 頁面
+    @State private var selectedTab: Int = 0
     @State private var showCategory = true
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
+    }
     
     init() {
         // 修改选中的 tab 颜色
@@ -12,7 +14,7 @@ struct MainTabView: View {
     }
     
     var body: some View {
-        NavigationView {
+//        NavigationView {
             TabView(selection: $selectedTab) {
                 HomePage()
                     .tabItem {
@@ -57,7 +59,7 @@ struct MainTabView: View {
                 }
                 settingsButton // 全局設定按鈕
             })
-        }
+//        }
     }
 
     // 切換顯示 Category 或 Analytics 的按鈕

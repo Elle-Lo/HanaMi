@@ -18,8 +18,6 @@ struct SaveButtonView: View {
     var onSave: () -> Void // 新增一個保存成功後的回調
 
     var body: some View {
-        HStack {
-            Spacer()
             Button(action: {
                 saveDataToFirestore()
             }) {
@@ -30,12 +28,9 @@ struct SaveButtonView: View {
                     .background(Color.orange)
                     .cornerRadius(10)
             }
-            Spacer()
-        }
-        .padding(.bottom, 30)
     }
 
-    // 保存地點和類別數據到 Firestore
+    // 保存地点和类别数据到 Firestore
     private func saveDataToFirestore() {
         guard let coordinate = selectedCoordinate, let locationName = selectedLocationName else {
             errorMessage = "請選擇一個有效的地點"
@@ -47,9 +42,9 @@ struct SaveButtonView: View {
             return
         }
 
-        // Step 1: 提取富文本中的内容，检查是否有图片
+        // 提取富文本中的内容，检查是否有图片和音频
         extractContentsWithImageUpload(contents) { processedContents in
-            // Step 2: 将处理后的内容和其他信息一起存入 Firestore
+            // 将处理后的内容和其他信息一起存入 Firestore
             firestoreService.saveTreasure(userID: userID, coordinate: coordinate, locationName: locationName, category: selectedCategory, isPublic: isPublic, contents: processedContents) { result in
                 DispatchQueue.main.async {
                     switch result {
@@ -64,113 +59,85 @@ struct SaveButtonView: View {
         }
     }
 
-    // 提取富文本内容并处理图片上传
     private func extractContentsWithImageUpload(_ richText: NSAttributedString, completion: @escaping ([TreasureContent]) -> Void) {
         var contents: [TreasureContent] = []
-        var pendingUploads = 0 // 跟踪待上传文件的数量
-        var currentIndex = 0   // 用来记录每个内容的顺序
-        
-        // 遍历富文本，处理文本、图片和音频
+        var pendingUploads = 0
+        var currentIndex = 0
+
+        // 遍历富文本内容
         richText.enumerateAttributes(in: NSRange(location: 0, length: richText.length), options: []) { attributes, range, _ in
-            if let attachment = attributes[.attachment] as? NSTextAttachment, let image = attachment.image {
-                // 处理图片上传
-                pendingUploads += 1
-                uploadImageToStorage(image) { result in
-                    switch result {
-                    case .success(let url):
-                        let content = TreasureContent(type: .image, content: url.absoluteString, index: currentIndex)
-                        contents.append(content)
-                    case .failure(let error):
-                        print("图片上传失败：\(error.localizedDescription)")
-                    }
-                    pendingUploads -= 1
-                    if pendingUploads == 0 {
-                        completion(contents)
+            if let attachment = attributes[.attachment] as? NSTextAttachment {
+                // 检查是否是链接预览图
+                if let link = attributes[.link] as? URL {
+                    print("跳过预览图，不上传图片，只保存链接")
+                    // 直接处理当前链接，不需要存入数组
+                    let displayText = richText.attributedSubstring(from: range).string
+                    let content = TreasureContent(type: .link, content: link.absoluteString, index: currentIndex, displayText: displayText)
+                    contents.append(content)
+                } else if let image = attachment.image {
+                    // 用户插入的图片，进行上传
+                    pendingUploads += 1
+                    uploadMediaToStorage(imageData: image.pngData(), path: "images", type: .image, currentIndex: currentIndex) { content in
+                        if let content = content {
+                            contents.append(content)
+                        }
+                        pendingUploads -= 1
+                        if pendingUploads == 0 {
+                            completion(contents.sorted(by: { $0.index < $1.index }))
+                        }
                     }
                 }
             } else if let link = attributes[.link] as? URL {
-                // 处理链接
+                // 处理纯链接
                 let displayText = richText.attributedSubstring(from: range).string
                 let content = TreasureContent(type: .link, content: link.absoluteString, index: currentIndex, displayText: displayText)
                 contents.append(content)
-            } else if let audioURL = attributes[.link] as? URL, audioURL.pathExtension == "m4a" {
-                // 处理音频上传
-                pendingUploads += 1
-                uploadAudioToStorage(audioURL) { result in
-                    switch result {
-                    case .success(let url):
-                        let content = TreasureContent(type: .audio, content: url.absoluteString, index: currentIndex)
-                        contents.append(content)
-                    case .failure(let error):
-                        print("音频上传失败：\(error.localizedDescription)")
-                    }
-                    pendingUploads -= 1
-                    if pendingUploads == 0 {
-                        completion(contents)
-                    }
-                }
             } else {
                 // 处理普通文本
                 let text = richText.attributedSubstring(from: range).string
                 let content = TreasureContent(type: .text, content: text, index: currentIndex)
                 contents.append(content)
             }
-            currentIndex += 1 // 递增索引
+            currentIndex += 1
         }
-        
-        // 如果没有文件上传，直接回调完成
+
+        // 如果没有文件需要上传，直接回调完成
         if pendingUploads == 0 {
-            completion(contents)
+            completion(contents.sorted(by: { $0.index < $1.index }))
         }
     }
 
-    // 上传图片到 Firebase Storage
-    private func uploadImageToStorage(_ image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
-        let storageRef = Storage.storage().reference().child("images/\(UUID().uuidString).png")
-        if let imageData = image.pngData() {
-            storageRef.putData(imageData, metadata: nil) { metadata, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                // 获取图片下载URL
-                storageRef.downloadURL { url, error in
-                    if let url = url {
-                        completion(.success(url))
-                    } else {
-                        completion(.failure(error!))
-                    }
+
+
+    
+    // 判斷是否是預覽附件（音頻或連結的預覽圖）
+    private func isPreviewAttachment(_ attachment: NSTextAttachment) -> Bool {
+        return attachment.accessibilityLabel == "LinkPreview" || attachment.accessibilityLabel == "AudioPreview"
+    }
+
+
+    private func uploadMediaToStorage(imageData: Data?, path: String, type: ContentType, currentIndex: Int, completion: @escaping (TreasureContent?) -> Void) {
+        guard let data = imageData else {
+            completion(nil)
+            return
+        }
+        let storageRef = Storage.storage().reference().child("\(path)/\(UUID().uuidString).png") // 這裡可以根據需要改成其他副檔名
+        storageRef.putData(data, metadata: nil) { metadata, error in
+            if let error = error {
+                print("文件上传失败：\(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            storageRef.downloadURL { url, error in
+                if let url = url {
+                    let content = TreasureContent(type: type, content: url.absoluteString, index: currentIndex)
+                    completion(content)
+                } else {
+                    print("获取下载URL失败: \(error?.localizedDescription ?? "未知错误")")
+                    completion(nil)
                 }
             }
-        } else {
-            completion(.failure(NSError(domain: "image-upload", code: -1, userInfo: [NSLocalizedDescriptionKey: "无法转换图片数据"])))
         }
     }
 
-    // 上传音频到 Firebase Storage
-    private func uploadAudioToStorage(_ audioURL: URL, completion: @escaping (Result<URL, Error>) -> Void) {
-        let storageRef = Storage.storage().reference().child("audios/\(UUID().uuidString).m4a")
-        
-        do {
-            let audioData = try Data(contentsOf: audioURL)
-            storageRef.putData(audioData, metadata: nil) { metadata, error in
-                if let error = error {
-                    completion(.failure(error))
-                    return
-                }
-                
-                // 获取音频下载URL
-                storageRef.downloadURL { url, error in
-                    if let url = url {
-                        completion(.success(url))
-                    } else {
-                        completion(.failure(error!))
-                    }
-                }
-            }
-        } catch {
-            completion(.failure(error))
-        }
-    }
 }
