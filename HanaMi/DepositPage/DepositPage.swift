@@ -1,4 +1,6 @@
 import SwiftUI
+import UIKit
+
 import Firebase
 import FirebaseFirestore
 import FirebaseStorage
@@ -9,6 +11,7 @@ import CoreLocation
 //import PhotosUI
 import AVKit
 import AVFoundation
+import UniformTypeIdentifiers
 import MediaPicker
 
 struct DepositPage: View {
@@ -31,6 +34,11 @@ struct DepositPage: View {
     @State private var mediaURLs: [URL] = []  // 用來存儲選擇的多媒體 URL
     @State private var isShowingMediaPicker = false  // 控制 media picker 是否顯示
     @State private var selectedMediaItems: [(url: URL, type: String)] = []  // 用來存儲選擇的圖片/影片的資訊
+    
+    @State private var isShowingImagePicker = false
+    @State private var mediaURL: URL?
+    @State private var mediaType: ImagePicker.MediaType?
+    @State private var sourceType: UIImagePickerController.SourceType = .camera
     
     @State private var showingAudioSheet = false
     @StateObject private var audioRecorder = AudioRecorder()
@@ -118,47 +126,16 @@ struct DepositPage: View {
                     }
                 }
                 
-//                ForEach(selectedMediaItems, id: \.url) { mediaItem in
-//                    if mediaItem.type == "image" {
-//                        AsyncImage(url: mediaItem.url) { image in
-//                            image
-//                                .resizable()
-//                                .scaledToFit()
-//                        } placeholder: {
-//                            ProgressView()
-//                        }
-//                    } else if mediaItem.type == "video" {
-//                        VideoPlayer(player: AVPlayer(url: mediaItem.url))
-//                            .scaledToFit()
-//                    } else if mediaItem.type == "livePhoto" {
-//                        VStack {
-//                            Text("Live Photo (Image + Video)")
-//                                .font(.headline)
-//                            
-//                            // 顯示靜態圖像部分
-//                            AsyncImage(url: mediaItem.url) { image in
-//                                image
-//                                    .resizable()
-//                                    .scaledToFit()
-//                            } placeholder: {
-//                                ProgressView()
-//                            }
-//                            
-//                            // 顯示短視頻部分
-//                            VideoPlayer(player: AVPlayer(url: mediaItem.url))
-//                                .scaledToFit()
-//                        }
-//                    }
-//                }
-
-//                .sheet(isPresented: $isShowingMediaPicker) {
-//                    PhotoPicker(image: $selectedImage)
-//                }
-//                .onChange(of: selectedImage) { newImage in
-//                    if let image = newImage {
-//                        insertMedia(image, mediaType: "image")
-//                    }
-//                }
+                // 新的相机按钮
+                   Button(action: {
+                       isShowingImagePicker = true // 新的 @State 变量
+                   }) {
+                       Image(systemName: "camera")
+                           .resizable()
+                           .frame(width: 30, height: 30)
+                           .foregroundColor(.colorBrown)
+                           .padding(10)
+                   }
                 
                 // 插入链接按钮
                 Button(action: {
@@ -222,6 +199,16 @@ struct DepositPage: View {
             .onAppear(perform: subscribeToKeyboardEvents)
         }
         .ignoresSafeArea(.keyboard)
+        .sheet(isPresented: $isShowingImagePicker) {
+            ImagePicker(mediaURL: $mediaURL, mediaType: $mediaType, sourceType: sourceType)
+                .onDisappear {
+                    // 当 ImagePicker 消失后，处理选取的媒体
+                    if let mediaURL = mediaURL, let mediaType = mediaType {
+                        handlePickedMedia(url: mediaURL, mediaType: mediaType)
+                    }
+                }
+        }
+
     }
     
     // 订阅键盘事件
@@ -236,6 +223,16 @@ struct DepositPage: View {
             keyboardHeight = 0
         }
     }
+    
+    func handlePickedMedia(url: URL, mediaType: ImagePicker.MediaType) {
+            if mediaType == .photo {
+                // 插入照片到富文本编辑器
+                insertImageToRichTextEditor(from: url)
+            } else if mediaType == .video {
+                // 插入视频到富文本编辑器
+                insertVideoToRichTextEditor(from: url)
+            }
+        }
     
 //    // 调整富文本编辑器高度
 //    func adjustRichTextHeight() {
@@ -323,45 +320,49 @@ struct DepositPage: View {
     func insertImageToRichTextEditor(from url: URL) {
         guard let image = UIImage(contentsOfFile: url.path) else { return }
         
-        let maxWidth: CGFloat = 200 // 設置圖片最大寬度
+        let maxWidth: CGFloat = 200 // 设置图片最大宽度
         let aspectRatio = image.size.width / image.size.height
         let targetHeight = maxWidth / aspectRatio
         
         let attachment = NSTextAttachment()
         attachment.image = image
-        attachment.bounds = CGRect(x: 0, y: 0, width: maxWidth, height: targetHeight) // 設置縮小的圖片尺寸
+        attachment.bounds = CGRect(x: 0, y: 0, width: maxWidth, height: targetHeight) // 设置缩小的图片尺寸
         
         let attributedString = NSAttributedString(attachment: attachment)
         let mutableRichText = NSMutableAttributedString(attributedString: richText)
         mutableRichText.append(attributedString)
-        richText = mutableRichText // 更新 richText 變量
+        richText = mutableRichText // 更新 richText 变量
     }
 
     func insertVideoToRichTextEditor(from url: URL) {
         let asset = AVAsset(url: url)
         let assetImageGenerator = AVAssetImageGenerator(asset: asset)
         assetImageGenerator.appliesPreferredTrackTransform = true
-        
-        var time = asset.duration
-        time.value = min(time.value, 2)
-        
+
+        let time = CMTime(seconds: 1.0, preferredTimescale: 600) // 取第一秒的帧作为缩略图
+
         if let cgImage = try? assetImageGenerator.copyCGImage(at: time, actualTime: nil) {
             let thumbnail = UIImage(cgImage: cgImage)
-            
-            let maxWidth: CGFloat = 200 // 設置影片預覽最大寬度
+
+            let maxWidth: CGFloat = 200 // 设置视频预览最大宽度
             let aspectRatio = thumbnail.size.width / thumbnail.size.height
             let targetHeight = maxWidth / aspectRatio
-            
+
             let attachment = NSTextAttachment()
             attachment.image = thumbnail
-            attachment.bounds = CGRect(x: 0, y: 0, width: maxWidth, height: targetHeight) // 設置縮小的影片縮圖尺寸
-            
-            let attributedString = NSAttributedString(attachment: attachment)
+            attachment.bounds = CGRect(x: 0, y: 0, width: maxWidth, height: targetHeight) // 设置缩小的影片缩图尺寸
+
+            // 创建带有附件的 NSMutableAttributedString
+            let attributedString = NSMutableAttributedString(attachment: attachment)
+            // 添加 .link 属性，将视频的 URL 添加到缩略图上
+            attributedString.addAttribute(.link, value: url, range: NSRange(location: 0, length: attributedString.length))
+
             let mutableRichText = NSMutableAttributedString(attributedString: richText)
             mutableRichText.append(attributedString)
-            richText = mutableRichText // 更新 richText 變量
+            richText = mutableRichText
         }
     }
+
 
 
         func playVideo(url: URL) {

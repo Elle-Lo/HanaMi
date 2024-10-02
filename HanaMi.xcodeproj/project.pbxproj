@@ -25,7 +25,8 @@
 		AB06AA692CA982BB00E49F5C /* SignUpPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA682CA982BB00E49F5C /* SignUpPage.swift */; };
 		AB06AA6B2CABFBC700E49F5C /* FavoritesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA6A2CABFBC700E49F5C /* FavoritesPage.swift */; };
 		AB06AA6E2CAD050C00E49F5C /* MediaPicker in Frameworks */ = {isa = PBXBuildFile; productRef = AB06AA6D2CAD050C00E49F5C /* MediaPicker */; };
-		AB06AA702CAD5A7C00E49F5C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB06AA6F2CAD5A7C00E49F5C /* Launch Screen.storyboard */; };
+		AB06AA722CAD802C00E49F5C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB06AA712CAD802C00E49F5C /* Launch Screen.storyboard */; };
+		AB06AA912CAD942F00E49F5C /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA902CAD942F00E49F5C /* ImagePicker.swift */; };
 		AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD842C9D1B4500A0135E /* CategoryView.swift */; };
 		AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */; };
 		AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */; };
@@ -81,7 +82,9 @@
 		AB06AA4E2CA96ABA00E49F5C /* HanaMi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HanaMi.entitlements; sourceTree = "<group>"; };
 		AB06AA682CA982BB00E49F5C /* SignUpPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPage.swift; sourceTree = "<group>"; };
 		AB06AA6A2CABFBC700E49F5C /* FavoritesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesPage.swift; sourceTree = "<group>"; };
-		AB06AA6F2CAD5A7C00E49F5C /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AB06AA712CAD802C00E49F5C /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AB06AA732CAD848D00E49F5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		AB06AA902CAD942F00E49F5C /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		AB5CCD842C9D1B4500A0135E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
 		AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
@@ -191,7 +194,9 @@
 		ABAFAAB52C93DBBF007CDB45 /* HanaMi */ = {
 			isa = PBXGroup;
 			children = (
+				AB06AA732CAD848D00E49F5C /* Info.plist */,
 				AB06AA4E2CA96ABA00E49F5C /* HanaMi.entitlements */,
+				AB06AA712CAD802C00E49F5C /* Launch Screen.storyboard */,
 				ABAFAAD82C9540EB007CDB45 /* Model.swift */,
 				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
 				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
@@ -206,6 +211,7 @@
 				AB06AA012CA00FED00E49F5C /* Character */,
 				ABAFAADA2C95427A007CDB45 /* Supporting file */,
 				ABAFAABC2C93DBC1007CDB45 /* Preview Content */,
+				AB06AA902CAD942F00E49F5C /* ImagePicker.swift */,
 			);
 			path = HanaMi;
 			sourceTree = "<group>";
@@ -223,7 +229,6 @@
 			children = (
 				ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */,
 				ABAFAAE52C95882D007CDB45 /* Extension.swift */,
-				AB06AA6F2CAD5A7C00E49F5C /* Launch Screen.storyboard */,
 				ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */,
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
 				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
@@ -363,7 +368,7 @@
 			files = (
 				ABAFAABE2C93DBC1007CDB45 /* Preview Assets.xcassets in Resources */,
 				ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */,
-				AB06AA702CAD5A7C00E49F5C /* Launch Screen.storyboard in Resources */,
+				AB06AA722CAD802C00E49F5C /* Launch Screen.storyboard in Resources */,
 				ABAFAAC52C93F726007CDB45 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -410,6 +415,7 @@
 				AB06AA0D2CA28E9D00E49F5C /* CategoryCardViewModel.swift in Sources */,
 				ABAFAAF52C973BF8007CDB45 /* LocationSearchViewModel.swift in Sources */,
 				ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */,
+				AB06AA912CAD942F00E49F5C /* ImagePicker.swift in Sources */,
 				ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */,
 				ABAFAAF72C973C1E007CDB45 /* LocationSearchView.swift in Sources */,
 				ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */,
@@ -579,6 +585,8 @@
 				DEVELOPMENT_TEAM = KX36U2DJW6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HanaMi/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "我們需要取得您相機的權限";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -616,6 +624,8 @@
 				DEVELOPMENT_TEAM = KX36U2DJW6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HanaMi/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "我們需要取得您相機的權限";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
