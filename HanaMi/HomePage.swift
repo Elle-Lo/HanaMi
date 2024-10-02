@@ -15,81 +15,82 @@ struct HomePage: View {
     private let firestoreService = FirestoreService()
     
     var body: some View {
-//        NavigationView {
-            ZStack {
-
-                // 半透明黑色遮罩
-                Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
-
-                VStack {
-                    if isLoading {
-                        ProgressView("加載中...")
-                    } else {
-                        ScrollView {
-                            ForEach(treasures) { treasure in
-                                TreasureCardView(treasure: treasure)
-                                    .padding(.horizontal, 20)
-                                    .padding(.vertical, 10)
-                            }
-                        }
-                        .scrollIndicators(.hidden)
-                    }
-
-                    Spacer()
-                }
-                .padding(.top, 15)
-
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            fetchRandomTreasures()
-                        }) {
-                            Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 15))
-                                .foregroundColor(.white)
-                                .frame(width: 50, height: 50)
-                                .background(Circle().fill(Color.gray).frame(width: 50, height: 50).opacity(0.3))
-                        }
-                        .padding(.trailing, 30)
-                        .padding(.bottom, 70)
-                    }
-                }
-            }
-            .background(
-                            Group {
-                                if let backgroundImageUrl = backgroundImageUrl, !isUsingDefaultBackground {
-                                    KFImage(backgroundImageUrl)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .edgesIgnoringSafeArea(.all) // 背景延伸到安全区域外
-                                } else {
-                                    Image("Homebg")
-                                        .resizable()
-                                        .scaledToFill()
-                                        .edgesIgnoringSafeArea(.all) // 使用默认背景
-                                }
-                            }
-                        )
-//        }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear {
-                   fetchBackgroundImage()  // 加載用戶背景圖片
-                   fetchRandomTreasures()
-               }
-    }
-    
-    func fetchBackgroundImage() {
-            firestoreService.fetchUserBackgroundImage(uid: userID) { imageUrlString in
-                if let imageUrlString = imageUrlString, let url = URL(string: imageUrlString) {
-                    self.backgroundImageUrl = url
-                    self.isUsingDefaultBackground = false  // 使用自定義背景
+        //        NavigationView {
+        ZStack {
+            
+            // 半透明黑色遮罩
+            Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
+            
+            VStack {
+                if isLoading {
+                    ProgressView("加載中...")
                 } else {
-                    self.isUsingDefaultBackground = true  // 沒有背景圖片，使用默認背景
+                    ScrollView {
+                        ForEach(treasures) { treasure in
+                            TreasureCardView(treasure: treasure)
+                                
+                                .padding(.vertical, 20)
+                        }
+                    }
+                    .padding(.horizontal, 30)
+                    .scrollIndicators(.hidden)
+                }
+                
+                Spacer()
+            }
+            .padding(.top, 15)
+            
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        fetchRandomTreasures()
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 15))
+                            .foregroundColor(.white)
+                            .frame(width: 50, height: 50)
+                            .background(Circle().fill(Color.gray).frame(width: 50, height: 50).opacity(0.3))
+                    }
+                    .padding(.trailing, 30)
+                    .padding(.bottom, 70)
                 }
             }
         }
+        .background(
+            Group {
+                if let backgroundImageUrl = backgroundImageUrl, !isUsingDefaultBackground {
+                    KFImage(backgroundImageUrl)
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all) // 背景延伸到安全区域外
+                } else {
+                    Image("Homebg")
+                        .resizable()
+                        .scaledToFill()
+                        .edgesIgnoringSafeArea(.all) // 使用默认背景
+                }
+            }
+        )
+        //        }
+        .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {
+            fetchBackgroundImage()  // 加載用戶背景圖片
+            fetchRandomTreasures()
+        }
+    }
+    
+    func fetchBackgroundImage() {
+        firestoreService.fetchUserBackgroundImage(uid: userID) { imageUrlString in
+            if let imageUrlString = imageUrlString, let url = URL(string: imageUrlString) {
+                self.backgroundImageUrl = url
+                self.isUsingDefaultBackground = false  // 使用自定義背景
+            } else {
+                self.isUsingDefaultBackground = true  // 沒有背景圖片，使用默認背景
+            }
+        }
+    }
     
     func fetchRandomTreasures() {
         isLoading = true
@@ -108,63 +109,75 @@ struct HomePage: View {
 
 struct TreasureCardView: View {
     var treasure: Treasure
-
+    
     var body: some View {
+        
         VStack(alignment: .leading, spacing: 10) {
-         
+            
             Text(treasure.category)
                 .font(.headline)
                 .foregroundColor(.black)
-                 .padding(.top, 10)
-
-            Text("地點: \(treasure.locationName)")
-                .font(.subheadline)
-                .foregroundColor(.gray)
-
-            Divider()
-                .padding(.vertical, 5)
-
-            ForEach(treasure.contents.sorted(by: { $0.index < $1.index })) { content in
-                VStack(alignment: .leading, spacing: 10) {
-                   
-                    switch content.type {
-                    case .text:
-                     
-                        Text(content.content)
-                            .font(.body)
-                            .foregroundColor(.black)
-                            .fixedSize(horizontal: false, vertical: true) // 确保文本换行时不会拉伸
-
-                    case .image:
-                      
-                        if let imageURL = URL(string: content.content) {
-                            KFImage(imageURL)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxWidth: .infinity)
-                                .cornerRadius(10)
-                        }
-                        
-                    case .link:
-                        if let url = URL(string: content.content) {
-                            LinkPreviewView(url: url)
-                                .cornerRadius(10)  // 保持圆角
-                                .shadow(radius: 5)  // 阴影
-                                .padding(.vertical, 5)  // 垂直间距
-
-                               }
-
-                    default:
-                        EmptyView()
-                    }
-                }
-                .padding(.bottom, 5)
+                .padding(.top, 10)
+            
+            HStack(spacing: 4) {
+                Image("pin")
+                    .resizable()
+                    .frame(width: 10, height: 10)
+                Text("\(treasure.longitude), \(treasure.latitude)")
+                    .font(.caption)
+                    .foregroundColor(.black)
             }
+            .padding(8)
+            .background(Color.gray.opacity(0.2))
+            .cornerRadius(15)
+            
+            Divider()
+            
+            ScrollView {
+                
+                ForEach(treasure.contents.sorted(by: { $0.index < $1.index })) { content in
+                    VStack(alignment: .leading, spacing: 5) {
+                        
+                        switch content.type {
+                        case .text:
+                            
+                            Text(content.content)
+                                .font(.body)
+                                .foregroundColor(.black)
+                                .lineSpacing(0)  // 調整行距
+//                                .fixedSize(horizontal: false, vertical: true)
+                            
+                        case .image:
+                            
+                            if let imageURL = URL(string: content.content) {
+                                KFImage(imageURL)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: .infinity)
+                                    .cornerRadius(10)
+                            }
+                            
+                        case .link:
+                            if let url = URL(string: content.content) {
+                                LinkPreviewView(url: url)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 5)
+                                    .padding(.vertical, 5)
+                                
+                            }
+                            
+                        default:
+                            EmptyView()
+                        }
+                    }
+                    .padding(.bottom, 5)
+                }
+            }
+            
         }
-        .padding()
-        .background(Color.white.opacity(0.8))
+        .padding(.horizontal, 20)
+        .background(Color.white.opacity(0.6))
         .cornerRadius(15)
         .shadow(radius: 5)
     }
 }
-

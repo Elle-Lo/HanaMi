@@ -24,6 +24,8 @@
 		AB06AA672CA9788A00E49F5C /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = AB06AA662CA9788A00E49F5C /* FirebaseStorage */; };
 		AB06AA692CA982BB00E49F5C /* SignUpPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA682CA982BB00E49F5C /* SignUpPage.swift */; };
 		AB06AA6B2CABFBC700E49F5C /* FavoritesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA6A2CABFBC700E49F5C /* FavoritesPage.swift */; };
+		AB06AA6E2CAD050C00E49F5C /* MediaPicker in Frameworks */ = {isa = PBXBuildFile; productRef = AB06AA6D2CAD050C00E49F5C /* MediaPicker */; };
+		AB06AA702CAD5A7C00E49F5C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB06AA6F2CAD5A7C00E49F5C /* Launch Screen.storyboard */; };
 		AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD842C9D1B4500A0135E /* CategoryView.swift */; };
 		AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */; };
 		AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */; };
@@ -79,6 +81,7 @@
 		AB06AA4E2CA96ABA00E49F5C /* HanaMi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HanaMi.entitlements; sourceTree = "<group>"; };
 		AB06AA682CA982BB00E49F5C /* SignUpPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPage.swift; sourceTree = "<group>"; };
 		AB06AA6A2CABFBC700E49F5C /* FavoritesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesPage.swift; sourceTree = "<group>"; };
+		AB06AA6F2CAD5A7C00E49F5C /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AB5CCD842C9D1B4500A0135E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
 		AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
@@ -126,6 +129,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABAFAB0B2C993504007CDB45 /* Kingfisher in Frameworks */,
+				AB06AA6E2CAD050C00E49F5C /* MediaPicker in Frameworks */,
 				AB06AA5F2CA9788A00E49F5C /* FirebaseAuthCombine-Community in Frameworks */,
 				AB06AA5D2CA9788A00E49F5C /* FirebaseAuth in Frameworks */,
 				AB06AA672CA9788A00E49F5C /* FirebaseStorage in Frameworks */,
@@ -219,6 +223,7 @@
 			children = (
 				ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */,
 				ABAFAAE52C95882D007CDB45 /* Extension.swift */,
+				AB06AA6F2CAD5A7C00E49F5C /* Launch Screen.storyboard */,
 				ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */,
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
 				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
@@ -305,6 +310,7 @@
 				AB06AA622CA9788A00E49F5C /* FirebaseFirestore */,
 				AB06AA642CA9788A00E49F5C /* FirebaseFirestoreCombine-Community */,
 				AB06AA662CA9788A00E49F5C /* FirebaseStorage */,
+				AB06AA6D2CAD050C00E49F5C /* MediaPicker */,
 			);
 			productName = HanaMi;
 			productReference = ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */;
@@ -339,6 +345,7 @@
 				ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				AB06AA592CA9788A00E49F5C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				AB06AA6C2CAD050C00E49F5C /* XCRemoteSwiftPackageReference "SwiftUI-MediaPicker" */,
 			);
 			productRefGroup = ABAFAAB42C93DBBF007CDB45 /* Products */;
 			projectDirPath = "";
@@ -356,6 +363,7 @@
 			files = (
 				ABAFAABE2C93DBC1007CDB45 /* Preview Assets.xcassets in Resources */,
 				ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */,
+				AB06AA702CAD5A7C00E49F5C /* Launch Screen.storyboard in Resources */,
 				ABAFAAC52C93F726007CDB45 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -576,6 +584,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -612,6 +621,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -661,6 +671,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 11.2.0;
+			};
+		};
+		AB06AA6C2CAD050C00E49F5C /* XCRemoteSwiftPackageReference "SwiftUI-MediaPicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/UWAppDev/SwiftUI-MediaPicker.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
 			};
 		};
 		ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -724,6 +742,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AB06AA592CA9788A00E49F5C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		AB06AA6D2CAD050C00E49F5C /* MediaPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB06AA6C2CAD050C00E49F5C /* XCRemoteSwiftPackageReference "SwiftUI-MediaPicker" */;
+			productName = MediaPicker;
 		};
 		ABAFAB0A2C993504007CDB45 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

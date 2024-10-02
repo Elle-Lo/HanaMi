@@ -90,12 +90,7 @@ struct SettingsPage: View {
                         // 更換背景按鈕
                         SettingsButton(iconName: "photo.on.rectangle", text: "更換背景") {
                             isBackgroundPhotoPickerPresented = true
-                        }
-//                        .onChange(of: selectedBackgroundImage) { newImage in
-//                            if let newImage = newImage {
-//                                uploadBackgroundImageToStorage(image: newImage)
-//                            }
-//                        }
+                        }                       
                         
                         // 移除背景按鈕
                         SettingsButton(iconName: "trash", text: "移除背景圖") {
@@ -113,7 +108,6 @@ struct SettingsPage: View {
                         // 收藏按鈕
                         NavigationLink(destination: FavoritesPage()) {
                             SettingsButton(iconName: "heart", text: "收藏") {
-                                // 收藏動作
                             }
                         }
 
