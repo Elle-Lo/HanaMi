@@ -6,15 +6,14 @@ enum ContentType: String, Codable {
     case image
     case video
     case link
-    case map
     case audio
 }
 
-enum LinkType {
-    case youtube
-    case googleMaps
-    case regular
-}
+//enum LinkType {
+//    case youtube
+//    case googleMaps
+//    case regular
+//}
 
 struct Users: Identifiable, Codable {
     @DocumentID var id: String? // 用戶的 Firestore document ID

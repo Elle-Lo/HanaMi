@@ -3,6 +3,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseStorage
 import MapKit
+import UniformTypeIdentifiers
 
 struct SaveButtonView: View {
     let userID: String
@@ -10,29 +11,28 @@ struct SaveButtonView: View {
     let selectedLocationName: String?
     let selectedCategory: String
     let isPublic: Bool
-    let contents: NSAttributedString // 传递 NSAttributedString 而非处理后的内容
+    let contents: NSAttributedString
     @Binding var errorMessage: String?
 
     var firestoreService = FirestoreService()
-    
-    var onSave: () -> Void // 新增一個保存成功後的回調
+    var onSave: () -> Void
 
     var body: some View {
-            Button(action: {
-                saveDataToFirestore()
-            }) {
-                Text("Save")
-                    .font(.system(size: 16))
-                    .foregroundColor(.colorBrown)
-                    .padding()
-                    .background(.colorYellow)
-                    .cornerRadius(10)
-            }
+        Button(action: {
+            saveDataToFirestore()
+        }) {
+            Text("Save")
+                .font(.system(size: 16))
+                .foregroundColor(.colorBrown)
+                .padding()
+                .background(Color.colorYellow)
+                .cornerRadius(10)
+        }
     }
 
-    // 保存地点和类别数据到 Firestore
     private func saveDataToFirestore() {
-        guard let coordinate = selectedCoordinate, let locationName = selectedLocationName else {
+        guard let coordinate = selectedCoordinate,
+              let locationName = selectedLocationName else {
             errorMessage = "請選擇一個有效的地點"
             return
         }
@@ -42,15 +42,20 @@ struct SaveButtonView: View {
             return
         }
 
-        // 提取富文本中的内容，检查是否有图片和音频
-        extractContentsWithImageUpload(contents) { processedContents in
-            // 将处理后的内容和其他信息一起存入 Firestore
-            firestoreService.saveTreasure(userID: userID, coordinate: coordinate, locationName: locationName, category: selectedCategory, isPublic: isPublic, contents: processedContents) { result in
+        extractContentsWithMediaUpload(contents) { processedContents in
+            firestoreService.saveTreasure(
+                userID: userID,
+                coordinate: coordinate,
+                locationName: locationName,
+                category: selectedCategory,
+                isPublic: isPublic,
+                contents: processedContents
+            ) { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success():
                         errorMessage = "數據保存成功"
-                        onSave() // 保存成功後執行重置操作
+                        onSave()
                     case .failure(let error):
                         errorMessage = "保存數據失敗: \(error.localizedDescription)"
                     }
@@ -59,18 +64,74 @@ struct SaveButtonView: View {
         }
     }
 
-    private func extractContentsWithImageUpload(_ richText: NSAttributedString, completion: @escaping ([TreasureContent]) -> Void) {
+    private func extractContentsWithMediaUpload(_ richText: NSAttributedString, completion: @escaping ([TreasureContent]) -> Void) {
         var contents: [TreasureContent] = []
         var pendingUploads = 0
         var currentIndex = 0
 
-        // 遍历富文本内容
-        richText.enumerateAttributes(in: NSRange(location: 0, length: richText.length), options: []) { attributes, range, _ in
+        let fullRange = NSRange(location: 0, length: richText.length)
+
+        richText.enumerateAttributes(in: fullRange, options: []) { attributes, range, _ in
             if let attachment = attributes[.attachment] as? NSTextAttachment {
-                if let image = attachment.image {
-                    // 处理图片附件
+                currentIndex += 1
+
+                if let fileType = attachment.fileType {
+                    if fileType == UTType.movie.identifier {
+                        // 处理视频附件
+                        pendingUploads += 1
+                        if let videoURL = attributes[.link] as? URL {
+                            uploadMediaToStorage(
+                                imageData: nil,
+                                videoURL: videoURL,
+                                path: "videos",
+                                type: .video,
+                                currentIndex: currentIndex
+                            ) { content in
+                                if let content = content {
+                                    contents.append(content)
+                                }
+                                pendingUploads -= 1
+                                if pendingUploads == 0 {
+                                    completion(contents.sorted(by: { $0.index < $1.index }))
+                                }
+                            }
+                        } else {
+                            print("无法获取视频 URL")
+                            pendingUploads -= 1
+                        }
+                    } else if fileType == UTType.image.identifier {
+                        // 处理图片附件
+                        if let image = attachment.image {
+                            pendingUploads += 1
+                            uploadMediaToStorage(
+                                imageData: image.pngData(),
+                                videoURL: nil,
+                                path: "images",
+                                type: .image,
+                                currentIndex: currentIndex
+                            ) { content in
+                                if let content = content {
+                                    contents.append(content)
+                                }
+                                pendingUploads -= 1
+                                if pendingUploads == 0 {
+                                    completion(contents.sorted(by: { $0.index < $1.index }))
+                                }
+                            }
+                        }
+                    } else {
+                        pendingUploads -= 1
+                    }
+                } else if let image = attachment.image {
+                    // 处理没有 fileType 的图片附件
                     pendingUploads += 1
-                    uploadMediaToStorage(imageData: image.pngData(), videoURL: nil, path: "images", type: .image, currentIndex: currentIndex) { content in
+                    uploadMediaToStorage(
+                        imageData: image.pngData(),
+                        videoURL: nil,
+                        path: "images",
+                        type: .image,
+                        currentIndex: currentIndex
+                    ) { content in
                         if let content = content {
                             contents.append(content)
                         }
@@ -79,57 +140,47 @@ struct SaveButtonView: View {
                             completion(contents.sorted(by: { $0.index < $1.index }))
                         }
                     }
-                } else if let videoFileURL = attachment.fileWrapper?.preferredFilename, videoFileURL.hasSuffix(".mp4") {
-                    // 处理视频附件
-                    pendingUploads += 1
-                    let videoURL = URL(fileURLWithPath: videoFileURL)
-                    uploadMediaToStorage(imageData: nil, videoURL: videoURL, path: "videos", type: .video, currentIndex: currentIndex) { content in
-                        if let content = content {
-                            contents.append(content)
-                        }
-                        pendingUploads -= 1
-                        if pendingUploads == 0 {
-                            completion(contents.sorted(by: { $0.index < $1.index }))
-                        }
-                    }
+                } else {
+                    pendingUploads -= 1
                 }
             } else if let link = attributes[.link] as? URL {
-                // 处理纯链接
                 let displayText = richText.attributedSubstring(from: range).string
-                let content = TreasureContent(type: .link, content: link.absoluteString, index: currentIndex, displayText: displayText)
+                let content = TreasureContent(
+                    type: .link,
+                    content: link.absoluteString,
+                    index: currentIndex,
+                    displayText: displayText
+                )
                 contents.append(content)
+                currentIndex += 1
             } else {
-                // 处理普通文本
                 let text = richText.attributedSubstring(from: range).string
-                let content = TreasureContent(type: .text, content: text, index: currentIndex)
+                let content = TreasureContent(
+                    type: .text,
+                    content: text,
+                    index: currentIndex
+                )
                 contents.append(content)
+                currentIndex += 1
             }
-            currentIndex += 1
         }
 
-        // 如果没有文件需要上传，直接回调完成
         if pendingUploads == 0 {
             completion(contents.sorted(by: { $0.index < $1.index }))
         }
     }
 
-
-
-
-    
-    // 判斷是否是預覽附件（音頻或連結的預覽圖）
-    private func isPreviewAttachment(_ attachment: NSTextAttachment) -> Bool {
-        return attachment.accessibilityLabel == "LinkPreview" || attachment.accessibilityLabel == "AudioPreview"
-    }
-
-
     private func uploadMediaToStorage(imageData: Data?, videoURL: URL?, path: String, type: ContentType, currentIndex: Int, completion: @escaping (TreasureContent?) -> Void) {
-        let storageRef = Storage.storage().reference().child("\(path)/\(UUID().uuidString)")
-        
-        if let data = imageData { // 上传图片
-            storageRef.child(".png").putData(data, metadata: nil) { metadata, error in
+        let filename = UUID().uuidString
+        let storageRef = Storage.storage().reference().child("\(path)/\(filename)")
+
+        if let data = imageData {
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/png"
+
+            storageRef.putData(data, metadata: metadata) { metadata, error in
                 if let error = error {
-                    print("图片上传失败：\(error.localizedDescription)")
+                    print("圖片上傳失敗：\(error.localizedDescription)")
                     completion(nil)
                     return
                 }
@@ -138,38 +189,33 @@ struct SaveButtonView: View {
                         let content = TreasureContent(type: type, content: url.absoluteString, index: currentIndex)
                         completion(content)
                     } else {
-                        print("获取下载URL失败: \(error?.localizedDescription ?? "未知错误")")
+                        print("獲取下載URL失敗: \(error?.localizedDescription ?? "未知錯誤")")
                         completion(nil)
                     }
                 }
             }
-        } else if let videoURL = videoURL { // 上传视频
-            do {
-                let videoData = try Data(contentsOf: videoURL)
-                storageRef.child(".mp4").putData(videoData, metadata: nil) { metadata, error in
-                    if let error = error {
-                        print("视频上传失败：\(error.localizedDescription)")
+        } else if let videoURL = videoURL {
+            let metadata = StorageMetadata()
+            metadata.contentType = "video/mp4"
+
+            storageRef.putFile(from: videoURL, metadata: metadata) { metadata, error in
+                if let error = error {
+                    print("視頻上傳失敗：\(error.localizedDescription)")
+                    completion(nil)
+                    return
+                }
+                storageRef.downloadURL { url, error in
+                    if let url = url {
+                        let content = TreasureContent(type: type, content: url.absoluteString, index: currentIndex)
+                        completion(content)
+                    } else {
+                        print("獲取下載URL失敗: \(error?.localizedDescription ?? "未知錯誤")")
                         completion(nil)
-                        return
-                    }
-                    storageRef.downloadURL { url, error in
-                        if let url = url {
-                            let content = TreasureContent(type: type, content: url.absoluteString, index: currentIndex)
-                            completion(content)
-                        } else {
-                            print("获取下载URL失败: \(error?.localizedDescription ?? "未知错误")")
-                            completion(nil)
-                        }
                     }
                 }
-            } catch {
-                print("无法读取视频文件数据: \(error.localizedDescription)")
-                completion(nil)
             }
         } else {
             completion(nil)
         }
     }
-
-
 }
