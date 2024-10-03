@@ -18,11 +18,10 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate, ObservableObject {
 
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-            AVSampleRateKey: 12000,
+            AVSampleRateKey: 44100,  // 常見的音質較好的取樣率
             AVNumberOfChannelsKey: 1,
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
         ]
-
         do {
             try setupAudioSession()
             audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
@@ -30,7 +29,7 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate, ObservableObject {
             audioRecorder?.isMeteringEnabled = true
             audioRecorder?.record()
             recordingURL = audioFilename // 更新錄音檔案 URL
-            startMonitoringVolume()
+//            startMonitoringVolume()
         } catch {
             print("錄音失敗：\(error.localizedDescription)")
         }
@@ -44,13 +43,15 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate, ObservableObject {
     
     // 播放錄音
     func playRecording(from url: URL) {
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
-        } catch {
-            print("播放錄音失敗: \(error.localizedDescription)")
+            do {
+                try setupAudioSession()  // 在播放之前設置音訊會話
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.volume = 1.0  // 設置音量為最大
+                audioPlayer?.play()
+            } catch {
+                print("播放錄音失敗: \(error.localizedDescription)")
+            }
         }
-    }
 
     // 刪除本地錄音檔案
     func deleteRecordingLocally() {
@@ -67,28 +68,4 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate, ObservableObject {
         try audioSession.setActive(true)
     }
 
-    // 監控音量
-    func startMonitoringVolume() {
-        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-            if self.audioRecorder?.isRecording == true {
-                self.audioRecorder?.updateMeters()
-                let power = self.audioRecorder?.averagePower(forChannel: 0) ?? -160
-                self.currentVolume = self.normalizedPowerLevel(fromDecibels: power)
-            } else {
-                timer.invalidate()
-            }
-        }
-    }
-
-    // 將音量分貝轉換為 0 到 1 的範圍
-    func normalizedPowerLevel(fromDecibels decibels: Float) -> Float {
-        let minDb: Float = -80
-        if decibels < minDb {
-            return 0.0
-        } else if decibels >= 0 {
-            return 1.0
-        } else {
-            return (decibels + abs(minDb)) / abs(minDb)
-        }
-    }
 }

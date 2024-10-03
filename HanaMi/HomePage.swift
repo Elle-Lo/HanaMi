@@ -77,7 +77,6 @@ struct HomePage: View {
         .onAppear {
             fetchBackgroundImage()  // 加載用戶背景圖片
             fetchRandomTreasures()
-            setupAudioSession()
         }
     }
     
@@ -104,16 +103,6 @@ struct HomePage: View {
             isLoading = false
         }
     }
-    
-    func setupAudioSession() {
-           let audioSession = AVAudioSession.sharedInstance()
-           do {
-               try audioSession.setCategory(.playback, mode: .default, options: [])
-               try audioSession.setActive(true)
-           } catch {
-               print("Failed to set up audio session: \(error.localizedDescription)")
-           }
-       }
 }
 
 
