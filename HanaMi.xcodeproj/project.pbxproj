@@ -227,13 +227,13 @@
 		ABAFAADA2C95427A007CDB45 /* Supporting file */ = {
 			isa = PBXGroup;
 			children = (
+				ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */,
+				ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */,
+				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
 				ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */,
 				ABAFAAE52C95882D007CDB45 /* Extension.swift */,
 				ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */,
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
-				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
-				ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */,
-				ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */,
 			);
 			path = "Supporting file";
 			sourceTree = "<group>";

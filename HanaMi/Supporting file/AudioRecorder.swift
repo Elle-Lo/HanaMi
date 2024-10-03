@@ -1,5 +1,4 @@
 import AVFoundation
-import FirebaseStorage
 import SwiftUI
 
 class AudioRecorder: NSObject, AVAudioRecorderDelegate, ObservableObject {
@@ -7,7 +6,6 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate, ObservableObject {
     var audioPlayer: AVAudioPlayer?
     @Published var recordingURL: URL?
     @Published var currentVolume: Float = 0.0
-    let storage = Storage.storage()
 
     // 開始錄音，並刪除舊的錄音檔案
     func startRecording() {
@@ -44,50 +42,21 @@ class AudioRecorder: NSObject, AVAudioRecorderDelegate, ObservableObject {
         audioRecorder = nil
     }
     
+    // 播放錄音
     func playRecording(from url: URL) {
-           do {
-               audioPlayer = try AVAudioPlayer(contentsOf: url)
-               audioPlayer?.play()
-           } catch {
-               print("播放錄音失敗: \(error.localizedDescription)")
-           }
-       }
-    
-    // 上傳錄音到 Firebase Storage
-    func uploadRecording(completion: @escaping (URL?) -> Void) {
-        guard let recordingURL = recordingURL else {
-            completion(nil)
-            return
-        }
-
-        let storageRef = storage.reference().child("audios/\(UUID().uuidString).m4a")
-        storageRef.putFile(from: recordingURL, metadata: nil) { metadata, error in
-            if let error = error {
-                print("上傳失敗：\(error.localizedDescription)")
-                completion(nil)
-            } else {
-                storageRef.downloadURL { url, error in
-                    if let url = url {
-                        completion(url)
-                    } else {
-                        print("獲取下載URL失敗：\(error?.localizedDescription ?? "")")
-                        completion(nil)
-                    }
-                }
-            }
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        } catch {
+            print("播放錄音失敗: \(error.localizedDescription)")
         }
     }
 
-    // 刪除 Firebase Storage 中的錄音檔案
-    func deleteRecordingFromStorage(at url: URL, completion: @escaping (Bool) -> Void) {
-        let storageRef = storage.reference(forURL: url.absoluteString)
-        storageRef.delete { error in
-            if let error = error {
-                print("刪除錄音失敗：\(error.localizedDescription)")
-                completion(false)
-            } else {
-                completion(true)
-            }
+    // 刪除本地錄音檔案
+    func deleteRecordingLocally() {
+        if let url = recordingURL {
+            try? FileManager.default.removeItem(at: url)
+            recordingURL = nil
         }
     }
 

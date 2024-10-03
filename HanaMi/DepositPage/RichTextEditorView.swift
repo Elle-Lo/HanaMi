@@ -8,6 +8,7 @@ import LinkPresentation
 struct RichTextEditorView: UIViewRepresentable {
     @Binding var text: NSAttributedString
     @State private var lastInsertedAudioURL: URL? // 保存最新插入的音頻 URL
+    @State private var videoLink: URL? // 用於存儲影片連結
     @State private var lastInsertedLinkURL: URL?
     var onVideoTapped: (URL) -> Void // 回调函数，点击视频时触发
 
@@ -120,6 +121,7 @@ struct RichTextEditorView: UIViewRepresentable {
                let mutableRichText = NSMutableAttributedString(attributedString: text)
                mutableRichText.append(attributedString)
                text = mutableRichText
+               videoLink = url
            }
        }
 

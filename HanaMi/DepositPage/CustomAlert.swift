@@ -18,7 +18,19 @@ struct CustomAlert: View {
                     .font(.headline)
                     .padding()
 
-                if let recordingURL = audioRecorder.recordingURL {
+                if isRecording {
+                    // 顯示停止按鈕
+                    Button(action: {
+                        audioRecorder.stopRecording()
+                        isRecording = false
+                    }) {
+                        Image(systemName: "stop.circle.fill")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.red)
+                    }
+                } else if let recordingURL = audioRecorder.recordingURL {
+                    // 錄音停止後顯示播放、保存、刪除按鈕
                     Button(action: {
                         audioRecorder.playRecording(from: recordingURL)
                         isPlaying = true
@@ -28,80 +40,70 @@ struct CustomAlert: View {
                             .frame(width: 60, height: 60)
                             .foregroundColor(.green)
                     }
-                }
-
-                HStack {
-                    // 錄音按鈕
-                    Button(action: {
-                        if audioRecorder.audioRecorder == nil {
-                            audioRecorder.startRecording()
-                            isRecording = true
-                        } else {
-                            audioRecorder.stopRecording()
-                            isRecording = false
-                        }
-                    }) {
-                        Image(systemName: isRecording ? "stop.circle.fill" : "mic.circle.fill")
-                            .resizable()
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(isRecording ? .red : .blue)
-                    }
-
-                    // 保存按鈕
-                    if let recordingURL = audioRecorder.recordingURL {
+                    
+                    HStack {
+                        // 保存按鈕
                         Button(action: {
-                            audioRecorder.uploadRecording { uploadedURL in
-                                if let uploadedURL = uploadedURL {
-                                    uploadedAudioURL = uploadedURL
-                                    show = false // 保存後關閉
-                                }
-                            }
+                               show = false // 保存後關閉
+                                
                         }) {
                             Text("保存")
-                                .foregroundColor(.white)
+                                .foregroundColor(.green)
                                 .padding()
                                 .background(Capsule().stroke(Color.green, lineWidth: 2))
                         }
-                    }
 
-                    // 刪除按鈕
-                    if let recordingURL = audioRecorder.recordingURL {
+                        // 刪除按鈕
                         Button(action: {
                             try? FileManager.default.removeItem(at: recordingURL)
                             audioRecorder.recordingURL = nil
                             show = false // 刪除後關閉
                         }) {
                             Text("刪除")
-                                .foregroundColor(.white)
+                                .foregroundColor(.red)
                                 .padding()
                                 .background(Capsule().stroke(Color.red, lineWidth: 2))
                         }
                     }
-                }
-                .padding(.horizontal, 20)
-
-                // 關閉按鈕
-                Button(action: {
-                    withAnimation {
-                        show = false
+                } else {
+                    // 顯示錄音按鈕
+                    Button(action: {
+                        audioRecorder.startRecording()
+                        isRecording = true
+                    }) {
+                        Image(systemName: "mic.circle.fill")
+                            .resizable()
+                            .frame(width: 60, height: 60)
+                            .foregroundColor(.blue)
                     }
-                }) {
-                    Image(systemName: "xmark.circle")
-                        .font(.system(size: 28, weight: .bold))
-                        .foregroundColor(.gray)
+                }
+
+                // 關閉按鈕（右上角）
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        withAnimation {
+                            show = false
+                        }
+                    }) {
+                        Image(systemName: "xmark.circle")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(.gray)
+                    }
                 }
                 .padding(.top, 10)
+                .padding(.trailing, 10)
             }
             .padding(30)
             .background(BlurView())  // 添加模糊背景
             .cornerRadius(25)
             .shadow(radius: 10)
-            .frame(width: 300, height: 300)  // 彈出視窗大小
-//            .transition(.scale)
+            .frame(width: 300, height: 300)  // 彈出視窗大小固定
         }
-        .animation(.easeInOut)
+//        .animation(.easeInOut)
     }
 }
+
 // BlurView 用於背景模糊效果
 struct BlurView: UIViewRepresentable {
     func makeUIView(context: Context) -> UIVisualEffectView {

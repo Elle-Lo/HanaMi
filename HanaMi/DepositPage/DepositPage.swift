@@ -175,8 +175,10 @@ struct DepositPage: View {
                                isPublic: isPublic,
                                contents: richText,
                                errorMessage: $errorMessage,
+                               audioRecorder: audioRecorder,  
                                onSave: resetFields
                            )
+
                        }
                        .padding(.horizontal, 20)
                        .padding(.vertical, 40)
@@ -196,7 +198,6 @@ struct DepositPage: View {
                                isPlaying: $isPlaying,
                                uploadedAudioURL: $uploadedAudioURL
                            )
-                           .frame(width: 300, height: 300)  // 彈出視窗大小
                        }
                    }
                }

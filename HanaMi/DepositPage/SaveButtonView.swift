@@ -13,6 +13,8 @@ struct SaveButtonView: View {
     let isPublic: Bool
     let contents: NSAttributedString
     @Binding var errorMessage: String?
+    
+    @StateObject var audioRecorder: AudioRecorder
 
     var firestoreService = FirestoreService()
     var onSave: () -> Void
@@ -68,21 +70,28 @@ struct SaveButtonView: View {
         var contents: [TreasureContent] = []
         var pendingUploads = 0
         var currentIndex = 0
+        var videoLink: URL? // 保存影片連結的變數
+        var audioLink: URL? // 保存音訊連結的變數
 
         let fullRange = NSRange(location: 0, length: richText.length)
 
+        // 遍歷富文本中的附件，檢查是否有圖片或視頻需要上傳
         richText.enumerateAttributes(in: fullRange, options: []) { attributes, range, _ in
             if let attachment = attributes[.attachment] as? NSTextAttachment {
                 currentIndex += 1
 
                 if let fileType = attachment.fileType {
                     if fileType == UTType.movie.identifier {
-                        // 处理视频附件
+                        // 處理視頻附件
                         pendingUploads += 1
                         if let videoURL = attributes[.link] as? URL {
+                            // 保存影片的本地連結
+                            videoLink = videoURL
+
+                            // 開始上傳影片到 Firebase Storage
                             uploadMediaToStorage(
                                 imageData: nil,
-                                videoURL: videoURL,
+                                mediaURL: videoURL,
                                 path: "videos",
                                 type: .video,
                                 currentIndex: currentIndex
@@ -96,16 +105,16 @@ struct SaveButtonView: View {
                                 }
                             }
                         } else {
-                            print("无法获取视频 URL")
+                            print("無法獲取視頻 URL")
                             pendingUploads -= 1
                         }
                     } else if fileType == UTType.image.identifier {
-                        // 处理图片附件
+                        // 處理圖片附件
                         if let image = attachment.image {
                             pendingUploads += 1
                             uploadMediaToStorage(
                                 imageData: image.pngData(),
-                                videoURL: nil,
+                                mediaURL: nil,
                                 path: "images",
                                 type: .image,
                                 currentIndex: currentIndex
@@ -123,11 +132,11 @@ struct SaveButtonView: View {
                         pendingUploads -= 1
                     }
                 } else if let image = attachment.image {
-                    // 处理没有 fileType 的图片附件
+                    // 處理沒有 fileType 的圖片附件
                     pendingUploads += 1
                     uploadMediaToStorage(
                         imageData: image.pngData(),
-                        videoURL: nil,
+                        mediaURL: nil,
                         path: "images",
                         type: .image,
                         currentIndex: currentIndex
@@ -165,13 +174,36 @@ struct SaveButtonView: View {
             }
         }
 
+        // 如果有音檔則上傳音檔
+        if let localAudioURL = audioRecorder.recordingURL {
+            pendingUploads += 1
+            uploadMediaToStorage(
+                imageData: nil,
+                mediaURL: localAudioURL,
+                path: "audios",
+                type: .audio,
+                currentIndex: currentIndex
+            ) { content in
+                if let content = content {
+                    contents.append(content)
+                }
+                try? FileManager.default.removeItem(at: localAudioURL)
+                
+                pendingUploads -= 1
+                if pendingUploads == 0 {
+                    completion(contents.sorted(by: { $0.index < $1.index }))
+                }
+            }
+        }
+
         if pendingUploads == 0 {
             completion(contents.sorted(by: { $0.index < $1.index }))
         }
     }
 
-    private func uploadMediaToStorage(imageData: Data?, videoURL: URL?, path: String, type: ContentType, currentIndex: Int, completion: @escaping (TreasureContent?) -> Void) {
-        let filename = UUID().uuidString
+    // 上傳多媒體內容的函數
+    private func uploadMediaToStorage(imageData: Data?, mediaURL: URL?, path: String, type: ContentType, currentIndex: Int, completion: @escaping (TreasureContent?) -> Void) {
+        let filename = (type == .audio) ? UUID().uuidString + ".m4a" : UUID().uuidString + (type == .video ? ".mp4" : "") // 為影片添加 .mp4 後綴
         let storageRef = Storage.storage().reference().child("\(path)/\(filename)")
 
         if let data = imageData {
@@ -194,18 +226,19 @@ struct SaveButtonView: View {
                     }
                 }
             }
-        } else if let videoURL = videoURL {
+        } else if let mediaURL = mediaURL {
             let metadata = StorageMetadata()
-            metadata.contentType = "video/mp4"
+            metadata.contentType = (type == .audio) ? "audio/m4a" : "video/mp4"
 
-            storageRef.putFile(from: videoURL, metadata: metadata) { metadata, error in
+            storageRef.putFile(from: mediaURL, metadata: metadata) { metadata, error in
                 if let error = error {
-                    print("視頻上傳失敗：\(error.localizedDescription)")
+                    print("\(type == .audio ? "音檔" : "視頻")上傳失敗：\(error.localizedDescription)")
                     completion(nil)
                     return
                 }
                 storageRef.downloadURL { url, error in
                     if let url = url {
+                        print("上傳成功，下載 URL: \(url.absoluteString)")
                         let content = TreasureContent(type: type, content: url.absoluteString, index: currentIndex)
                         completion(content)
                     } else {
