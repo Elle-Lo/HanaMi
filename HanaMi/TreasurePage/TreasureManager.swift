@@ -21,7 +21,6 @@ class TreasureManager: ObservableObject {
         var userTreasures: [TreasureSummary] = []
         
         // 先抓取所有公開寶藏
-        // 先抓取所有公開寶藏
         dispatchGroup.enter()
         firestoreService.fetchAllTreasuresNear(minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { result in
             switch result {

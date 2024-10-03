@@ -9,12 +9,6 @@ enum ContentType: String, Codable {
     case audio
 }
 
-//enum LinkType {
-//    case youtube
-//    case googleMaps
-//    case regular
-//}
-
 struct Users: Identifiable, Codable {
     @DocumentID var id: String? // 用戶的 Firestore document ID
     var name: String
@@ -46,16 +40,16 @@ struct TreasureContent: Identifiable, Codable {
     var timestamp: Date = Date()
 }
 
-struct LinkMetadata {
+struct LinkMetadata: Codable {
     var title: String
     var description: String
     var imageUrl: String?
 }
 
-struct TreasureSummary {
+struct TreasureSummary: Codable {
     let id: String
     let latitude: Double
     let longitude: Double
-    let userID: String // 添加 userID
+    let userID: String
 }
 

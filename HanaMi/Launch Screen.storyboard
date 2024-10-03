@@ -22,7 +22,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HanaMi" translatesAutoresizingMaskIntoConstraints="NO" id="VdQ-pB-8MI">
-                                <rect key="frame" x="-53.666666666666657" y="176" width="500.33333333333326" height="500"/>
+                                <rect key="frame" x="-315.66666666666663" y="-86" width="1024.333333333333" height="1024"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
@@ -42,6 +42,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="HanaMi" width="500" height="500"/>
+        <image name="HanaMi" width="1024" height="1024"/>
     </resources>
 </document>

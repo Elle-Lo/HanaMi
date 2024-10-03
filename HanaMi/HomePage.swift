@@ -148,7 +148,6 @@ struct TreasureCardView: View {
                                 .font(.body)
                                 .foregroundColor(.black)
                                 .lineSpacing(0)  // 調整行距
-//                                .fixedSize(horizontal: false, vertical: true)
                             
                         case .image:
                             
@@ -171,7 +170,7 @@ struct TreasureCardView: View {
                             
                         case .audio:  // 新增對 audio 類型的處理
                             if let audioURL = URL(string: content.content) {
-                                AudioPlayerView(audioURL: audioURL, isPlaying: $isPlayingAudio)
+                                AudioPlayerView(audioURL: audioURL)
                             }
                             
                         default:
@@ -187,40 +186,5 @@ struct TreasureCardView: View {
         .background(Color.white.opacity(0.6))
         .cornerRadius(15)
         .shadow(radius: 5)
-    }
-}
-
-// 音頻播放器的視圖
-struct AudioPlayerView: View {
-    let audioURL: URL
-    @Binding var isPlaying: Bool
-    @State private var audioPlayer: AVPlayer?
-    
-    var body: some View {
-        HStack {
-            Button(action: {
-                if isPlaying {
-                    audioPlayer?.pause()
-                    isPlaying = false
-                } else {
-                    playAudio()
-                    isPlaying = true
-                }
-            }) {
-                Image(systemName: isPlaying ? "pause.circle.fill" : "play.circle.fill")
-                    .resizable()
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(.blue)
-            }
-        }
-        .onDisappear {
-            audioPlayer?.pause()  // 停止播放當視圖消失時
-            isPlaying = false
-        }
-    }
-    
-    private func playAudio() {
-        audioPlayer = AVPlayer(url: audioURL)
-        audioPlayer?.play()
     }
 }
