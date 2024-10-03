@@ -16,7 +16,6 @@ struct HomePage: View {
     private let firestoreService = FirestoreService()
     
     var body: some View {
-        //        NavigationView {
         ZStack {
             
             // 半透明黑色遮罩
@@ -74,11 +73,11 @@ struct HomePage: View {
                 }
             }
         )
-        //        }
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
             fetchBackgroundImage()  // 加載用戶背景圖片
             fetchRandomTreasures()
+            setupAudioSession()
         }
     }
     
@@ -105,6 +104,16 @@ struct HomePage: View {
             isLoading = false
         }
     }
+    
+    func setupAudioSession() {
+           let audioSession = AVAudioSession.sharedInstance()
+           do {
+               try audioSession.setCategory(.playback, mode: .default, options: [])
+               try audioSession.setActive(true)
+           } catch {
+               print("Failed to set up audio session: \(error.localizedDescription)")
+           }
+       }
 }
 
 
