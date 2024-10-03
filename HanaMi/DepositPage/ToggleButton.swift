@@ -16,7 +16,5 @@ struct ToggleButton: View {
                 .background(isPublic ? Color(hex: "#FFF7EF") : Color(hex: "#522504")) // 公開/私人背景顏色
                 .cornerRadius(25) // 加大圓角半徑，讓它更加圓弧狀
         }
-//        .frame(width: 100, height: 50) // 調整按鈕的固定大小
     }
 }
-

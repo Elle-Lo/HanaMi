@@ -62,7 +62,7 @@
 		ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */; };
 		ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */; };
 		ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */; };
-		ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */; };
+		ABAFAB1C2C99ACF5007CDB45 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1B2C99ACF5007CDB45 /* CustomAlert.swift */; };
 		ABAFAB1F2C9A7D9E007CDB45 /* TreasureManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB1E2C9A7D9E007CDB45 /* TreasureManager.swift */; };
 		ABAFAB212C9A7EEB007CDB45 /* CustomMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB202C9A7EEB007CDB45 /* CustomMapView.swift */; };
 		ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */; };
@@ -118,7 +118,7 @@
 		ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditorView.swift; sourceTree = "<group>"; };
 		ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewView.swift; sourceTree = "<group>"; };
 		ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
-		ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingSheet.swift; sourceTree = "<group>"; };
+		ABAFAB1B2C99ACF5007CDB45 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
 		ABAFAB1E2C9A7D9E007CDB45 /* TreasureManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureManager.swift; sourceTree = "<group>"; };
 		ABAFAB202C9A7EEB007CDB45 /* CustomMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapView.swift; sourceTree = "<group>"; };
 		ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureMapView.swift; sourceTree = "<group>"; };
@@ -257,7 +257,7 @@
 				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
 				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
 				ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */,
-				ABAFAB1B2C99ACF5007CDB45 /* RecordingSheet.swift */,
+				ABAFAB1B2C99ACF5007CDB45 /* CustomAlert.swift */,
 			);
 			path = DepositPage;
 			sourceTree = "<group>";
@@ -436,7 +436,7 @@
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
 				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,
 				AB06AA4D2CA9420D00E49F5C /* TreasureListView.swift in Sources */,
-				ABAFAB1C2C99ACF5007CDB45 /* RecordingSheet.swift in Sources */,
+				ABAFAB1C2C99ACF5007CDB45 /* CustomAlert.swift in Sources */,
 				ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */,
 				ABAFAAE62C95882D007CDB45 /* Extension.swift in Sources */,
 				ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */,

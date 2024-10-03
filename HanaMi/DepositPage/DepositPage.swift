@@ -40,7 +40,8 @@ struct DepositPage: View {
     @State private var mediaType: ImagePicker.MediaType?
     @State private var sourceType: UIImagePickerController.SourceType = .camera
     
-    @State private var showingAudioSheet = false
+    @State private var showingAudioAlert = false
+    @State private var customAlert = false
     @StateObject private var audioRecorder = AudioRecorder()
     @State private var isRecording: Bool = false
     @State private var isPlaying: Bool = false
@@ -54,162 +55,160 @@ struct DepositPage: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            // 顶部的切换按钮和类别选择
-            HStack(spacing: 0) {
-                ToggleButton(isPublic: $isPublic)
-                CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
-            }
-            .padding(.horizontal)
-            
-            // 地点选择视图
-            LocationSelectionView(
-                selectedCoordinate: $selectedCoordinate,
-                selectedLocationName: $selectedLocationName,
-                shouldZoomToUserLocation: $shouldZoomToUserLocation,
-                locationManager: locationManager,
-                searchViewModel: searchViewModel,
-                userID: userID
-            )
-            
-            // 主体内容
-            ScrollView {
-                // 富文本编辑器
-                RichTextEditorView(text: $richText, onVideoTapped: { videoURL in
-                                // 點擊縮圖播放影片
-                                playVideo(url: videoURL)
-                            })
-                    .background(Color.clear)
-                    .frame(height: richTextHeight)
-                    .padding(.horizontal)
-//                    .onAppear {
-//                        adjustRichTextHeight()
-//                    }
-                    .padding(.bottom, keyboardHeight)
-                    .padding(.horizontal)
-                
-                
-                // 错误信息显示
-                if let errorMessage = errorMessage {
-                    Text(errorMessage)
-                        .foregroundColor(.red)
-                        .font(.caption)
-                }
-            }
-            .padding(.bottom, 0)
-            .scrollIndicators(.hidden)
-            
-            Spacer()
-            
-            // 工具栏按钮
-            HStack {
-                // 插入图片按钮
-                Button(action: {
-                    isShowingMediaPicker = true
-                }) {
-                    Image(systemName: "photo.on.rectangle.angled")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.colorBrown)
-                        .padding(10)
-                }
-                .mediaImporter(isPresented: $isShowingMediaPicker,
-                               allowedMediaTypes: .all,
-                               allowsMultipleSelection: true) { result in
-                    switch result {
-                    case .success(let urls):
-                        self.mediaURLs = urls
-                        displayMediaInRichTextEditor(urls: urls)
-                    case .failure(let error):
-                        print(error)
-                        self.mediaURLs = []
-                    }
-                }
-                
-                // 新的相机按钮
-                   Button(action: {
-                       isShowingImagePicker = true // 新的 @State 变量
-                   }) {
-                       Image(systemName: "camera")
-                           .resizable()
-                           .frame(width: 30, height: 30)
-                           .foregroundColor(.colorBrown)
-                           .padding(10)
-                   }
-                
-                // 插入链接按钮
-                Button(action: {
-                    showingLinkAlert = true
-                }) {
-                    Image(systemName: "link")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.colorBrown)
-                        .padding(10)
-//                        .background(Color(UIColor.systemGray6))
-//                        .cornerRadius(5)
-                }
-                .alert("插入連結", isPresented: $showingLinkAlert) {
-                    TextField("連結網址", text: $linkURL)
-                    Button("確認", action: insertLink)
-                    Button("取消", role: .cancel) { }
-                } message: {
-                    Text("請輸入要插入的連結")
-                }
-                
-                // 录音按钮
-                Button(action: {
-                    showingAudioSheet = true
-                }) {
-                    Image(systemName: "mic.circle.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.colorBrown)
-                        .padding(10)
-//                        .background(Color(UIColor.systemGray6))
-//                        .cornerRadius(5)
-                }
-                .sheet(isPresented: $showingAudioSheet) {
-                    RecordingSheet(
-                        audioRecorder: audioRecorder,
-                        richText: $richText,
-                        isRecording: $isRecording,
-                        isPlaying: $isPlaying,
-                        uploadedAudioURL: $uploadedAudioURL
-                    )
-                }
-                Spacer()
-                // 保存按钮
-                SaveButtonView(
-                    userID: userID,
-                    selectedCoordinate: selectedCoordinate,
-                    selectedLocationName: selectedLocationName,
-                    selectedCategory: selectedCategory,
-                    isPublic: isPublic,
-                    contents: richText,
-                    errorMessage: $errorMessage,
-                    onSave: resetFields
-                )
-                
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 40)
-            
-            
-            .onAppear(perform: subscribeToKeyboardEvents)
-        }
-        .ignoresSafeArea(.keyboard)
-        .sheet(isPresented: $isShowingImagePicker) {
-            ImagePicker(mediaURL: $mediaURL, mediaType: $mediaType, sourceType: sourceType)
-                .onDisappear {
-                    // 当 ImagePicker 消失后，处理选取的媒体
-                    if let mediaURL = mediaURL, let mediaType = mediaType {
-                        handlePickedMedia(url: mediaURL, mediaType: mediaType)
-                    }
-                }
-        }
+        ZStack {
+                   VStack(alignment: .leading, spacing: 20) {
+                       // 頂部的切換按鈕和類別選擇
+                       HStack(spacing: 0) {
+                           ToggleButton(isPublic: $isPublic)
+                           CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
+                       }
+                       .padding(.horizontal)
 
-    }
+                       // 地點選擇視圖
+                       LocationSelectionView(
+                           selectedCoordinate: $selectedCoordinate,
+                           selectedLocationName: $selectedLocationName,
+                           shouldZoomToUserLocation: $shouldZoomToUserLocation,
+                           locationManager: locationManager,
+                           searchViewModel: searchViewModel,
+                           userID: userID
+                       )
+
+                       // 主體內容
+                       ScrollView {
+                           // 富文本編輯器
+                           RichTextEditorView(text: $richText, onVideoTapped: { videoURL in
+                               playVideo(url: videoURL)
+                           })
+                           .background(Color.clear)
+                           .frame(height: richTextHeight)
+                           .padding(.horizontal)
+                           .padding(.bottom, keyboardHeight)
+
+                           // 錯誤信息顯示
+                           if let errorMessage = errorMessage {
+                               Text(errorMessage)
+                                   .foregroundColor(.red)
+                                   .font(.caption)
+                           }
+                       }
+                       .scrollIndicators(.hidden)
+                       .padding(.bottom, 0)
+
+                       Spacer()
+
+                       // 工具欄按鈕
+                       HStack {
+                           // 插入圖片按鈕
+                           Button(action: {
+                               isShowingMediaPicker = true
+                           }) {
+                               Image(systemName: "photo.on.rectangle.angled")
+                                   .resizable()
+                                   .frame(width: 30, height: 30)
+                                   .foregroundColor(.colorBrown)
+                                   .padding(10)
+                           }
+                           .mediaImporter(isPresented: $isShowingMediaPicker,
+                                          allowedMediaTypes: .all,
+                                          allowsMultipleSelection: true) { result in
+                               switch result {
+                               case .success(let urls):
+                                   self.mediaURLs = urls
+                                   displayMediaInRichTextEditor(urls: urls)
+                               case .failure(let error):
+                                   print(error)
+                                   self.mediaURLs = []
+                               }
+                           }
+
+                           // 相機按鈕
+                           Button(action: {
+                               isShowingImagePicker = true
+                           }) {
+                               Image(systemName: "camera")
+                                   .resizable()
+                                   .frame(width: 30, height: 30)
+                                   .foregroundColor(.colorBrown)
+                                   .padding(10)
+                           }
+
+                           // 插入連結按鈕
+                           Button(action: {
+                               showingLinkAlert = true
+                           }) {
+                               Image(systemName: "link")
+                                   .resizable()
+                                   .frame(width: 30, height: 30)
+                                   .foregroundColor(.colorBrown)
+                                   .padding(10)
+                           }
+                           .alert("插入連結", isPresented: $showingLinkAlert) {
+                               TextField("連結網址", text: $linkURL)
+                               Button("確認", action: insertLink)
+                               Button("取消", role: .cancel) { }
+                           } message: {
+                               Text("請輸入要插入的連結")
+                           }
+
+                           // 錄音按鈕
+                           Button(action: {
+                               withAnimation {
+                                   customAlert.toggle()
+                               }
+                           }) {
+                               Image(systemName: audioRecorder.recordingURL != nil ? "waveform.circle.fill" : "mic.circle.fill")
+                                   .resizable()
+                                   .frame(width: 30, height: 30)
+                                   .foregroundColor(.brown)
+                                   .padding(10)
+                           }
+
+                           Spacer()
+
+                           // 保存按鈕
+                           SaveButtonView(
+                               userID: userID,
+                               selectedCoordinate: selectedCoordinate,
+                               selectedLocationName: selectedLocationName,
+                               selectedCategory: selectedCategory,
+                               isPublic: isPublic,
+                               contents: richText,
+                               errorMessage: $errorMessage,
+                               onSave: resetFields
+                           )
+                       }
+                       .padding(.horizontal, 20)
+                       .padding(.vertical, 40)
+                       .onAppear(perform: subscribeToKeyboardEvents)
+                   }
+                   .ignoresSafeArea(.keyboard)
+
+                   // CustomAlert 彈出視窗
+                   if customAlert {
+                       ZStack {
+
+                           CustomAlert(
+                               show: $customAlert,
+                               audioRecorder: audioRecorder,
+                               richText: $richText,
+                               isRecording: $isRecording,
+                               isPlaying: $isPlaying,
+                               uploadedAudioURL: $uploadedAudioURL
+                           )
+                           .frame(width: 300, height: 300)  // 彈出視窗大小
+                       }
+                   }
+               }
+               .sheet(isPresented: $isShowingImagePicker) {
+                   ImagePicker(mediaURL: $mediaURL, mediaType: $mediaType, sourceType: sourceType)
+                       .onDisappear {
+                           if let mediaURL = mediaURL, let mediaType = mediaType {
+                               handlePickedMedia(url: mediaURL, mediaType: mediaType)
+                           }
+                       }
+               }
+           }
     
     // 订阅键盘事件
     func subscribeToKeyboardEvents() {
@@ -266,56 +265,6 @@ struct DepositPage: View {
             }
         }
     }
-        // 保存圖片和影片到 Firebase Storage
-//        func saveMediaToFirebase() {
-//            let storageRef = Storage.storage().reference()
-//
-//            for mediaItem in selectedMediaItems {
-//                let fileName = UUID().uuidString
-//                let mediaRef: StorageReference
-//
-//                if mediaItem.type == "image" {
-//                    mediaRef = storageRef.child("user_media/\(userID)/images/\(fileName).jpg")
-//                } else if mediaItem.type == "video" {
-//                    mediaRef = storageRef.child("user_media/\(userID)/videos/\(fileName).mp4")
-//                } else if mediaItem.type == "livePhoto" {
-//                    mediaRef = storageRef.child("user_media/\(userID)/livePhotos/\(fileName).mov")  // 儲存 Live Photo
-//                }
-//
-//                // 將多媒體上傳到 Firebase Storage
-//                do {
-//                    let data = try Data(contentsOf: mediaItem.url)
-//                    mediaRef.putData(data, metadata: nil) { metadata, error in
-//                        if let error = error {
-//                            print("上傳失敗: \(error.localizedDescription)")
-//                        } else {
-//                            mediaRef.downloadURL { url, error in
-//                                if let error = error {
-//                                    print("獲取下載連結失敗: \(error.localizedDescription)")
-//                                } else if let downloadURL = url {
-//                                    // 在此處將下載連結儲存到 Firestore
-//                                    saveDownloadLinkToFirestore(url: downloadURL)
-//                                }
-//                            }
-//                        }
-//                    }
-//                } catch {
-//                    print("無法讀取文件數據: \(error.localizedDescription)")
-//                }
-//            }
-//        }
-    
-    func processMediaURLs(_ urls: [URL]) {
-            for url in urls {
-                let contentType = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType
-
-                if contentType?.conforms(to: .image) == true {
-                    insertImageToRichTextEditor(from: url)
-                } else if contentType?.conforms(to: .audiovisualContent) == true {
-                    insertVideoToRichTextEditor(from: url)
-                }
-            }
-        }
 
     func insertImageToRichTextEditor(from url: URL) {
         guard let image = UIImage(contentsOfFile: url.path) else { return }
@@ -362,8 +311,6 @@ struct DepositPage: View {
             richText = mutableRichText
         }
     }
-
-
 
         func playVideo(url: URL) {
             let player = AVPlayer(url: url)
