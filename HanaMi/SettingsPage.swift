@@ -15,6 +15,7 @@ struct SettingsPage: View {
         @State private var isBackgroundPhotoPickerPresented = false
         @State private var isRemoveBackgroundEnabled = false
         @State private var showCharacterAlert = false
+        @State private var showDeleteAccountAlert = false
         @State private var newCharacterName: String = ""
         @State private var characterName: String = "Loading..."
         @State private var isEditingName = false  // 狀態來控制編輯模式
@@ -119,11 +120,24 @@ struct SettingsPage: View {
                                 showCharacterAlert = true
                             }
                         }
+                        
+                        SettingsButton(iconName: "trash.circle", text: "刪除帳號") {
+                            showDeleteAccountAlert = true
+                        }
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
                 }
             }
+            .alert("確認要刪除帳號嗎？", isPresented: $showDeleteAccountAlert) {
+                       Button("確認", role: .destructive, action: deleteAccount)
+                       Button("取消", role: .cancel) {}
+                   } message: {
+                       Text("這個操作無法還原，帳號和所有數據將永久刪除。")
+                   }
+                   .onAppear {
+                       fetchUserNameAndProfileImage()
+                   }
         }
         .navigationTitle("設定")
         .navigationBarTitleDisplayMode(.inline)
@@ -272,6 +286,35 @@ struct SettingsPage: View {
             self.characterName = characterName ?? "No character"
         }
     }
+    
+    func deleteAccount() {
+        let user = Auth.auth().currentUser
+        firestoreService.deleteUserAccount(uid: uid) { success in
+            if success {
+                // 如果 Firestore 中的數據刪除成功，接著刪除 Auth 帳號
+                user?.delete { error in
+                    if let error = error {
+                        print("刪除帳號失敗: \(error.localizedDescription)")
+                    } else {
+                        print("帳號已成功刪除")
+                        // 執行登出操作
+                        logOutAndNavigateToLoginPage()
+                    }
+                }
+            } else {
+                print("刪除 Firestore 資料失敗")
+            }
+        }
+    }
+    
+    func logOutAndNavigateToLoginPage() {
+        // 刪除使用者 ID，防止下次自動登入
+        UserDefaults.standard.removeObject(forKey: "userID")
+        // 將登錄狀態設為 false，這樣頁面會自動回到登入頁面
+        logStatus = false
+    }
+
+
 }
 
 struct SettingsButton: View {

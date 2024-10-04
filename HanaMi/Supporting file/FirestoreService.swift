@@ -38,6 +38,20 @@ class FirestoreService {
         }
     }
     
+    func deleteUserAccount(uid: String, completion: @escaping (Bool) -> Void) {
+            let userDocRef = db.collection("Users").document(uid)
+            
+            userDocRef.delete { error in
+                if let error = error {
+                    print("刪除 Firestore 中的用戶數據失敗: \(error.localizedDescription)")
+                    completion(false)
+                } else {
+                    print("Firestore 中的用戶數據已刪除")
+                    completion(true)
+                }
+            }
+        }
+    
     func fetchUserData(uid: String, completion: @escaping (String?, String?, String?, String?) -> Void) {
         let docRef = db.collection("Users").document(uid)
         docRef.getDocument { snapshot, error in

@@ -8,6 +8,8 @@ struct TreasureDetailView: View {
     @State private var isPlayingAudio = false
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @State private var showImageViewer = false
+    @State private var selectedImageURL: URL? = nil
     private let firestoreService = FirestoreService()
     
     private var userID: String {
@@ -23,7 +25,7 @@ struct TreasureDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // 顯示日期
                     Text(treasure.createdTime, formatter: dateFormatter)
-                        .font(.title3)
+                        .font(.subheadline)
                         .foregroundColor(.colorBrown)
                         .bold()
 
@@ -45,7 +47,7 @@ struct TreasureDetailView: View {
                         } else {
                             Text("私人")
                                 .padding(.vertical, 10)
-                                .padding(.horizontal, 15)
+                                .padding(.horizontal, 18)
                                 .font(.system(size: 15))
                                 .background(Color.colorBrown)
                                 .cornerRadius(10)
@@ -54,7 +56,8 @@ struct TreasureDetailView: View {
                         }
                         
                         Text(treasure.category)
-                            .padding(10)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 18)
                             .background(Color(hex: "D4D4D4").opacity(0.9)) // 類別標籤背景
                             .cornerRadius(10)
                             .foregroundColor(.colorYellow) // 字體顏色
@@ -69,9 +72,9 @@ struct TreasureDetailView: View {
                             .foregroundColor(.colorBrown) // 圖標顏色
                         Text(treasure.locationName)
                             .foregroundColor(.colorBrown) // 字體顏色
-                            .font(.system(size: 15))
+                            .font(.system(size: 10))
                     }
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 8)
                     .padding(.horizontal, 15)
                     .background(Color(hex: "E8E8E8").opacity(0.75)) // 地標背景
                     .cornerRadius(10)
@@ -89,6 +92,11 @@ struct TreasureDetailView: View {
                                         .frame(height: 200)
                                         .cornerRadius(10)
                                         .shadow(radius: 2)
+                                        .onTapGesture {
+                                            // 點擊圖片時顯示圖片檢視器
+                                            selectedImageURL = url
+                                            showImageViewer = true
+                                        }
                                 }
                             }
 
@@ -142,7 +150,7 @@ struct TreasureDetailView: View {
                         .font(.system(size: 30))
                         .foregroundColor(.colorBrown)
                         .padding()
-                        .background(Color.white.opacity(0.6))
+                        .background(Color.white.opacity(0.3))
                         .cornerRadius(50)
                         .shadow(radius: 10) // 添加陰影效果
                 }
