@@ -25,7 +25,8 @@ class FirestoreService {
             "categories": [],
             "characterName": "Hanami",
             "userImage": "",
-            "backgroundImage": ""
+            "backgroundImage": "",
+            "collectionTreasureList": []
         ]
         
         db.collection("Users").document(uid).setData(userData) { error in
@@ -435,6 +436,20 @@ class FirestoreService {
         return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude, userID: userID)
     }
     
+    //將寶藏id加到收藏寶藏清單
+    func addTreasureToFavorites(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            let userDocRef = db.collection("Users").document(userID)
+
+            userDocRef.updateData([
+                "collectionTreasureList": FieldValue.arrayUnion([treasureID])
+            ]) { error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        }
     
     // MARK: - 類別處理
     func loadCategories(userID: String, completion: @escaping ([String]) -> Void) {

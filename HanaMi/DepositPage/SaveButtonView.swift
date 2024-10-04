@@ -66,12 +66,16 @@ struct SaveButtonView: View {
         }
     }
 
+    //看能不能把篩選的方式重寫
+    //抓取link時，一樣的link只會抓取一次
+    //帶有link的圖片忽略
+    //目前預覽圖帶link的有video和linkPreview，看怎麼區分這兩種
     private func extractContentsWithMediaUpload(_ richText: NSAttributedString, completion: @escaping ([TreasureContent]) -> Void) {
         var contents: [TreasureContent] = []
         var pendingUploads = 0
         var currentIndex = 0
-        var videoLink: URL? // 保存影片連結的變數
-        var audioLink: URL? // 保存音訊連結的變數
+        var videoLink: URL?
+        var audioLink: URL?
 
         let fullRange = NSRange(location: 0, length: richText.length)
 

@@ -18,6 +18,7 @@ struct Users: Identifiable, Codable {
     var characterName: String
     var image: String
     var backgroundImage: String
+    var collectionTreasureList: [String]
 }
 
 struct Treasure: Identifiable, Codable {
