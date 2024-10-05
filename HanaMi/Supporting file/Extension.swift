@@ -84,3 +84,12 @@ extension UIImage {
         return resizedImage
     }
 }
+
+extension Date {
+    func isWithinPast(minutes: Int) -> Bool {
+        let now = Date()
+        let timeAgo = Date().addingTimeInterval(-1 * TimeInterval(60 * minutes))
+        let range = timeAgo...now
+        return range.contains(self)
+    }
+}
