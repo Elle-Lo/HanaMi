@@ -3,6 +3,7 @@ import FirebaseAuth
 import FirebaseStorage
 import Kingfisher
 import AuthenticationServices
+import IQKeyboardManagerSwift
 
 struct SettingsPage: View {
     // MARK: - State Properties
@@ -44,6 +45,7 @@ struct SettingsPage: View {
     // MARK: - Body
     
     var body: some View {
+        ScrollView {
         ZStack {
             // 背景圆角矩形
             RoundedRectangle(cornerRadius: 60, style: .continuous)
@@ -59,17 +61,17 @@ struct SettingsPage: View {
                 Image("capybaraRight")
                     .resizable()
                     .frame(width: 60, height: 40)
-                    .offset(x: -120, y: 10)
+                    .offset(x: -120, y: -18)
                 
                 // 设置选项
-                ScrollView {
+                VStack {
                     settingsOptions
                         .padding(.horizontal, 20)
-                        .padding(.top, 20)
                 }
+                .padding(.top, 5)
             }
-            .alert("确认要删除帐号吗？", isPresented: $showDeleteAccountAlert) {
-                Button("确认", role: .destructive) {
+            .alert("確認要刪除帳號嗎？取消好嗎:)", isPresented: $showDeleteAccountAlert) {
+                Button("確認", role: .destructive) {
                     Task {
                         let success = await deleteAccount()
                         if success {
@@ -79,10 +81,10 @@ struct SettingsPage: View {
                 }
                 Button("取消", role: .cancel) {}
             } message: {
-                Text("这个操作无法还原，帐号和所有数据将永久删除。")
+                Text("我會很難過～而且這個操作無法還原，帳號和所有數據將永遠刪除。")
             }
         }
-        .navigationTitle("设定")
+        .navigationTitle("設定")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $isProfilePhotoPickerPresented) {
             PhotoPicker(image: $selectedProfileImage)
@@ -101,15 +103,16 @@ struct SettingsPage: View {
             }
         }
         .alert("修改角色名字", isPresented: $showCharacterAlert) {
-            TextField("输入新角色名字", text: $newCharacterName)
-            Button("确认", action: updateCharacterName)
+            TextField("輸入新角色名字", text: $newCharacterName)
+            Button("確認", action: updateCharacterName)
             Button("取消", role: .cancel) {}
         } message: {
-            Text("请输入新的角色名字")
+            Text("請輸入新的角色名字")
         }
         .onAppear {
             fetchUserNameAndProfileImage()
         }
+    }
     }
     
     // MARK: - Subviews
@@ -139,11 +142,11 @@ struct SettingsPage: View {
                 }
             }
             .actionSheet(isPresented: $showActionSheet) {
-                ActionSheet(title: Text("选择操作"), buttons: [
-                    .default(Text("更换大头贴")) {
+                ActionSheet(title: Text("選擇操作"), buttons: [
+                    .default(Text("更換大頭貼")) {
                         isProfilePhotoPickerPresented = true
                     },
-                    .destructive(Text("删除大头贴")) {
+                    .destructive(Text("刪除大頭貼")) {
                         removeProfileImage()
                     },
                     .cancel()
@@ -152,72 +155,70 @@ struct SettingsPage: View {
             .padding(.bottom, 10)
             
             // 用户名和编辑按钮
-            HStack {
-                if isEditingName {
-                    TextField("输入名字", text: $newUserName)
-                        .padding(10)
-                        .background(Color.clear)
-                        .foregroundColor(.black)
-                        .multilineTextAlignment(.center)
-                        .submitLabel(.done)
-                        .padding(.horizontal)
-                        .focused($isNameFocused)
-                        .onSubmit {
-                            saveUserName()
-                            isEditingName = false
-                        }
-                        .onChange(of: isNameFocused) { focused in
-                            if !focused {
-                                saveUserName()
-                                isEditingName = false
-                            }
-                        }
-                } else {
-                
-                        Text(userName)
-                            .font(.headline)
-                            .foregroundColor(Color(hex: "#522504"))
-                            .multilineTextAlignment(.center)
-                    }
-                
-                if !isEditingName {
-                    Button(action: {
-                        isEditingName = true
-                        newUserName = userName
-                        isNameFocused = true
-                    }) {
-                        Image(systemName: "pencil")
-                            .foregroundColor(.gray)
-                    }
-                    // 调整铅笔图标的位置，使其不影响文本居中
-                    .offset(x: 80, y: 0) // 根据需要调整 x 和 y 值
+            if isEditingName {
+                TextField("\(userName)", text: $newUserName, onCommit: {
+                    saveUserName()  // 保存新用户名
+                })
+                .focused($isNameFocused)
+                .background(Color.clear)
+                .foregroundColor(.black)
+                .multilineTextAlignment(.center)
+                .submitLabel(.done)  // 键盘上的按钮显示为 Done
+                .onSubmit {
+                    saveUserName()  // 提交时保存新用户名
+                    isEditingName = false
                 }
+                .onAppear {
+                    newUserName = userName  // 确保编辑时显示当前用户名
+                    isNameFocused = true  // 在编辑模式时自动激活焦点，弹出键盘
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+                    // 监听键盘隐藏的事件，确保 IQKeyboard 的 Done 按钮也能完成编辑
+                    if isEditingName {
+                        saveUserName()
+                        isEditingName = false
+                    }
+                }
+            } else {
+                Text(userName)
+                    .font(.headline)
+                    .foregroundColor(Color(hex: "#522504"))
+                    .multilineTextAlignment(.center)
+                    .onTapGesture {
+                        isEditingName = true
+                        newUserName = userName  // 进入编辑模式时初始化为当前用户名
+                    }
             }
-
-            .padding(.bottom, 5)
-            
+               
             // 角色名字
             Text(characterName)
                 .font(.subheadline)
                 .foregroundColor(.gray)
+                .padding(.top, 8)
         }
         .padding(.top, 40)
     }
     
     private var settingsOptions: some View {
         VStack(spacing: 10) {
-            // 更换背景按钮
-            SettingsButton(iconName: "photo.on.rectangle", text: "更换背景") {
+            
+            SettingsButton(iconName: "pencil", text: "更換用戶名") {
+                isEditingName = true
+            }
+            
+            CharacterButton() {
+                showCharacterAlert = true
+            }
+            
+            SettingsButton(iconName: "photo", text: "更換背景") {
                 isBackgroundPhotoPickerPresented = true
             }
             
-            // 移除背景按钮
-            SettingsButton(iconName: "trash", text: "移除背景图") {
+            SettingsButton(iconName: "trash", text: "移除背景圖") {
                 isRemoveBackgroundEnabled = true
                 removeBackgroundImage()
             }
             
-            // 登出按钮
             SettingsButton(iconName: "arrow.right.square", text: "登出") {
                 try? Auth.auth().signOut()
                 UserDefaults.standard.removeObject(forKey: "userID")
@@ -226,13 +227,9 @@ struct SettingsPage: View {
             
             FavoriteButton()
             
-            // 更改角色名称按钮
-            SettingsButton(iconName: "capybaraIcon", text: "更改角色名称") {
-                showCharacterAlert = true
-            }
+            Divider()
             
-            // 删除帐号按钮
-            SettingsButton(iconName: "trash.circle", text: "删除帐号") {
+            SettingsButton(iconName: "trash.circle", text: "刪除帳號") {
                 showDeleteAccountAlert = true
             }
         }
@@ -447,14 +444,49 @@ struct SettingsPage: View {
     }
 }
 
+struct CharacterButton: View {
+    var action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Image("capybaraIcon")
+                    .foregroundColor(.brown)
+                    .font(.system(size: 24))
+                    .padding(.trailing, 20)
+                    .frame(width: 40)
+                
+                Text("更換角色名稱")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(.black)
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.colorBrown)
+                    .font(.system(size: 16))
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.clear)
+            .cornerRadius(10)
+            
+        }
+        .padding(.vertical, 5)
+    }
+}
+
 struct FavoriteButton: View {
     var body: some View {
         NavigationLink(destination: FavoritesPage()) {
+            
             HStack {
+                
                 Image(systemName: "heart")
                     .foregroundColor(.brown)
                     .font(.system(size: 24))
                     .padding(.trailing, 20)
+                    .frame(width: 40)
                 
                 Text("收藏")
                     .font(.system(size: 18, weight: .bold))
@@ -492,6 +524,7 @@ struct SettingsButton: View {
                     .foregroundColor(.brown)
                     .font(.system(size: 24))
                     .padding(.trailing, 20)
+                    .frame(width: 40)
                 
                 Text(text)
                     .font(.system(size: 18, weight: .bold))
@@ -500,10 +533,11 @@ struct SettingsButton: View {
                 Spacer()
                 
                 Image(systemName: "chevron.right")
-                    .foregroundColor(Color.brown)
+                    .foregroundColor(.colorBrown)
                     .font(.system(size: 16))
             }
             .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color.clear)
             .cornerRadius(10)
             
