@@ -390,6 +390,7 @@ struct DepositPage: View {
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var selectedLocationName: String?
     @State private var shouldZoomToUserLocation: Bool = true
+    @State private var showErrorMessage = false // 用來控制是否顯示錯誤訊息
     @State private var errorMessage: String?
     @State private var textContent: String = ""  // 使用 TextEditor 替換富文本編輯器
     @State private var keyboardHeight: CGFloat = 0
@@ -418,6 +419,12 @@ struct DepositPage: View {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
     
+    private var canSave: Bool {
+           let trimmedText = textContent.trimmingCharacters(in: .whitespacesAndNewlines)
+           return selectedCoordinate != nil &&
+                  (!trimmedText.isEmpty || !selectedMediaItems.isEmpty || audioRecorder.recordingURL != nil)
+       }
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -426,6 +433,7 @@ struct DepositPage: View {
                     HStack(spacing: 0) {
                         ToggleButton(isPublic: $isPublic)
                         CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
+                            .padding(.leading, 10)
                     }
                     .padding(.horizontal)
                     
@@ -495,20 +503,32 @@ struct DepositPage: View {
                 }
                 .padding(.top, 20)  // 確保內容不會超出螢幕上方
             }
+
+
             // 固定工具欄
             VStack {
+                
                 Spacer()
                 
+                if let errorMessage = errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(.gray)
+                        .font(.custom("LexendDeca-SemiBold", size: 11))
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
                 // 工具欄按鈕
                 HStack {
                     // 相機按鈕
                     Button(action: {
                         isShowingActionSheet = true
+                        errorMessage = nil
                     }) {
                         Image(systemName: "camera")
                             .resizable()
                             .frame(width: 30, height: 30)
-                            .foregroundColor(.brown)
+                            .font(.system(size: 24))
+                            .foregroundColor(.colorBrown)
                             .padding(10)
                     }
                     .actionSheet(isPresented: $isShowingActionSheet) {
@@ -544,11 +564,13 @@ struct DepositPage: View {
                     // 插入連結按鈕
                     Button(action: {
                         showingLinkAlert = true
+                        errorMessage = nil
                     }) {
                         Image(systemName: "link")
                             .resizable()
                             .frame(width: 30, height: 30)
-                            .foregroundColor(.brown)
+                            .font(.system(size: 24))
+                            .foregroundColor(.colorBrown)
                             .padding(10)
                     }
                     .alert("插入連結", isPresented: $showingLinkAlert) {
@@ -561,33 +583,40 @@ struct DepositPage: View {
                     Button(action: {
                         withAnimation {
                             customAlert.toggle()
+                            errorMessage = nil
                         }
                     }) {
                         Image(systemName: audioRecorder.recordingURL != nil ? "waveform.circle.fill" : "mic.circle.fill")
                             .resizable()
                             .frame(width: 30, height: 30)
-                            .foregroundColor(.brown)
+                            .font(.system(size: 24))
+                            .foregroundColor(.colorBrown)
                             .padding(10)
                     }
                     
                     Spacer()
                     
-                    // 保存按鈕
                     SaveButtonView(
                         userID: userID,
                         selectedCoordinate: selectedCoordinate,
                         selectedLocationName: selectedLocationName,
                         selectedCategory: selectedCategory,
                         isPublic: isPublic,
-                        contents: NSAttributedString(string: textContent),  // 只保存文字
+                        textContent: textContent,
+                        selectedMediaItems: selectedMediaItems,
                         errorMessage: $errorMessage,
                         audioRecorder: audioRecorder,
-                        onSave: resetFields
+                        onSave: {
+                            resetFields()
+                            showErrorMessage = false  // 成功保存後，隱藏錯誤訊息
+                        }
                     )
+                    .opacity(canSave ? 1 : 0.5)  // 不可保存時降低不透明度
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 20)
                 .background(Color.clear)
+                
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
             
@@ -655,9 +684,9 @@ struct DepositPage: View {
         textContent = ""
         selectedCategory = categories.first ?? "未分類"
         selectedCoordinate = nil
-        selectedLocationName = "未知地點"
+        selectedLocationName = "選擇地點"
         isPublic = true
-        errorMessage = nil
+        errorMessage = ""
         audioRecorder.recordingURL = nil
         isRecording = false
         isPlaying = false

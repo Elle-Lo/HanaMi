@@ -39,14 +39,14 @@ struct LocationSelectionView: View {
                         Text("\(name)")
                             .foregroundColor(.colorBrown)
                             .font(.custom("LexendDeca-SemiBold", size: 13))
-                            .padding(8)
+                            .padding(12)
                             .background(Color(UIColor.systemGray6))
                             .cornerRadius(8)
                     } else {
                         Text("選擇地點")
                             .foregroundColor(.colorBrown)
                             .font(.custom("LexendDeca-SemiBold", size: 13))
-                            .padding(8)
+                            .padding(12)
                             .background(Color(UIColor.systemGray6))
                             .cornerRadius(8)
                     }
