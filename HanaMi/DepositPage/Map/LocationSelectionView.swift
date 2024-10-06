@@ -24,10 +24,11 @@ struct LocationSelectionView: View {
                 activeSheet = .search // 打開搜索 sheet
             }) {
                 Image(systemName: "magnifyingglass")
-                    .padding(8)
+                    .padding(10)
                     .background(Color(UIColor.systemGray6))
-                    .cornerRadius(8)
+                    .cornerRadius(10)
             }
+            .padding(.trailing, 2)
             // 顯示地圖選擇地點的按鈕
             Button(action: {
                 shouldZoomToUserLocation = true // 確保縮放到使用者位置
@@ -36,19 +37,37 @@ struct LocationSelectionView: View {
                 HStack {
                     // 顯示地名和經緯度
                     if let name = selectedLocationName {
-                        Text("\(name)")
-                            .foregroundColor(.colorBrown)
-                            .font(.custom("LexendDeca-SemiBold", size: 13))
-                            .padding(12)
-                            .background(Color(UIColor.systemGray6))
-                            .cornerRadius(8)
+                        HStack {
+                            Image("pin")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                                .foregroundColor(.colorBrown)
+                            
+                            Text("\(name)")
+                                .foregroundColor(.colorBrown)
+                                .font(.custom("LexendDeca-SemiBold", size: 13))
+                        }
+                        .padding(.vertical, 11)
+                        .padding(.trailing, 19)
+                        .padding(.leading, 13)
+                        .background(Color(UIColor.systemGray6))
+                        .cornerRadius(10)
                     } else {
-                        Text("選擇地點")
-                            .foregroundColor(.colorBrown)
-                            .font(.custom("LexendDeca-SemiBold", size: 13))
-                            .padding(12)
-                            .background(Color(UIColor.systemGray6))
-                            .cornerRadius(8)
+                        HStack {
+                            Image("pin")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                                .foregroundColor(.colorBrown)
+                            
+                            Text("選擇地點")
+                                .foregroundColor(.colorBrown)
+                                .font(.custom("LexendDeca-SemiBold", size: 13))
+                        }
+                        .padding(.vertical, 11)
+                        .padding(.trailing, 19)
+                        .padding(.leading, 13)
+                        .background(Color(UIColor.systemGray6))
+                        .cornerRadius(10)
                     }
                 }
             }

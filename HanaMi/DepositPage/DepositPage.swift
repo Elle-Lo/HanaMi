@@ -427,13 +427,17 @@ struct DepositPage: View {
     
     var body: some View {
         ZStack {
+            
+            Color(.colorYellow)  // 這裡可以替換成任何你想要的顏色或圖片
+                .edgesIgnoringSafeArea(.all)  // 擴展到整個屏幕
+            
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // 顯示頂部類別選擇等功能
                     HStack(spacing: 0) {
                         ToggleButton(isPublic: $isPublic)
                         CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
-                            .padding(.leading, 10)
+//                            .padding(.leading, 10)
                     }
                     .padding(.horizontal)
                     
@@ -496,13 +500,15 @@ struct DepositPage: View {
                     .scrollIndicators(.hidden)
                     
                     // TextEditor 文字輸入區域
-                    PlaceholderTextEditor(text: $textContent, placeholder: "任何想紀錄的事情都寫下來吧～")
+                    PlaceholderTextEditor(text: $textContent, placeholder: "一個故事、一場經歷、一個情緒 \n任何想紀錄的事情都寫下來吧～")
+                        .lineSpacing(10)
                         .frame(height: 150)
                         .padding()
                         .background(Color.clear)
                 }
                 .padding(.top, 20)  // 確保內容不會超出螢幕上方
             }
+            .padding(.horizontal, 15)
 
 
             // 固定工具欄
@@ -613,10 +619,9 @@ struct DepositPage: View {
                     )
                     .opacity(canSave ? 1 : 0.5)  // 不可保存時降低不透明度
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 25)
                 .padding(.vertical, 20)
                 .background(Color.clear)
-                
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
             
@@ -695,22 +700,32 @@ struct DepositPage: View {
 }
 
 struct PlaceholderTextEditor: View {
-    @Binding var text: String
-    let placeholder: String
-    
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-            if text.isEmpty {
-                Text(placeholder)
-                    .foregroundColor(.gray)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 12)
-            }
-            
-            TextEditor(text: $text)
-                .padding(4)
-                .background(Color.white)
-                .cornerRadius(8)
+    @FocusState private var keyboardFocused: Bool  // 用於跟踪 TextEditor 是否獲得焦點
+        @Binding var text: String  // 綁定的文本
+        var placeholder = ""  // 占位符文字
+
+        // 判斷是否顯示占位符：當文本為空且鍵盤未聚焦時顯示
+        var shouldShowPlaceholder: Bool {
+            text.isEmpty && !keyboardFocused
         }
-    }
+
+        var body: some View {
+            ZStack(alignment: .topLeading) {
+                // 當應該顯示占位符時，顯示占位符文字
+                if shouldShowPlaceholder {
+                    Text(placeholder)
+                        .padding(.top, 10)  // 占位符與頂部的距離
+                        .padding(.leading, 6)  // 占位符與左邊的距離
+                        .foregroundColor(.gray)  // 設置占位符的顏色
+                        .onTapGesture {  // 點擊占位符後聚焦 TextEditor
+                            keyboardFocused = true
+                        }
+                }
+
+                // 實際的 TextEditor，當占位符應該顯示時將其顏色設置為透明
+                TextEditor(text: $text)
+                    .colorMultiply(shouldShowPlaceholder ? .clear : .white)  // 占位符顯示時隱藏 TextEditor 內容
+                    .focused($keyboardFocused)  // 將 TextEditor 綁定到 FocusState
+            }
+        }
 }

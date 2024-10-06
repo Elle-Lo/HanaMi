@@ -31,16 +31,15 @@ struct CategorySelectionView: View {
                 }
             } label: {
                 Text(selectedCategory)
-                    .font(.system(size: 13))
+                    .font(.system(size: 15))
                     .fontWeight(.bold)
-                    .padding(.vertical, 13)
-                    .padding(.horizontal, 20)
-                    .foregroundColor(Color(hex: "#FFF7EF"))
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 18)
+                    .foregroundColor(Color.colorYellow)
                     .background(Color(hex: "#CDCDCD"))
-                    .cornerRadius(25)
+                    .cornerRadius(10)
             }
         }
-        .padding(.horizontal)
         .onAppear {
             firestoreService.loadCategories(userID: userID) { loadedCategories in
                 categories = loadedCategories
