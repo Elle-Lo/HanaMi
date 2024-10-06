@@ -388,7 +388,7 @@ struct DepositPage: View {
     @State private var categories: [String] = []
     @State private var selectedCategory: String = "Creative"
     @State private var selectedCoordinate: CLLocationCoordinate2D?
-    @State private var selectedLocationName: String? = "未知地點"
+    @State private var selectedLocationName: String?
     @State private var shouldZoomToUserLocation: Bool = true
     @State private var errorMessage: String?
     @State private var textContent: String = ""  // 使用 TextEditor 替換富文本編輯器
@@ -419,184 +419,190 @@ struct DepositPage: View {
     }
     
     var body: some View {
+        
         ScrollView {
-            ZStack {
-                VStack(alignment: .leading, spacing: 20) {
-                    // 顯示頂部類別選擇等功能
-                    HStack(spacing: 0) {
-                        ToggleButton(isPublic: $isPublic)
-                        CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
-                    }
-                    .padding(.horizontal)
-                    
-                    // 地點選擇視圖
-                    LocationSelectionView(
-                        selectedCoordinate: $selectedCoordinate,
-                        selectedLocationName: $selectedLocationName,
-                        shouldZoomToUserLocation: $shouldZoomToUserLocation,
-                        locationManager: locationManager,
-                        searchViewModel: searchViewModel,
-                        userID: userID
-                    )
-                    
-                    // ScrollView 顯示已插入的媒體 (圖片、影片、音訊、連結)
-                    ScrollView(.horizontal) {  // 改為橫向滑動
-                        HStack(spacing: 10) {  // 使用 HStack 水平排列項目
-                            ForEach(selectedMediaItems.indices, id: \.self) { index in
-                                let item = selectedMediaItems[index]
-                                
-                                ZStack(alignment: .topTrailing) {
-                                    if item.type == "image" {
-                                        ImageViewWithPreview(
-                                            image: UIImage(contentsOfFile: item.url.path)!
-                                        )
-                                        .frame(width: 300, height: 300)  // 確保圖片高度和寬度一致
-                                        .cornerRadius(8)
-                                    } else if item.type == "video" {
-                                        // 正確顯示影片播放器
-                                        VideoPlayerView(url: item.url)
-                                            .frame(width: 300, height: 300)
-                                            .cornerRadius(8)
-                                    } else if item.type == "audio" {
-                                        AudioPlayerView(audioURL: item.url)
-                                            .frame(width: 300, height: 300)
-                                    } else if item.type == "link" {
-                                        // 顯示連結預覽
-                                        LinkPreviewView(url: item.url)
-                                            .frame(width: 350, height: 300)
-                                            .cornerRadius(8)
-                                    }
-                                    
-                                    // 添加刪除按鈕
-                                    Button(action: {
-                                        deleteMediaItem(at: IndexSet(integer: index))
-                                    }) {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .resizable()
-                                            .frame(width: 24, height: 24)
-                                            .foregroundColor(.white)
-                                            .background(Color.black.opacity(0.7))
-                                            .clipShape(Circle())
-                                            .padding(8)
-                                    }
-                                }
-                                .padding(.bottom, 10)  // 確保每個項目之間有間距
-                            }
+            VStack {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        // 顯示頂部類別選擇等功能
+                        HStack(spacing: 0) {
+                            ToggleButton(isPublic: $isPublic)
+                            CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
                         }
-                        .padding(.horizontal)  // 保證水平有邊距
+                        .padding(.horizontal)
+                        
+                        // 地點選擇視圖
+                        LocationSelectionView(
+                            selectedCoordinate: $selectedCoordinate,
+                            selectedLocationName: $selectedLocationName,
+                            shouldZoomToUserLocation: $shouldZoomToUserLocation,
+                            locationManager: locationManager,
+                            searchViewModel: searchViewModel,
+                            userID: userID
+                        )
+                        
+                        // ScrollView 顯示已插入的媒體 (圖片、影片、音訊、連結)
+                        ScrollView(.horizontal) {  // 改為橫向滑動
+                            HStack(spacing: 10) {  // 使用 HStack 水平排列項目
+                                ForEach(selectedMediaItems.indices, id: \.self) { index in
+                                    let item = selectedMediaItems[index]
+                                    
+                                    ZStack(alignment: .topTrailing) {
+                                        if item.type == "image" {
+                                            ImageViewWithPreview(
+                                                image: UIImage(contentsOfFile: item.url.path)!
+                                            )
+                                            .frame(width: 300, height: 300)  // 確保圖片高度和寬度一致
+                                            .cornerRadius(8)
+                                        } else if item.type == "video" {
+                                            // 正確顯示影片播放器
+                                            VideoPlayerView(url: item.url)
+                                                .frame(width: 300, height: 300)
+                                                .cornerRadius(8)
+                                        } else if item.type == "audio" {
+                                            AudioPlayerView(audioURL: item.url)
+                                                .frame(width: 300, height: 300)
+                                        } else if item.type == "link" {
+                                            // 顯示連結預覽
+                                            LinkPreviewView(url: item.url)
+                                                .frame(width: 350, height: 300)
+                                                .cornerRadius(8)
+                                        }
+                                        
+                                        // 添加刪除按鈕
+                                        Button(action: {
+                                            deleteMediaItem(at: IndexSet(integer: index))
+                                        }) {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .resizable()
+                                                .frame(width: 24, height: 24)
+                                                .foregroundColor(.white)
+                                                .background(Color.black.opacity(0.7))
+                                                .clipShape(Circle())
+                                                .padding(8)
+                                        }
+                                    }
+                                    .padding(.bottom, 10)  // 確保每個項目之間有間距
+                                }
+                            }
+                            .padding(.horizontal)  // 保證水平有邊距
+                        }
+                        
+                        // TextEditor 文字輸入區域
+                        PlaceholderTextEditor(text: $textContent, placeholder: "任何想紀錄的事情都寫下來吧～")
+                            .frame(height: 150)
+                            .padding()
+                            .background(Color.clear)
+                        
+                        
                     }
                     
-                    // TextEditor 文字輸入區域
-                    PlaceholderTextEditor(text: $textContent, placeholder: "任何想紀錄的事情都寫下來吧～")
-                        .frame(height: 150)
-                        .padding()
-                        .background(Color.clear)
+                    // CustomAlert 彈出視窗
+                    if customAlert {
+                        CustomAlert(
+                            show: $customAlert,
+                            audioRecorder: audioRecorder,
+                            richText: .constant(NSAttributedString(string: "")), // 不再需要富文本
+                            isRecording: $isRecording,
+                            isPlaying: $isPlaying,
+                            uploadedAudioURL: $uploadedAudioURL
+                        )
+                        .zIndex(1)
+                    }
+                }
+                
+                Spacer()
+                
+                
+                // 工具欄按鈕
+                HStack {
+                    // 相機按鈕
+                    Button(action: {
+                        isShowingActionSheet = true
+                    }) {
+                        Image(systemName: "camera")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.brown)
+                            .padding(10)
+                    }
+                    .actionSheet(isPresented: $isShowingActionSheet) {
+                        ActionSheet(title: Text("選擇來源"), buttons: [
+                            .default(Text("相機")) {
+                                isShowingCameraPicker = true
+                            },
+                            .default(Text("媒體庫")) {
+                                isShowingMediaPicker = true
+                            },
+                            .cancel()
+                        ])
+                    }
+                    // 打開相機的 Sheet
+                    .sheet(isPresented: $isShowingCameraPicker) {
+                        ImagePicker(mediaURL: $cameraMediaURL, mediaType: $mediaType, sourceType: .camera)
+                            .onDisappear {
+                                if let cameraMediaURL = cameraMediaURL, let mediaType = mediaType {
+                                    handlePickedMedia(urls: [cameraMediaURL], mediaType: mediaType)
+                                }
+                            }
+                    }
+                    // 打開媒體庫的 MediaImporter
+                    .mediaImporter(isPresented: $isShowingMediaPicker, allowedMediaTypes: .all, allowsMultipleSelection: true) { result in
+                        switch result {
+                        case .success(let urls):
+                            mediaURLs = urls
+                            handlePickedMedia(urls: mediaURLs, mediaType: nil)
+                        case .failure(let error):
+                            print("Error selecting media: \(error)")
+                        }
+                    }
+                    // 插入連結按鈕
+                    Button(action: {
+                        showingLinkAlert = true
+                    }) {
+                        Image(systemName: "link")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.brown)
+                            .padding(10)
+                    }
+                    .alert("插入連結", isPresented: $showingLinkAlert) {
+                        TextField("連結網址", text: $linkURL)
+                        Button("確認", action: insertLink)
+                        Button("取消", role: .cancel) { }
+                    }
+                    
+                    // 錄音按鈕
+                    Button(action: {
+                        withAnimation {
+                            customAlert.toggle()
+                        }
+                    }) {
+                        Image(systemName: audioRecorder.recordingURL != nil ? "waveform.circle.fill" : "mic.circle.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.brown)
+                            .padding(10)
+                    }
                     
                     Spacer()
                     
-                    // 工具欄按鈕
-                    HStack {
-                        // 相機按鈕
-                        Button(action: {
-                            isShowingActionSheet = true
-                        }) {
-                            Image(systemName: "plus.circle")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.brown)
-                                .padding(10)
-                        }
-                        .actionSheet(isPresented: $isShowingActionSheet) {
-                            ActionSheet(title: Text("選擇來源"), buttons: [
-                                .default(Text("相機")) {
-                                    isShowingCameraPicker = true
-                                },
-                                .default(Text("媒體庫")) {
-                                    isShowingMediaPicker = true
-                                },
-                                .cancel()
-                            ])
-                        }
-                        // 打開相機的 Sheet
-                        .sheet(isPresented: $isShowingCameraPicker) {
-                            ImagePicker(mediaURL: $cameraMediaURL, mediaType: $mediaType, sourceType: .camera)
-                                .onDisappear {
-                                    if let cameraMediaURL = cameraMediaURL, let mediaType = mediaType {
-                                        handlePickedMedia(urls: [cameraMediaURL], mediaType: mediaType)
-                                    }
-                                }
-                        }
-                        // 打開媒體庫的 MediaImporter
-                        .mediaImporter(isPresented: $isShowingMediaPicker, allowedMediaTypes: .all, allowsMultipleSelection: true) { result in
-                            switch result {
-                            case .success(let urls):
-                                mediaURLs = urls
-                                handlePickedMedia(urls: mediaURLs, mediaType: nil)
-                            case .failure(let error):
-                                print("Error selecting media: \(error)")
-                            }
-                        }
-                        // 插入連結按鈕
-                        Button(action: {
-                            showingLinkAlert = true
-                        }) {
-                            Image(systemName: "link")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.brown)
-                                .padding(10)
-                        }
-                        .alert("插入連結", isPresented: $showingLinkAlert) {
-                            TextField("連結網址", text: $linkURL)
-                            Button("確認", action: insertLink)
-                            Button("取消", role: .cancel) { }
-                        }
-                        
-                        // 錄音按鈕
-                        Button(action: {
-                            withAnimation {
-                                customAlert.toggle()
-                            }
-                        }) {
-                            Image(systemName: audioRecorder.recordingURL != nil ? "waveform.circle.fill" : "mic.circle.fill")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.brown)
-                                .padding(10)
-                        }
-                        
-                        Spacer()
-                        
-                        // 保存按鈕
-                        SaveButtonView(
-                            userID: userID,
-                            selectedCoordinate: selectedCoordinate,
-                            selectedLocationName: selectedLocationName,
-                            selectedCategory: selectedCategory,
-                            isPublic: isPublic,
-                            contents: NSAttributedString(string: textContent),  // 只保存文字
-                            errorMessage: $errorMessage,
-                            audioRecorder: audioRecorder,
-                            onSave: resetFields
-                        )
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 40)
-                }
-                
-                // CustomAlert 彈出視窗
-                if customAlert {
-                    CustomAlert(
-                        show: $customAlert,
+                    // 保存按鈕
+                    SaveButtonView(
+                        userID: userID,
+                        selectedCoordinate: selectedCoordinate,
+                        selectedLocationName: selectedLocationName,
+                        selectedCategory: selectedCategory,
+                        isPublic: isPublic,
+                        contents: NSAttributedString(string: textContent),  // 只保存文字
+                        errorMessage: $errorMessage,
                         audioRecorder: audioRecorder,
-                        richText: .constant(NSAttributedString(string: "")), // 不再需要富文本
-                        isRecording: $isRecording,
-                        isPlaying: $isPlaying,
-                        uploadedAudioURL: $uploadedAudioURL
+                        onSave: resetFields
                     )
-                    .zIndex(1)
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 40)
         }
     }
     

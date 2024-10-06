@@ -19,32 +19,7 @@ struct LocationSelectionView: View {
     
     var body: some View {
         HStack {
-            // 顯示地圖選擇地點的按鈕
-            Button(action: {
-                shouldZoomToUserLocation = true // 確保縮放到使用者位置
-                activeSheet = .map // 打開地圖 sheet
-            }) {
-                HStack {
-                    // 顯示地名和經緯度
-                    if let name = selectedLocationName, let coordinate = selectedCoordinate {
-                        Text("\(name) - 經度: \(coordinate.longitude), 緯度: \(coordinate.latitude)")
-                            .foregroundColor(.blue)
-                            .padding(8)
-                            .background(Color(UIColor.systemGray6))
-                            .cornerRadius(8)
-                    } else {
-                        Text("選擇地點")
-                            .foregroundColor(.blue)
-                            .padding(8)
-                            .background(Color(UIColor.systemGray6))
-                            .cornerRadius(8)
-                    }
-                }
-            }
             
-            Spacer()
-            
-            // 搜尋按鈕
             Button(action: {
                 activeSheet = .search // 打開搜索 sheet
             }) {
@@ -52,6 +27,30 @@ struct LocationSelectionView: View {
                     .padding(8)
                     .background(Color(UIColor.systemGray6))
                     .cornerRadius(8)
+            }
+            // 顯示地圖選擇地點的按鈕
+            Button(action: {
+                shouldZoomToUserLocation = true // 確保縮放到使用者位置
+                activeSheet = .map // 打開地圖 sheet
+            }) {
+                HStack {
+                    // 顯示地名和經緯度
+                    if let name = selectedLocationName {
+                        Text("\(name)")
+                            .foregroundColor(.colorBrown)
+                            .font(.custom("LexendDeca-SemiBold", size: 13))
+                            .padding(8)
+                            .background(Color(UIColor.systemGray6))
+                            .cornerRadius(8)
+                    } else {
+                        Text("選擇地點")
+                            .foregroundColor(.colorBrown)
+                            .font(.custom("LexendDeca-SemiBold", size: 13))
+                            .padding(8)
+                            .background(Color(UIColor.systemGray6))
+                            .cornerRadius(8)
+                    }
+                }
             }
         }
         .padding(.horizontal)
