@@ -419,100 +419,85 @@ struct DepositPage: View {
     }
     
     var body: some View {
-        
-        ScrollView {
-            VStack {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        // 顯示頂部類別選擇等功能
-                        HStack(spacing: 0) {
-                            ToggleButton(isPublic: $isPublic)
-                            CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
-                        }
-                        .padding(.horizontal)
-                        
-                        // 地點選擇視圖
-                        LocationSelectionView(
-                            selectedCoordinate: $selectedCoordinate,
-                            selectedLocationName: $selectedLocationName,
-                            shouldZoomToUserLocation: $shouldZoomToUserLocation,
-                            locationManager: locationManager,
-                            searchViewModel: searchViewModel,
-                            userID: userID
-                        )
-                        
-                        // ScrollView 顯示已插入的媒體 (圖片、影片、音訊、連結)
-                        ScrollView(.horizontal) {  // 改為橫向滑動
-                            HStack(spacing: 10) {  // 使用 HStack 水平排列項目
-                                ForEach(selectedMediaItems.indices, id: \.self) { index in
-                                    let item = selectedMediaItems[index]
-                                    
-                                    ZStack(alignment: .topTrailing) {
-                                        if item.type == "image" {
-                                            ImageViewWithPreview(
-                                                image: UIImage(contentsOfFile: item.url.path)!
-                                            )
-                                            .frame(width: 300, height: 300)  // 確保圖片高度和寬度一致
-                                            .cornerRadius(8)
-                                        } else if item.type == "video" {
-                                            // 正確顯示影片播放器
-                                            VideoPlayerView(url: item.url)
-                                                .frame(width: 300, height: 300)
-                                                .cornerRadius(8)
-                                        } else if item.type == "audio" {
-                                            AudioPlayerView(audioURL: item.url)
-                                                .frame(width: 300, height: 300)
-                                        } else if item.type == "link" {
-                                            // 顯示連結預覽
-                                            LinkPreviewView(url: item.url)
-                                                .frame(width: 350, height: 300)
-                                                .cornerRadius(8)
-                                        }
-                                        
-                                        // 添加刪除按鈕
-                                        Button(action: {
-                                            deleteMediaItem(at: IndexSet(integer: index))
-                                        }) {
-                                            Image(systemName: "xmark.circle.fill")
-                                                .resizable()
-                                                .frame(width: 24, height: 24)
-                                                .foregroundColor(.white)
-                                                .background(Color.black.opacity(0.7))
-                                                .clipShape(Circle())
-                                                .padding(8)
-                                        }
-                                    }
-                                    .padding(.bottom, 10)  // 確保每個項目之間有間距
-                                }
-                            }
-                            .padding(.horizontal)  // 保證水平有邊距
-                        }
-                        
-                        // TextEditor 文字輸入區域
-                        PlaceholderTextEditor(text: $textContent, placeholder: "任何想紀錄的事情都寫下來吧～")
-                            .frame(height: 150)
-                            .padding()
-                            .background(Color.clear)
-                        
-                        
+        ZStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // 顯示頂部類別選擇等功能
+                    HStack(spacing: 0) {
+                        ToggleButton(isPublic: $isPublic)
+                        CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
                     }
+                    .padding(.horizontal)
                     
-                    // CustomAlert 彈出視窗
-                    if customAlert {
-                        CustomAlert(
-                            show: $customAlert,
-                            audioRecorder: audioRecorder,
-                            richText: .constant(NSAttributedString(string: "")), // 不再需要富文本
-                            isRecording: $isRecording,
-                            isPlaying: $isPlaying,
-                            uploadedAudioURL: $uploadedAudioURL
-                        )
-                        .zIndex(1)
+                    // 地點選擇視圖
+                    LocationSelectionView(
+                        selectedCoordinate: $selectedCoordinate,
+                        selectedLocationName: $selectedLocationName,
+                        shouldZoomToUserLocation: $shouldZoomToUserLocation,
+                        locationManager: locationManager,
+                        searchViewModel: searchViewModel,
+                        userID: userID
+                    )
+                    
+                    // ScrollView 顯示已插入的媒體 (圖片、影片、音訊、連結)
+                    ScrollView(.horizontal) {  // 改為橫向滑動
+                        HStack(spacing: 10) {  // 使用 HStack 水平排列項目
+                            ForEach(selectedMediaItems.indices, id: \.self) { index in
+                                let item = selectedMediaItems[index]
+                                
+                                ZStack(alignment: .topTrailing) {
+                                    if item.type == "image" {
+                                        ImageViewWithPreview(
+                                            image: UIImage(contentsOfFile: item.url.path)!
+                                        )
+                                        .frame(width: 300, height: 300)  // 確保圖片高度和寬度一致
+                                        .cornerRadius(8)
+                                    } else if item.type == "video" {
+                                        // 正確顯示影片播放器
+                                        VideoPlayerView(url: item.url)
+                                            .frame(width: 300, height: 300)
+                                            .cornerRadius(8)
+                                    } else if item.type == "audio" {
+                                        AudioPlayerView(audioURL: item.url)
+                                            .frame(width: 300, height: 300)
+                                    } else if item.type == "link" {
+                                        // 顯示連結預覽
+                                        LinkPreviewView(url: item.url)
+                                            .frame(width: 350, height: 300)
+                                            .cornerRadius(8)
+                                    }
+                                    
+                                    // 添加刪除按鈕
+                                    Button(action: {
+                                        deleteMediaItem(at: IndexSet(integer: index))
+                                    }) {
+                                        Image(systemName: "xmark.circle.fill")
+                                            .resizable()
+                                            .frame(width: 24, height: 24)
+                                            .foregroundColor(.white)
+                                            .background(Color.black.opacity(0.7))
+                                            .clipShape(Circle())
+                                            .padding(8)
+                                    }
+                                }
+                                .padding(.bottom, 10)  // 確保每個項目之間有間距
+                            }
+                        }
+                        .padding(.horizontal)  // 保證水平有邊距
                     }
+                    .scrollIndicators(.hidden)
+                    
+                    // TextEditor 文字輸入區域
+                    PlaceholderTextEditor(text: $textContent, placeholder: "任何想紀錄的事情都寫下來吧～")
+                        .frame(height: 150)
+                        .padding()
+                        .background(Color.clear)
                 }
-                
+                .padding(.top, 20)  // 確保內容不會超出螢幕上方
+            }
+            // 固定工具欄
+            VStack {
                 Spacer()
-                
                 
                 // 工具欄按鈕
                 HStack {
@@ -600,9 +585,30 @@ struct DepositPage: View {
                         onSave: resetFields
                     )
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 20)
+                .background(Color.clear)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 40)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            
+            // CustomAlert 彈出視窗，並添加背景遮罩和顯示在中間
+            if customAlert {
+                Color.black.opacity(0.4).ignoresSafeArea()  // 遮罩
+                    .zIndex(1)
+                CustomAlert(
+                    show: $customAlert,
+                    audioRecorder: audioRecorder,
+                    richText: .constant(NSAttributedString(string: "")),
+                    isRecording: $isRecording,
+                    isPlaying: $isPlaying,
+                    uploadedAudioURL: $uploadedAudioURL
+                )
+                .zIndex(2)
+                .transition(.scale)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)  // 滿版
+                .background(Color.clear)
+                .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)  // 顯示在螢幕中央
+            }
         }
     }
     
