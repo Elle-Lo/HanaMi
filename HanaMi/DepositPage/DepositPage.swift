@@ -25,35 +25,35 @@
 //    @State private var richText: NSAttributedString = NSAttributedString(string: "")
 //    @State private var keyboardHeight: CGFloat = 0
 //    @State private var richTextHeight: CGFloat = 300
-//    
+//
 //    @State private var selectedImage: UIImage?
 ////    @State private var showingImagePicker = false
 //    @State private var showingLinkAlert = false
 //    @State private var linkURL = ""
-//    
+//
 //    @State private var mediaURLs: [URL] = []  // 用來存儲選擇的多媒體 URL
 //    @State private var isShowingMediaPicker = false  // 控制 media picker 是否顯示
 //    @State private var selectedMediaItems: [(url: URL, type: String)] = []  // 用來存儲選擇的圖片/影片的資訊
-//    
+//
 //    @State private var isShowingImagePicker = false
 //    @State private var mediaURL: URL?
 //    @State private var mediaType: ImagePicker.MediaType?
 //    @State private var sourceType: UIImagePickerController.SourceType = .camera
-//    
+//
 //    @State private var showingAudioAlert = false
 //    @State private var customAlert = false
 //    @StateObject private var audioRecorder = AudioRecorder()
 //    @State private var isRecording: Bool = false
 //    @State private var isPlaying: Bool = false
 //    @State private var uploadedAudioURL: URL?
-//    
+//
 //    @StateObject private var locationManager = LocationManager()
 //    @StateObject private var searchViewModel = LocationSearchViewModel()
-//    
+//
 //    private var userID: String {
 //        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
 //    }
-//    
+//
 //    var body: some View {
 //        ScrollView {
 //        ZStack {
@@ -176,7 +176,7 @@
 //                               isPublic: isPublic,
 //                               contents: richText,
 //                               errorMessage: $errorMessage,
-//                               audioRecorder: audioRecorder,  
+//                               audioRecorder: audioRecorder,
 //                               onSave: resetFields
 //                           )
 //
@@ -210,7 +210,7 @@
 //        }
 //               }
 //           }
-//    
+//
 //    // 订阅键盘事件
 ////    func subscribeToKeyboardEvents() {
 ////        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
@@ -218,12 +218,12 @@
 ////                keyboardHeight = keyboardSize.height
 ////            }
 ////        }
-////        
+////
 ////        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
 ////            keyboardHeight = 0
 ////        }
 ////    }
-//    
+//
 //    func handlePickedMedia(url: URL, mediaType: ImagePicker.MediaType) {
 //            if mediaType == .photo {
 //                // 插入照片到富文本编辑器
@@ -233,7 +233,7 @@
 //                insertVideoToRichTextEditor(from: url)
 //            }
 //        }
-//    
+//
 ////    // 调整富文本编辑器高度
 ////    func adjustRichTextHeight() {
 ////        DispatchQueue.main.async {
@@ -242,7 +242,7 @@
 ////            richTextHeight = min(max(newHeight, 300), maxHeight)
 ////        }
 ////    }
-//    
+//
 //    // 將選擇的多媒體顯示在富文本編輯器中
 //    func displayMediaInRichTextEditor(urls: [URL]) {
 //        for url in urls {
@@ -269,15 +269,15 @@
 //
 //    func insertImageToRichTextEditor(from url: URL) {
 //        guard let image = UIImage(contentsOfFile: url.path) else { return }
-//        
+//
 //        let maxWidth: CGFloat = 200 // 设置图片最大宽度
 //        let aspectRatio = image.size.width / image.size.height
 //        let targetHeight = maxWidth / aspectRatio
-//        
+//
 //        let attachment = NSTextAttachment()
 //        attachment.image = image
 //        attachment.bounds = CGRect(x: 0, y: 0, width: maxWidth, height: targetHeight) // 设置缩小的图片尺寸
-//        
+//
 //        let attributedString = NSAttributedString(attachment: attachment)
 //        let mutableRichText = NSMutableAttributedString(attributedString: richText)
 //        mutableRichText.append(attributedString)
@@ -325,7 +325,7 @@
 //                }
 //            }
 //        }
-//    
+//
 //    // 插入圖片或影片到富文本
 ////    func insertMedia(_ url: URL, mediaType: String) {
 ////        let editor = RichTextEditorView(text: $richText)
@@ -338,7 +338,7 @@
 ////        }
 ////    }
 //
-//    
+//
 //    // 插入链接到富文本
 //    func insertLink() {
 //        guard let url = URL(string: linkURL) else { return }
@@ -346,7 +346,7 @@
 //        editor.insertLinkPreview(url: url)
 //        linkURL = ""
 //    }
-//    
+//
 //    // 重置所有字段
 //    func resetFields() {
 //        if let audioURL = audioRecorder.recordingURL {
@@ -357,7 +357,7 @@
 //                print("無法刪除音訊檔案：\(error.localizedDescription)")
 //            }
 //        }
-//        
+//
 //        richText = NSAttributedString(string: "")
 //        selectedCategory = categories.first ?? "未分類"
 //        selectedCoordinate = nil
@@ -393,30 +393,31 @@ struct DepositPage: View {
     @State private var errorMessage: String?
     @State private var textContent: String = ""  // 使用 TextEditor 替換富文本編輯器
     @State private var keyboardHeight: CGFloat = 0
-
+    
     @State private var selectedMediaItems: [(url: URL, type: String)] = []  // 存儲選擇的圖片/影片
     @State private var isShowingCameraPicker = false  // 控制相機的顯示
     @State private var isShowingMediaPicker = false  // 控制媒體庫的顯示
     @State private var mediaURLs: [URL] = []  // 存儲多選的媒體 URL
     @State private var mediaType: ImagePicker.MediaType?
     @State private var cameraMediaURL: URL?  // 單個 URL 來處理相機拍攝
-
+    @State private var isShowingActionSheet = false // 控制 ActionSheet 的顯示
+    
     @State private var showingLinkAlert = false
     @State private var linkURL = ""
-
+    
     @State private var customAlert = false
     @StateObject private var audioRecorder = AudioRecorder()
     @State private var isRecording: Bool = false
     @State private var isPlaying: Bool = false
     @State private var uploadedAudioURL: URL?
-
+    
     @StateObject private var locationManager = LocationManager()
     @StateObject private var searchViewModel = LocationSearchViewModel()
-
+    
     private var userID: String {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
-
+    
     var body: some View {
         ScrollView {
             ZStack {
@@ -427,7 +428,7 @@ struct DepositPage: View {
                         CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
                     }
                     .padding(.horizontal)
-
+                    
                     // 地點選擇視圖
                     LocationSelectionView(
                         selectedCoordinate: $selectedCoordinate,
@@ -439,7 +440,7 @@ struct DepositPage: View {
                     )
                     
                     // ScrollView 顯示已插入的媒體 (圖片、影片、音訊、連結)
-                  ScrollView(.horizontal) {  // 改為橫向滑動
+                    ScrollView(.horizontal) {  // 改為橫向滑動
                         HStack(spacing: 10) {  // 使用 HStack 水平排列項目
                             ForEach(selectedMediaItems.indices, id: \.self) { index in
                                 let item = selectedMediaItems[index]
@@ -465,7 +466,7 @@ struct DepositPage: View {
                                             .frame(width: 350, height: 300)
                                             .cornerRadius(8)
                                     }
-
+                                    
                                     // 添加刪除按鈕
                                     Button(action: {
                                         deleteMediaItem(at: IndexSet(integer: index))
@@ -490,21 +491,33 @@ struct DepositPage: View {
                         .frame(height: 150)
                         .padding()
                         .background(Color.clear)
-
+                    
                     Spacer()
-
+                    
                     // 工具欄按鈕
                     HStack {
                         // 相機按鈕
                         Button(action: {
-                            isShowingCameraPicker = true
+                            isShowingActionSheet = true
                         }) {
-                            Image(systemName: "camera")
+                            Image(systemName: "plus.circle")
                                 .resizable()
                                 .frame(width: 30, height: 30)
                                 .foregroundColor(.brown)
                                 .padding(10)
                         }
+                        .actionSheet(isPresented: $isShowingActionSheet) {
+                            ActionSheet(title: Text("選擇來源"), buttons: [
+                                .default(Text("相機")) {
+                                    isShowingCameraPicker = true
+                                },
+                                .default(Text("媒體庫")) {
+                                    isShowingMediaPicker = true
+                                },
+                                .cancel()
+                            ])
+                        }
+                        // 打開相機的 Sheet
                         .sheet(isPresented: $isShowingCameraPicker) {
                             ImagePicker(mediaURL: $cameraMediaURL, mediaType: $mediaType, sourceType: .camera)
                                 .onDisappear {
@@ -513,17 +526,7 @@ struct DepositPage: View {
                                     }
                                 }
                         }
-
-                        // 媒體庫按鈕
-                        Button(action: {
-                            isShowingMediaPicker = true
-                        }) {
-                            Image(systemName: "photo.on.rectangle.angled")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.brown)
-                                .padding(10)
-                        }
+                        // 打開媒體庫的 MediaImporter
                         .mediaImporter(isPresented: $isShowingMediaPicker, allowedMediaTypes: .all, allowsMultipleSelection: true) { result in
                             switch result {
                             case .success(let urls):
@@ -533,7 +536,6 @@ struct DepositPage: View {
                                 print("Error selecting media: \(error)")
                             }
                         }
-
                         // 插入連結按鈕
                         Button(action: {
                             showingLinkAlert = true
@@ -549,7 +551,7 @@ struct DepositPage: View {
                             Button("確認", action: insertLink)
                             Button("取消", role: .cancel) { }
                         }
-
+                        
                         // 錄音按鈕
                         Button(action: {
                             withAnimation {
@@ -562,9 +564,9 @@ struct DepositPage: View {
                                 .foregroundColor(.brown)
                                 .padding(10)
                         }
-
+                        
                         Spacer()
-
+                        
                         // 保存按鈕
                         SaveButtonView(
                             userID: userID,
@@ -581,7 +583,7 @@ struct DepositPage: View {
                     .padding(.horizontal, 20)
                     .padding(.vertical, 40)
                 }
-
+                
                 // CustomAlert 彈出視窗
                 if customAlert {
                     CustomAlert(
@@ -597,7 +599,7 @@ struct DepositPage: View {
             }
         }
     }
-
+    
     // 處理選取的多媒體並將其添加到 ScrollView
     func handlePickedMedia(urls: [URL], mediaType: ImagePicker.MediaType?) {
         for url in urls {
@@ -623,19 +625,19 @@ struct DepositPage: View {
             }
         }
     }
-
+    
     // 插入連結
     func insertLink() {
         guard let url = URL(string: linkURL) else { return }
         selectedMediaItems.append((url: url, type: "link"))
         linkURL = ""
     }
-
+    
     // 刪除 ScrollView 中的項目
     func deleteMediaItem(at offsets: IndexSet) {
         selectedMediaItems.remove(atOffsets: offsets)
     }
-
+    
     // 重置所有字段
     func resetFields() {
         textContent = ""

@@ -15,7 +15,7 @@ struct ImageViewWithPreview: View {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
-                .frame(height: 200)
+                .frame(width: 300, height: 300)
                 .onTapGesture {
                     isPresented.toggle()
                 }
@@ -51,7 +51,7 @@ struct ImageViewWithPreview: View {
                                             dragOffset = .zero
 
                                             // 如果拖动超过100点高度，关闭全屏
-                                            if value.translation.height > 250 {
+                                            if value.translation.height > 200 {
                                                 isPresented = false
                                             }
                                         }
