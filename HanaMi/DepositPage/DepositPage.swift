@@ -445,44 +445,52 @@ struct DepositPage: View {
                         .background(Color.clear)
                     
                     // ScrollView 顯示已插入的媒體 (圖片、影片、音訊、連結)
-                    ScrollView {
-                        VStack(spacing: 10) {
+                  ScrollView(.horizontal) {  // 改為橫向滑動
+                        HStack(spacing: 10) {  // 使用 HStack 水平排列項目
                             ForEach(selectedMediaItems.indices, id: \.self) { index in
                                 let item = selectedMediaItems[index]
                                 
-                                HStack {
+                                ZStack(alignment: .topTrailing) {
                                     if item.type == "image" {
                                         ImageViewWithPreview(
                                             image: UIImage(contentsOfFile: item.url.path)!
                                         )
+                                        .frame(width: 300, height: 300)  // 確保圖片高度和寬度一致
+                                        .cornerRadius(8)
                                     } else if item.type == "video" {
                                         // 正確顯示影片播放器
                                         VideoPlayerView(url: item.url)
-                                            .frame(height: 200)
+                                            .frame(width: 300, height: 300)
                                             .cornerRadius(8)
                                     } else if item.type == "audio" {
                                         AudioPlayerView(audioURL: item.url)
-                                            .frame(height: 40)
+                                            .frame(width: 300, height: 300)
                                     } else if item.type == "link" {
                                         // 顯示連結預覽
                                         LinkPreviewView(url: item.url)
-                                            
-//                                            .cornerRadius(8)
+                                            .frame(width: 350, height: 300)
+                                            .cornerRadius(8)
                                     }
 
                                     // 添加刪除按鈕
                                     Button(action: {
                                         deleteMediaItem(at: IndexSet(integer: index))
                                     }) {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.red)
-                                            .padding()
+                                        Image(systemName: "xmark.circle.fill")
+                                            .resizable()
+                                            .frame(width: 24, height: 24)
+                                            .foregroundColor(.white)
+                                            .background(Color.black.opacity(0.7))
+                                            .clipShape(Circle())
+                                            .padding(8)
                                     }
                                 }
+                                .padding(.bottom, 10)  // 確保每個項目之間有間距
                             }
                         }
-                        .padding()
+                        .padding(.horizontal)  // 保證水平有邊距
                     }
+
 
                     Spacer()
 
