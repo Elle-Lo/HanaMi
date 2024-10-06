@@ -32,7 +32,6 @@ struct SettingsPage: View {
     
     @FocusState private var isNameFocused: Bool
 
-    
     // MARK: - Services and References
     
     private let firestoreService = FirestoreService()
@@ -49,26 +48,27 @@ struct SettingsPage: View {
         ZStack {
             // 背景圆角矩形
             RoundedRectangle(cornerRadius: 60, style: .continuous)
-                .fill(Color(hex: "#FFF7EF"))
+                .fill(Color.colorYellow)
                 .frame(height: UIScreen.main.bounds.height * 0.75)
                 .offset(y: UIScreen.main.bounds.height * 0.2)
             
             VStack(spacing: 0) {
                 // 个人信息区域
                 profileSection
+                    .padding(.top, 40)
                 
                 // 水豚图片
                 Image("capybaraRight")
                     .resizable()
                     .frame(width: 60, height: 40)
-                    .offset(x: -120, y: -18)
+                    .offset(x: -120, y: -20)
                 
                 // 设置选项
                 VStack {
                     settingsOptions
                         .padding(.horizontal, 20)
                 }
-                .padding(.top, 5)
+//                .padding(.top, 5)
             }
             .alert("確認要刪除帳號嗎？取消好嗎:)", isPresented: $showDeleteAccountAlert) {
                 Button("確認", role: .destructive) {
@@ -113,7 +113,7 @@ struct SettingsPage: View {
             fetchUserNameAndProfileImage()
         }
     }
-    }
+}
     
     // MARK: - Subviews
     
@@ -161,9 +161,8 @@ struct SettingsPage: View {
                 })
                 .focused($isNameFocused)
                 .background(Color.clear)
-                .foregroundColor(.black)
                 .multilineTextAlignment(.center)
-                .submitLabel(.done)  // 键盘上的按钮显示为 Done
+                .submitLabel(.done)
                 .onSubmit {
                     saveUserName()  // 提交时保存新用户名
                     isEditingName = false
@@ -181,22 +180,23 @@ struct SettingsPage: View {
                 }
             } else {
                 Text(userName)
-                    .font(.headline)
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
                     .foregroundColor(Color(hex: "#522504"))
                     .multilineTextAlignment(.center)
                     .onTapGesture {
                         isEditingName = true
-                        newUserName = userName  // 进入编辑模式时初始化为当前用户名
+                        newUserName = userName
                     }
             }
                
             // 角色名字
             Text(characterName)
-                .font(.subheadline)
+                .font(.custom("LexendDeca-SemiBold", size: 13))
                 .foregroundColor(.gray)
-                .padding(.top, 8)
+                .padding(.top, 2)
+                .padding(.bottom, 15)
         }
-        .padding(.top, 40)
+        
     }
     
     private var settingsOptions: some View {
@@ -451,14 +451,14 @@ struct CharacterButton: View {
         Button(action: action) {
             HStack {
                 Image("capybaraIcon")
-                    .foregroundColor(.brown)
+                    .foregroundColor(.colorBrown)
                     .font(.system(size: 24))
                     .padding(.trailing, 20)
                     .frame(width: 40)
                 
                 Text("更換角色名稱")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.black)
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
+                    .foregroundColor(.colorBrown)
                 
                 Spacer()
                 
@@ -483,14 +483,14 @@ struct FavoriteButton: View {
             HStack {
                 
                 Image(systemName: "heart")
-                    .foregroundColor(.brown)
+                    .foregroundColor(.colorBrown)
                     .font(.system(size: 24))
                     .padding(.trailing, 20)
                     .frame(width: 40)
                 
                 Text("收藏")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.black)
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
+                    .foregroundColor(.colorBrown)
                 
                 Spacer()
                 
@@ -521,14 +521,14 @@ struct SettingsButton: View {
         Button(action: action) {
             HStack {
                 Image(systemName: iconName)
-                    .foregroundColor(.brown)
+                    .foregroundColor(.colorBrown)
                     .font(.system(size: 24))
                     .padding(.trailing, 20)
                     .frame(width: 40)
                 
                 Text(text)
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.black)
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
+                    .foregroundColor(.colorBrown)
                 
                 Spacer()
                 

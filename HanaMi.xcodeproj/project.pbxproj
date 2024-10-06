@@ -30,6 +30,9 @@
 		AB06AA952CAED64A00E49F5C /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA942CAED64A00E49F5C /* AudioPlayerView.swift */; };
 		AB06AA972CAFDB6700E49F5C /* ImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA962CAFDB6700E49F5C /* ImageViewer.swift */; };
 		AB06AA9B2CB0263F00E49F5C /* SignInWithApple.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA9A2CB0263F00E49F5C /* SignInWithApple.swift */; };
+		AB06AA9E2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB06AA9D2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf */; };
+		AB06AAA02CB1FDD800E49F5C /* NotoSansHK-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB06AA9F2CB1FDD700E49F5C /* NotoSansHK-Medium.ttf */; };
+		AB06AAA22CB1FDE200E49F5C /* NotoSansHK-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB06AAA12CB1FDE200E49F5C /* NotoSansHK-Regular.ttf */; };
 		AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD842C9D1B4500A0135E /* CategoryView.swift */; };
 		AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */; };
 		AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */; };
@@ -91,6 +94,9 @@
 		AB06AA942CAED64A00E49F5C /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		AB06AA962CAFDB6700E49F5C /* ImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewer.swift; sourceTree = "<group>"; };
 		AB06AA9A2CB0263F00E49F5C /* SignInWithApple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithApple.swift; sourceTree = "<group>"; };
+		AB06AA9D2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-SemiBold.ttf"; sourceTree = "<group>"; };
+		AB06AA9F2CB1FDD700E49F5C /* NotoSansHK-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansHK-Medium.ttf"; sourceTree = "<group>"; };
+		AB06AAA12CB1FDE200E49F5C /* NotoSansHK-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansHK-Regular.ttf"; sourceTree = "<group>"; };
 		AB5CCD842C9D1B4500A0135E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
 		AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
@@ -166,6 +172,16 @@
 			path = Character;
 			sourceTree = "<group>";
 		};
+		AB06AA9C2CB17B0800E49F5C /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				AB06AA9D2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf */,
+				AB06AA9F2CB1FDD700E49F5C /* NotoSansHK-Medium.ttf */,
+				AB06AAA12CB1FDE200E49F5C /* NotoSansHK-Regular.ttf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		AB5CCD832C9D192000A0135E /* CategoryAndAnalytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,6 +216,7 @@
 		ABAFAAB52C93DBBF007CDB45 /* HanaMi */ = {
 			isa = PBXGroup;
 			children = (
+				AB06AA9C2CB17B0800E49F5C /* Font */,
 				AB06AA732CAD848D00E49F5C /* Info.plist */,
 				AB06AA4E2CA96ABA00E49F5C /* HanaMi.entitlements */,
 				AB06AA712CAD802C00E49F5C /* Launch Screen.storyboard */,
@@ -377,8 +394,11 @@
 			files = (
 				ABAFAABE2C93DBC1007CDB45 /* Preview Assets.xcassets in Resources */,
 				ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */,
+				AB06AA9E2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf in Resources */,
 				AB06AA722CAD802C00E49F5C /* Launch Screen.storyboard in Resources */,
 				ABAFAAC52C93F726007CDB45 /* GoogleService-Info.plist in Resources */,
+				AB06AAA22CB1FDE200E49F5C /* NotoSansHK-Regular.ttf in Resources */,
+				AB06AAA02CB1FDD800E49F5C /* NotoSansHK-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

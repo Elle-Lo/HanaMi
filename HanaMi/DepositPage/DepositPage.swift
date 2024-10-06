@@ -55,6 +55,7 @@ struct DepositPage: View {
     }
     
     var body: some View {
+        ScrollView {
         ZStack {
                    VStack(alignment: .leading, spacing: 20) {
                        // 頂部的切換按鈕和類別選擇
@@ -182,9 +183,7 @@ struct DepositPage: View {
                        }
                        .padding(.horizontal, 20)
                        .padding(.vertical, 40)
-                       .onAppear(perform: subscribeToKeyboardEvents)
                    }
-                   .ignoresSafeArea(.keyboard)
 
                    // CustomAlert 彈出視窗
                    if customAlert {
@@ -201,28 +200,29 @@ struct DepositPage: View {
                        }
                    }
                }
-               .sheet(isPresented: $isShowingImagePicker) {
-                   ImagePicker(mediaURL: $mediaURL, mediaType: $mediaType, sourceType: sourceType)
-                       .onDisappear {
-                           if let mediaURL = mediaURL, let mediaType = mediaType {
-                               handlePickedMedia(url: mediaURL, mediaType: mediaType)
-                           }
-                       }
+        .sheet(isPresented: $isShowingImagePicker) {
+            ImagePicker(mediaURL: $mediaURL, mediaType: $mediaType, sourceType: sourceType)
+                .onDisappear {
+                    if let mediaURL = mediaURL, let mediaType = mediaType {
+                        handlePickedMedia(url: mediaURL, mediaType: mediaType)
+                    }
+                }
+        }
                }
            }
     
     // 订阅键盘事件
-    func subscribeToKeyboardEvents() {
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
-            if let keyboardSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                keyboardHeight = keyboardSize.height
-            }
-        }
-        
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
-            keyboardHeight = 0
-        }
-    }
+//    func subscribeToKeyboardEvents() {
+//        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
+//            if let keyboardSize = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+//                keyboardHeight = keyboardSize.height
+//            }
+//        }
+//        
+//        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+//            keyboardHeight = 0
+//        }
+//    }
     
     func handlePickedMedia(url: URL, mediaType: ImagePicker.MediaType) {
             if mediaType == .photo {

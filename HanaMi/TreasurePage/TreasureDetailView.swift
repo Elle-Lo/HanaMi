@@ -25,7 +25,7 @@ struct TreasureDetailView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     // 顯示日期
                     Text(treasure.createdTime, formatter: dateFormatter)
-                        .font(.subheadline)
+                        .font(.custom("LexendDeca-SemiBold", size: 18))
                         .foregroundColor(.colorBrown)
                         .bold()
 
@@ -35,7 +35,7 @@ struct TreasureDetailView: View {
                             Text("公開")
                                 .padding(.vertical, 10)
                                 .padding(.horizontal, 12)
-                                .font(.system(size: 15))
+                                .font(.custom("LexendDeca-SemiBold", size: 15))
                                 .background(Color.colorYellow)
                                 .cornerRadius(10)
                                 .overlay(
@@ -48,7 +48,7 @@ struct TreasureDetailView: View {
                             Text("私人")
                                 .padding(.vertical, 10)
                                 .padding(.horizontal, 18)
-                                .font(.system(size: 15))
+                                .font(.custom("LexendDeca-SemiBold", size: 15))
                                 .background(Color.colorBrown)
                                 .cornerRadius(10)
                                 .foregroundColor(.colorYellow) // 字體顏色
@@ -61,7 +61,7 @@ struct TreasureDetailView: View {
                             .background(Color(hex: "D4D4D4").opacity(0.9)) // 類別標籤背景
                             .cornerRadius(10)
                             .foregroundColor(.colorYellow) // 字體顏色
-                            .bold()
+                            .font(.custom("LexendDeca-SemiBold", size: 15))
                         
                     }
                     .font(.subheadline)
@@ -72,7 +72,7 @@ struct TreasureDetailView: View {
                             .foregroundColor(.colorBrown) // 圖標顏色
                         Text(treasure.locationName)
                             .foregroundColor(.colorBrown) // 字體顏色
-                            .font(.system(size: 10))
+                            .font(.custom("LexendDeca-SemiBold", size: 10))
                     }
                     .padding(.vertical, 8)
                     .padding(.horizontal, 15)
@@ -128,7 +128,7 @@ struct TreasureDetailView: View {
                     // 文字內容
                     ForEach(treasure.contents.filter { $0.type == .text }, id: \.id) { content in
                         Text(content.content)
-                            .font(.body)
+                            .font(.custom("LexendDeca-SemiBold", size: 15))
                             .lineSpacing(5)
                             .padding(.horizontal)
                             .padding(.vertical, 10) // 與圖片的垂直間距保持一致
