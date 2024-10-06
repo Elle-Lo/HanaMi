@@ -6,7 +6,8 @@ struct LocationSearchView: View {
     @Binding var selectedCoordinate: CLLocationCoordinate2D?
     @Binding var selectedLocationName: String?
     @ObservedObject var locationManager: LocationManager
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
+//    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         VStack {
@@ -45,7 +46,8 @@ struct LocationSearchView: View {
     private func selectLocation(_ mapItem: MKMapItem) {
         selectedCoordinate = mapItem.placemark.coordinate
         selectedLocationName = mapItem.name ?? "未知地點"
-        presentationMode.wrappedValue.dismiss()
+//        presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
 
     private func calculateDistance(from coordinate: CLLocationCoordinate2D) -> Double? {

@@ -13,8 +13,8 @@ struct LinkPreviewView: UIViewRepresentable {
             if let metadata = metadata {
                 DispatchQueue.main.async {
                     linkView.metadata = metadata
-                    linkView.sizeToFit()  // 确保大小自适应内容
-                    linkView.layoutIfNeeded()  // 更新布局
+//                    linkView.sizeToFit()  // 确保大小自适应内容
+//                    linkView.layoutIfNeeded()  // 更新布局
                 }
             }
         }
@@ -24,7 +24,7 @@ struct LinkPreviewView: UIViewRepresentable {
 
     func updateUIView(_ uiView: LPLinkView, context: Context) {
         // 更新时确保尺寸和布局同步
-        uiView.sizeToFit()
-        uiView.layoutIfNeeded()
+//        uiView.sizeToFit()
+//        uiView.layoutIfNeeded()
     }
 }
