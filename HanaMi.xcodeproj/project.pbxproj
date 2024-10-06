@@ -75,6 +75,7 @@
 		ABAFAB252C9A8533007CDB45 /* TreasureAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */; };
 		ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */; };
 		ABB59A012CB2582A00E61CF2 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */; };
+		ABB59A032CB268CC00E61CF2 /* ImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -138,6 +139,7 @@
 		ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureAnnotation.swift; sourceTree = "<group>"; };
 		ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureDetailView.swift; sourceTree = "<group>"; };
 		ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewWithPreview.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,6 +239,7 @@
 				ABAFAADA2C95427A007CDB45 /* Supporting file */,
 				ABAFAABC2C93DBC1007CDB45 /* Preview Content */,
 				ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */,
+				ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */,
 			);
 			path = HanaMi;
 			sourceTree = "<group>";
@@ -459,6 +462,7 @@
 				AB06AA692CA982BB00E49F5C /* SignUpPage.swift in Sources */,
 				AB06AA6B2CABFBC700E49F5C /* FavoritesPage.swift in Sources */,
 				AB06AA4B2CA93EF400E49F5C /* AddCategoryForm.swift in Sources */,
+				ABB59A032CB268CC00E61CF2 /* ImageViewWithPreview.swift in Sources */,
 				ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */,
 				AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */,
 				ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */,

@@ -437,13 +437,13 @@ struct DepositPage: View {
                         searchViewModel: searchViewModel,
                         userID: userID
                     )
-
+                    
                     // TextEditor 文字輸入區域
-                    TextEditor(text: $textContent)
+                    PlaceholderTextEditor(text: $textContent, placeholder: "任何想紀錄的事情都寫下來吧～")
                         .frame(height: 150)
                         .padding()
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
-
+                        .background(Color.clear)
+                    
                     // ScrollView 顯示已插入的媒體 (圖片、影片、音訊、連結)
                     ScrollView {
                         VStack(spacing: 10) {
@@ -452,12 +452,9 @@ struct DepositPage: View {
                                 
                                 HStack {
                                     if item.type == "image" {
-                                        // 正確顯示圖片
-                                        Image(uiImage: UIImage(contentsOfFile: item.url.path)!)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 200)
-                                            .cornerRadius(8)
+                                        ImageViewWithPreview(
+                                            image: UIImage(contentsOfFile: item.url.path)!
+                                        )
                                     } else if item.type == "video" {
                                         // 正確顯示影片播放器
                                         VideoPlayerView(url: item.url)
@@ -644,5 +641,26 @@ struct DepositPage: View {
         isRecording = false
         isPlaying = false
         selectedMediaItems.removeAll()  // 清空已選擇的媒體
+    }
+}
+
+struct PlaceholderTextEditor: View {
+    @Binding var text: String
+    let placeholder: String
+    
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            if text.isEmpty {
+                Text(placeholder)
+                    .foregroundColor(.gray)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 12)
+            }
+            
+            TextEditor(text: $text)
+                .padding(4)
+                .background(Color.white)
+                .cornerRadius(8)
+        }
     }
 }
