@@ -607,7 +607,7 @@ struct DepositPage: View {
                 .transition(.scale)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)  // 滿版
                 .background(Color.clear)
-                .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)  // 顯示在螢幕中央
+                .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2.5)  // 顯示在螢幕中央
             }
         }
     }
