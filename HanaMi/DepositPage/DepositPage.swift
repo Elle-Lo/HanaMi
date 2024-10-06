@@ -438,12 +438,6 @@ struct DepositPage: View {
                         userID: userID
                     )
                     
-                    // TextEditor 文字輸入區域
-                    PlaceholderTextEditor(text: $textContent, placeholder: "任何想紀錄的事情都寫下來吧～")
-                        .frame(height: 150)
-                        .padding()
-                        .background(Color.clear)
-                    
                     // ScrollView 顯示已插入的媒體 (圖片、影片、音訊、連結)
                   ScrollView(.horizontal) {  // 改為橫向滑動
                         HStack(spacing: 10) {  // 使用 HStack 水平排列項目
@@ -490,7 +484,12 @@ struct DepositPage: View {
                         }
                         .padding(.horizontal)  // 保證水平有邊距
                     }
-
+                    
+                    // TextEditor 文字輸入區域
+                    PlaceholderTextEditor(text: $textContent, placeholder: "任何想紀錄的事情都寫下來吧～")
+                        .frame(height: 150)
+                        .padding()
+                        .background(Color.clear)
 
                     Spacer()
 

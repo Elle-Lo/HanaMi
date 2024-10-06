@@ -3,14 +3,15 @@ import SwiftUI
 struct ImageViewWithPreview: View {
     @State private var isPresented = false
     @State private var dragOffset = CGSize.zero
-    @State private var scale: CGFloat = 1.0  // 縮放比例
-    @State private var lastScale: CGFloat = 1.0  // 上次縮放的比例
+    @State private var scale: CGFloat = 1.0
+    @State private var lastScale: CGFloat = 1.0
+    @State private var imageOffset = CGSize.zero // 记录图片相对于初始位置的偏移量
 
     let image: UIImage
 
     var body: some View {
         ZStack(alignment: .center) {
-            // 縮略圖顯示
+            // 缩略图显示
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
@@ -18,44 +19,46 @@ struct ImageViewWithPreview: View {
                 .onTapGesture {
                     isPresented.toggle()
                 }
-                .fullScreenCover(isPresented: $isPresented) {
+                .fullScreenCover(isPresented: $isPresented, onDismiss: {
+                    resetImagePosition()
+                }) {
                     ZStack {
-                        Color.black.opacity(0.8).edgesIgnoringSafeArea(.all)
+                        Color.black.edgesIgnoringSafeArea(.all)
 
+                        // 让图片居中，并支持拖动和缩放
                         Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .padding()
-                            .scaleEffect(scale)  // 將縮放效果應用於圖片
+                            .scaleEffect(scale)
+                            .offset(x: dragOffset.width + imageOffset.width, y: dragOffset.height + imageOffset.height) // 累积偏移量
                             .gesture(
                                 MagnificationGesture()
                                     .onChanged { value in
-                                        // 計算縮放比例
                                         let delta = value / lastScale
                                         lastScale = value
                                         scale *= delta
                                     }
                                     .onEnded { _ in
-                                        // 手勢結束時重置 lastScale
                                         lastScale = 1.0
                                     }
                                     .simultaneously(with: DragGesture()
                                         .onChanged { value in
-                                            if value.translation.height > 0 {
-                                                dragOffset = value.translation
-                                            }
+                                            dragOffset = value.translation // 跟踪当前手势的偏移量
                                         }
                                         .onEnded { value in
-                                            if value.translation.height > 100 {
+                                            imageOffset.width += value.translation.width
+                                            imageOffset.height += value.translation.height
+                                            dragOffset = .zero
+
+                                            // 如果拖动超过100点高度，关闭全屏
+                                            if value.translation.height > 250 {
                                                 isPresented = false
                                             }
-                                            dragOffset = .zero
                                         }
                                     )
                             )
-                            .offset(y: dragOffset.height)  // 允許拖動以退出全屏
 
-                        // 右上角的關閉按鈕
+                        // 右上角的关闭按钮
                         VStack {
                             HStack {
                                 Spacer()
@@ -74,5 +77,13 @@ struct ImageViewWithPreview: View {
                     }
                 }
         }
+    }
+
+    // 重置图片的位置和大小
+    private func resetImagePosition() {
+        scale = 1.0
+        dragOffset = .zero
+        imageOffset = .zero // 使图片返回初始位置
+        lastScale = 1.0
     }
 }
