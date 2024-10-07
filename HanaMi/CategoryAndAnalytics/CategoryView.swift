@@ -21,7 +21,8 @@ struct CategoryView: View {
             VStack(alignment: .leading) {
                 Text("Category")
                     .font(.largeTitle)
-                    .bold()
+                    .foregroundColor(.colorBrown)
+                    .font(.custom("LexendDeca-ExtraBold", size: 20))
                     .padding([.top, .leading])
                 
                 // 類別選擇按鈕

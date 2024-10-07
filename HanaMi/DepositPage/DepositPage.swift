@@ -428,7 +428,7 @@ struct DepositPage: View {
     var body: some View {
         ZStack {
             
-            Color(.colorYellow)  // 這裡可以替換成任何你想要的顏色或圖片
+            Color(.colorGrayBlue)  // 這裡可以替換成任何你想要的顏色或圖片
                 .edgesIgnoringSafeArea(.all)  // 擴展到整個屏幕
             
             ScrollView {
@@ -503,7 +503,7 @@ struct DepositPage: View {
                     PlaceholderTextEditor(text: $textContent, placeholder: "一個故事、一場經歷、一個情緒 \n任何想紀錄的事情都寫下來吧～")
                         .lineSpacing(10)
                         .frame(height: 150)
-                        .padding()
+                        .padding(.horizontal, 15)
                         .background(Color.clear)
                 }
                 .padding(.top, 20)  // 確保內容不會超出螢幕上方
@@ -530,7 +530,7 @@ struct DepositPage: View {
                         isShowingActionSheet = true
                         errorMessage = nil
                     }) {
-                        Image(systemName: "camera")
+                        Image("camera")
                             .resizable()
                             .frame(width: 30, height: 30)
                             .font(.system(size: 24))
@@ -592,11 +592,11 @@ struct DepositPage: View {
                             errorMessage = nil
                         }
                     }) {
-                        Image(systemName: audioRecorder.recordingURL != nil ? "waveform.circle.fill" : "mic.circle.fill")
+                        Image(audioRecorder.recordingURL != nil ? "record" : "mic")
                             .resizable()
                             .frame(width: 30, height: 30)
                             .font(.system(size: 24))
-                            .foregroundColor(.colorBrown)
+                            .foregroundColor(audioRecorder.recordingURL != nil ? .red : .colorBrown)
                             .padding(10)
                     }
                     
@@ -711,21 +711,21 @@ struct PlaceholderTextEditor: View {
 
         var body: some View {
             ZStack(alignment: .topLeading) {
-                // 當應該顯示占位符時，顯示占位符文字
+                
+                TextEditor(text: $text)
+                    .foregroundColor(.black)
+                    .colorMultiply(shouldShowPlaceholder ? .clear : .colorGrayBlue)
+                    .focused($keyboardFocused)
+                
                 if shouldShowPlaceholder {
                     Text(placeholder)
-                        .padding(.top, 10)  // 占位符與頂部的距離
-                        .padding(.leading, 6)  // 占位符與左邊的距離
-                        .foregroundColor(.gray)  // 設置占位符的顏色
-                        .onTapGesture {  // 點擊占位符後聚焦 TextEditor
+                        .padding(.top, 10)
+                        .padding(.leading, 6)
+                        .foregroundColor(.gray)
+                        .onTapGesture {
                             keyboardFocused = true
                         }
                 }
-
-                // 實際的 TextEditor，當占位符應該顯示時將其顏色設置為透明
-                TextEditor(text: $text)
-                    .colorMultiply(shouldShowPlaceholder ? .clear : .white)  // 占位符顯示時隱藏 TextEditor 內容
-                    .focused($keyboardFocused)  // 將 TextEditor 綁定到 FocusState
             }
         }
 }

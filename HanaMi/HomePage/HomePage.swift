@@ -1,7 +1,7 @@
 import SwiftUI
 import FirebaseFirestore
 import Kingfisher
-import AVFoundation
+//import AVFoundation
 
 struct HomePage: View {
     @State private var treasures: [Treasure] = []
@@ -102,87 +102,5 @@ struct HomePage: View {
             }
             isLoading = false
         }
-    }
-}
-
-
-struct TreasureCardView: View {
-    var treasure: Treasure
-    @State private var audioPlayer: AVPlayer?
-    @State private var isPlayingAudio = false
-    
-    var body: some View {
-        
-        VStack(alignment: .leading, spacing: 10) {
-            
-            Text(treasure.category)
-                .font(.headline)
-                .foregroundColor(.black)
-                .padding(.top, 10)
-            
-            HStack(spacing: 4) {
-                Image("pin")
-                    .resizable()
-                    .frame(width: 10, height: 10)
-                Text("\(treasure.longitude), \(treasure.latitude)")
-                    .font(.caption)
-                    .foregroundColor(.black)
-            }
-            .padding(8)
-            .background(Color.gray.opacity(0.2))
-            .cornerRadius(15)
-            
-            Divider()
-            
-            ScrollView {
-                
-                ForEach(treasure.contents.sorted(by: { $0.index < $1.index })) { content in
-                    VStack(alignment: .leading, spacing: 5) {
-                        
-                        switch content.type {
-                        case .text:
-                            
-                            Text(content.content)
-                                .font(.body)
-                                .foregroundColor(.black)
-                                .lineSpacing(0)  // 調整行距
-                            
-                        case .image:
-                            
-                            if let imageURL = URL(string: content.content) {
-                                KFImage(imageURL)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(maxWidth: .infinity)
-                                    .cornerRadius(10)
-                            }
-                            
-                        case .link:
-                            if let url = URL(string: content.content) {
-                                LinkPreviewView(url: url)
-                                    .cornerRadius(10)
-                                    .shadow(radius: 5)
-                                    .padding(.vertical, 5)
-                                
-                            }
-                            
-                        case .audio:  // 新增對 audio 類型的處理
-                            if let audioURL = URL(string: content.content) {
-                                AudioPlayerView(audioURL: audioURL)
-                            }
-                            
-                        default:
-                            EmptyView()
-                        }
-                    }
-                    .padding(.bottom, 5)
-                }
-            }
-            
-        }
-        .padding(.horizontal, 20)
-        .background(Color.white.opacity(0.6))
-        .cornerRadius(15)
-        .shadow(radius: 5)
     }
 }

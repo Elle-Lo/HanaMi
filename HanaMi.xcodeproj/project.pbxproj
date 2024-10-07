@@ -36,6 +36,7 @@
 		AB5CCD852C9D1B4500A0135E /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD842C9D1B4500A0135E /* CategoryView.swift */; };
 		AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */; };
 		AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */; };
+		AB825DA02CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB825D9F2CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf */; };
 		ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */; };
 		ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */; };
 		ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */; };
@@ -76,6 +77,8 @@
 		ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */; };
 		ABB59A012CB2582A00E61CF2 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */; };
 		ABB59A032CB268CC00E61CF2 /* ImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */; };
+		ABB59A052CB3076A00E61CF2 /* TreasureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A042CB3076A00E61CF2 /* TreasureCardView.swift */; };
+		ABB59A092CB380F300E61CF2 /* LexendDeca-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ABB59A082CB380F300E61CF2 /* LexendDeca-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +105,7 @@
 		AB5CCD842C9D1B4500A0135E /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
 		AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
+		AB825D9F2CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-ExtraBold.ttf"; sourceTree = "<group>"; };
 		ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanaMi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaMiApp.swift; sourceTree = "<group>"; };
 		ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 		ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureDetailView.swift; sourceTree = "<group>"; };
 		ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewWithPreview.swift; sourceTree = "<group>"; };
+		ABB59A042CB3076A00E61CF2 /* TreasureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureCardView.swift; sourceTree = "<group>"; };
+		ABB59A082CB380F300E61CF2 /* LexendDeca-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-Bold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +185,8 @@
 		AB06AA9C2CB17B0800E49F5C /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				AB825D9F2CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf */,
+				ABB59A082CB380F300E61CF2 /* LexendDeca-Bold.ttf */,
 				AB06AA9D2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf */,
 				AB06AA9F2CB1FDD700E49F5C /* NotoSansHK-Medium.ttf */,
 				AB06AAA12CB1FDE200E49F5C /* NotoSansHK-Regular.ttf */,
@@ -220,26 +228,24 @@
 		ABAFAAB52C93DBBF007CDB45 /* HanaMi */ = {
 			isa = PBXGroup;
 			children = (
-				AB06AA9C2CB17B0800E49F5C /* Font */,
 				AB06AA732CAD848D00E49F5C /* Info.plist */,
 				AB06AA4E2CA96ABA00E49F5C /* HanaMi.entitlements */,
 				AB06AA712CAD802C00E49F5C /* Launch Screen.storyboard */,
 				ABAFAAD82C9540EB007CDB45 /* Model.swift */,
 				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
 				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
-				ABAFAACF2C9414AE007CDB45 /* HomePage.swift */,
 				ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */,
-				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
 				AB06AA6A2CABFBC700E49F5C /* FavoritesPage.swift */,
+				ABB59A072CB307DB00E61CF2 /* ToolView */,
 				ABAFAAF12C96F88E007CDB45 /* Log In */,
+				ABB59A062CB307A800E61CF2 /* HomePage */,
 				AB5CCD832C9D192000A0135E /* CategoryAndAnalytics */,
-				ABAFAB1D2C9A7D83007CDB45 /* TreasurePage */,
 				ABAFAAFA2C980F9F007CDB45 /* DepositPage */,
+				ABAFAB1D2C9A7D83007CDB45 /* TreasurePage */,
 				AB06AA012CA00FED00E49F5C /* Character */,
 				ABAFAADA2C95427A007CDB45 /* Supporting file */,
+				AB06AA9C2CB17B0800E49F5C /* Font */,
 				ABAFAABC2C93DBC1007CDB45 /* Preview Content */,
-				ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */,
-				ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */,
 			);
 			path = HanaMi;
 			sourceTree = "<group>";
@@ -256,12 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				ABAFAAFF2C988FA1007CDB45 /* FirestoreService.swift */,
-				ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */,
-				AB06AA942CAED64A00E49F5C /* AudioPlayerView.swift */,
-				AB06AA902CAD942F00E49F5C /* ImagePicker.swift */,
-				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
 				ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */,
-				AB06AA962CAFDB6700E49F5C /* ImageViewer.swift */,
 				ABAFAAE52C95882D007CDB45 /* Extension.swift */,
 				ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */,
 				ABAFAAC42C93F726007CDB45 /* GoogleService-Info.plist */,
@@ -284,7 +285,6 @@
 			isa = PBXGroup;
 			children = (
 				ABAFAAD62C953CC0007CDB45 /* DepositPage.swift */,
-				ABAFAB112C996B5B007CDB45 /* Map */,
 				ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */,
 				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
 				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
@@ -317,6 +317,31 @@
 				ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */,
 			);
 			path = TreasurePage;
+			sourceTree = "<group>";
+		};
+		ABB59A062CB307A800E61CF2 /* HomePage */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAACF2C9414AE007CDB45 /* HomePage.swift */,
+				ABB59A042CB3076A00E61CF2 /* TreasureCardView.swift */,
+			);
+			path = HomePage;
+			sourceTree = "<group>";
+		};
+		ABB59A072CB307DB00E61CF2 /* ToolView */ = {
+			isa = PBXGroup;
+			children = (
+				ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */,
+				AB06AA942CAED64A00E49F5C /* AudioPlayerView.swift */,
+				AB06AA902CAD942F00E49F5C /* ImagePicker.swift */,
+				ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */,
+				AB06AA962CAFDB6700E49F5C /* ImageViewer.swift */,
+				ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */,
+				ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */,
+				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
+				ABAFAB112C996B5B007CDB45 /* Map */,
+			);
+			path = ToolView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -399,7 +424,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABAFAABE2C93DBC1007CDB45 /* Preview Assets.xcassets in Resources */,
+				AB825DA02CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf in Resources */,
 				ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */,
+				ABB59A092CB380F300E61CF2 /* LexendDeca-Bold.ttf in Resources */,
 				AB06AA9E2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf in Resources */,
 				AB06AA722CAD802C00E49F5C /* Launch Screen.storyboard in Resources */,
 				ABAFAAC52C93F726007CDB45 /* GoogleService-Info.plist in Resources */,
@@ -454,6 +481,7 @@
 				ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */,
 				ABAFAAF72C973C1E007CDB45 /* LocationSearchView.swift in Sources */,
 				ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */,
+				ABB59A052CB3076A00E61CF2 /* TreasureCardView.swift in Sources */,
 				ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */,
 				AB06AA052CA01CC300E49F5C /* StatusSelectionSheet.swift in Sources */,
 				ABB59A012CB2582A00E61CF2 /* VideoPlayerView.swift in Sources */,

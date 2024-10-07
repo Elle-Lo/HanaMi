@@ -4,7 +4,9 @@
 <dict>
 	<key>UIAppFonts</key>
 	<array>
+		<string>LexendDeca-ExtraBold.ttf</string>
 		<string>LexendDeca-SemiBold.ttf</string>
+		<string>LexendDeca-Bold.ttf</string>
 		<string>NotoSansHK-Medium.ttf</string>
 		<string>NotoSansHK-Regular.ttf</string>
 	</array>

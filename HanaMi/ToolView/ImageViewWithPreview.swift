@@ -25,12 +25,11 @@ struct ImageViewWithPreview: View {
                     ZStack {
                         Color.black.edgesIgnoringSafeArea(.all)
 
-                        // 让图片居中，并支持拖动和缩放
                         Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .scaleEffect(scale)
-                            .offset(x: dragOffset.width + imageOffset.width, y: dragOffset.height + imageOffset.height) // 累积偏移量
+                            .offset(x: dragOffset.width + imageOffset.width, y: dragOffset.height + imageOffset.height)
                             .gesture(
                                 MagnificationGesture()
                                     .onChanged { value in
@@ -43,7 +42,7 @@ struct ImageViewWithPreview: View {
                                     }
                                     .simultaneously(with: DragGesture()
                                         .onChanged { value in
-                                            dragOffset = value.translation // 跟踪当前手势的偏移量
+                                            dragOffset = value.translation
                                         }
                                         .onEnded { value in
                                             imageOffset.width += value.translation.width

@@ -1,6 +1,5 @@
 import SwiftUI
 
-// 拆分类别选择视图为子视图
 struct CategorySelectionButtons: View {
     @Binding var categories: [String]
     @Binding var selectedCategory: String?
@@ -14,10 +13,11 @@ struct CategorySelectionButtons: View {
                 onSelectCategory("All")
             }) {
                 Text("All")
-                    .padding(.vertical, 13)
+                    .padding(.vertical, 11)
                     .padding(.horizontal, 18)
-                    .background(selectedCategory == "All" ? Color.blue : Color.gray.opacity(0.2))
-                    .foregroundColor(selectedCategory == "All" ? Color.white : Color.black)
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
+                    .background(selectedCategory == "All" ? Color.colorYellow : Color.white.opacity(0.55))
+                    .foregroundColor(selectedCategory == "All" ? Color.colorBrown : Color.gray)
                     .cornerRadius(25)
             }
 
@@ -27,10 +27,11 @@ struct CategorySelectionButtons: View {
                     onSelectCategory(category)
                 }) {
                     Text(category)
-                        .padding(.vertical, 13)
+                        .padding(.vertical, 11)
                         .padding(.horizontal, 18)
-                        .background(selectedCategory == category ? Color.blue : Color.gray.opacity(0.2))
-                        .foregroundColor(selectedCategory == category ? Color.white : Color.black)
+                        .font(.custom("LexendDeca-SemiBold", size: 15))
+                        .background(selectedCategory == category ? Color.colorYellow : Color.white.opacity(0.55))
+                        .foregroundColor(selectedCategory == category ? Color.colorBrown : Color.gray)
                         .cornerRadius(25)
                 }
             }
@@ -39,9 +40,10 @@ struct CategorySelectionButtons: View {
                 onAddCategory()
             }) {
                 Label("Add Category", systemImage: "plus")
-                    .padding(.vertical, 13)
+                    .padding(.vertical, 11)
                     .padding(.horizontal, 18)
-                    .background(Color.gray.opacity(0.2))
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
+                    .background(Color.white.opacity(0.55))
                     .foregroundColor(.black)
                     .cornerRadius(25)
             }
