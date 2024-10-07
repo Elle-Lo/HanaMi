@@ -37,6 +37,7 @@
 		AB5CCD872C9D1B8200A0135E /* CategoryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */; };
 		AB5CCD892C9D3D6E00A0135E /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */; };
 		AB825DA02CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB825D9F2CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf */; };
+		AB825DA22CB3E5B800965502 /* URLImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */; };
 		ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */; };
 		ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */; };
 		ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */; };
@@ -106,6 +107,7 @@
 		AB5CCD862C9D1B8200A0135E /* CategoryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCardView.swift; sourceTree = "<group>"; };
 		AB5CCD882C9D3D6E00A0135E /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		AB825D9F2CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-ExtraBold.ttf"; sourceTree = "<group>"; };
+		AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageViewWithPreview.swift; sourceTree = "<group>"; };
 		ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanaMi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaMiApp.swift; sourceTree = "<group>"; };
 		ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -339,6 +341,7 @@
 				ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */,
 				ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */,
 				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
+				AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */,
 				ABAFAB112C996B5B007CDB45 /* Map */,
 			);
 			path = ToolView;
@@ -511,6 +514,7 @@
 				ABAFAAD02C9414AE007CDB45 /* HomePage.swift in Sources */,
 				ABAFAAF32C971045007CDB45 /* MapView.swift in Sources */,
 				ABAFAAE42C958650007CDB45 /* CharacterPage.swift in Sources */,
+				AB825DA22CB3E5B800965502 /* URLImageViewWithPreview.swift in Sources */,
 				ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */,
 				ABAFAAD92C9540EB007CDB45 /* Model.swift in Sources */,
 				AB06AA492CA93E7C00E49F5C /* CategorySelectionButtons.swift in Sources */,

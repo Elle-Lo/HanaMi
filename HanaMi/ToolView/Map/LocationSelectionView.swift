@@ -50,7 +50,7 @@ struct LocationSelectionView: View {
                         .padding(.vertical, 11)
                         .padding(.trailing, 19)
                         .padding(.leading, 13)
-                        .background(Color(UIColor.systemGray6))
+                        .background(Color(hex: "#E0E0E0"))
                         .cornerRadius(10)
                     } else {
                         HStack {

@@ -15,6 +15,8 @@ struct TreasureListView: View {
         ScrollView {
             if treasures.isEmpty {
                 Text("No treasures found")
+                    .font(.custom("LexendDeca-SemiBold", size: 12))
+                    .foregroundColor(.colorBrown)
                     .padding()
             } else {
                 ForEach(treasures) { treasure in

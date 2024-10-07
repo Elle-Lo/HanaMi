@@ -16,7 +16,13 @@ struct CategorySelectionButtons: View {
                     .padding(.vertical, 11)
                     .padding(.horizontal, 18)
                     .font(.custom("LexendDeca-SemiBold", size: 15))
-                    .background(selectedCategory == "All" ? Color.colorYellow : Color.white.opacity(0.55))
+                    .background(selectedCategory == "All" ? Color.colorDarkYellow : Color.white.opacity(0.55))
+                    .overlay(selectedCategory == "All" ?
+                            RoundedRectangle(cornerRadius: 25)
+                        .stroke(Color.colorBrown, lineWidth: 2.5) :
+                                RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.colorBrown, lineWidth: 0)
+                        )
                     .foregroundColor(selectedCategory == "All" ? Color.colorBrown : Color.gray)
                     .cornerRadius(25)
             }
@@ -30,7 +36,13 @@ struct CategorySelectionButtons: View {
                         .padding(.vertical, 11)
                         .padding(.horizontal, 18)
                         .font(.custom("LexendDeca-SemiBold", size: 15))
-                        .background(selectedCategory == category ? Color.colorYellow : Color.white.opacity(0.55))
+                        .background(selectedCategory == category ? Color.colorDarkYellow : Color.white.opacity(0.55))
+                        .overlay(selectedCategory == category ?
+                                RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color.colorBrown, lineWidth: 2.5) :
+                                    RoundedRectangle(cornerRadius: 25)
+                                .stroke(Color.colorBrown, lineWidth: 0)
+                            )
                         .foregroundColor(selectedCategory == category ? Color.colorBrown : Color.gray)
                         .cornerRadius(25)
                 }
@@ -44,7 +56,11 @@ struct CategorySelectionButtons: View {
                     .padding(.horizontal, 18)
                     .font(.custom("LexendDeca-SemiBold", size: 15))
                     .background(Color.white.opacity(0.55))
-                    .foregroundColor(.black)
+                    .overlay(
+                            RoundedRectangle(cornerRadius: 25)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
+                    .foregroundColor(.gray)
                     .cornerRadius(25)
             }
         }

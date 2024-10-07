@@ -345,9 +345,17 @@ struct SaveButtonView: View {
 
         // 處理選擇的媒體項目
         for item in selectedMediaItems {
-            pendingUploads += 1
-            if item.type == "image" {
+            switch item.type {
+            case "link":
+                // 連結類型處理
+                let linkContent = TreasureContent(type: .link, content: item.url.absoluteString, index: currentIndex)
+                contents.append(linkContent)
+                currentIndex += 1
+
+            case "image":
+                // 圖片類型處理
                 if let image = UIImage(contentsOfFile: item.url.path) {
+                    pendingUploads += 1
                     uploadMediaToStorage(imageData: image.pngData(), mediaURL: nil, path: "images", type: .image, currentIndex: currentIndex) { content in
                         if let content = content {
                             contents.append(content)
@@ -357,8 +365,12 @@ struct SaveButtonView: View {
                             completion(contents)
                         }
                     }
+                    currentIndex += 1
                 }
-            } else if item.type == "video" {
+
+            case "video":
+                // 視頻類型處理
+                pendingUploads += 1
                 uploadMediaToStorage(imageData: nil, mediaURL: item.url, path: "videos", type: .video, currentIndex: currentIndex) { content in
                     if let content = content {
                         contents.append(content)
@@ -368,15 +380,49 @@ struct SaveButtonView: View {
                         completion(contents)
                     }
                 }
+                currentIndex += 1
+
+            case "audio":
+                // 音訊類型處理
+                pendingUploads += 1
+                uploadMediaToStorage(imageData: nil, mediaURL: item.url, path: "audios", type: .audio, currentIndex: currentIndex) { content in
+                    if let content = content {
+                        contents.append(content)
+                    }
+                    pendingUploads -= 1
+                    if pendingUploads == 0 {
+                        completion(contents)
+                    }
+                }
+                currentIndex += 1
+
+            default:
+                break
+            }
+        }
+
+        // 如果有音檔則上傳音檔
+        if let localAudioURL = audioRecorder.recordingURL {
+            pendingUploads += 1
+            uploadMediaToStorage(imageData: nil, mediaURL: localAudioURL, path: "audios", type: .audio, currentIndex: currentIndex) { content in
+                if let content = content {
+                    contents.append(content)
+                }
+                try? FileManager.default.removeItem(at: localAudioURL)
+                pendingUploads -= 1
+                if pendingUploads == 0 {
+                    completion(contents.sorted(by: { $0.index < $1.index }))
+                }
             }
             currentIndex += 1
         }
 
         // 當沒有待處理的上傳時，完成處理
         if pendingUploads == 0 {
-            completion(contents)
+            completion(contents.sorted(by: { $0.index < $1.index }))
         }
     }
+
 
     // 上傳媒體到Firebase Storage
     private func uploadMediaToStorage(imageData: Data?, mediaURL: URL?, path: String, type: ContentType, currentIndex: Int, completion: @escaping (TreasureContent?) -> Void) {

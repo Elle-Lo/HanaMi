@@ -19,7 +19,7 @@ struct CategoryCardView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            // 顶部 HStack，包含 ToggleButton 和 CategorySelectionView
+           
             HStack(alignment: .top) {
                 ToggleButton(isPublic: $viewModel.isPublic)
                     .onChange(of: viewModel.isPublic) { oldValue, newValue in
@@ -95,7 +95,6 @@ struct CategoryCardView: View {
                                 .cornerRadius(10)  // 保持圆角
                                 .shadow(radius: 5)  // 阴影
                                 .padding(.vertical, 5)  // 垂直间距
-
                         }
                         
                     default:
@@ -105,11 +104,11 @@ struct CategoryCardView: View {
                 .padding(.bottom, 5)
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 30)
         .padding(.vertical, 15)
-        .background(Color.white.opacity(0.8))
+        .background(Color.white.opacity(0.75))
         .cornerRadius(15)
-        .shadow(radius: 5)
+        .shadow(radius: 2)
         // 使用新的 alert 语法
         .alert("確認删除嗎？", isPresented: $viewModel.showTreasureDeleteAlert) {
             Button("確認", role: .destructive) {
@@ -122,8 +121,7 @@ struct CategoryCardView: View {
             Button("取消", role: .cancel) { }
         } message: {
             Text("確認删除這項寶藏嗎？這個動作無法撤回！")
-        }
-//        .id(viewModel.selectedCategory)  
+        } 
     }
        
 }

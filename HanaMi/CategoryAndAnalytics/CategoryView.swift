@@ -18,12 +18,15 @@ struct CategoryView: View {
     
     var body: some View {
         ZStack {
+            
+            Color(.colorYellow)  // 這裡可以替換成任何你想要的顏色或圖片
+                .edgesIgnoringSafeArea(.all)  // 擴展到整個屏幕
+            
             VStack(alignment: .leading) {
                 Text("Category")
-                    .font(.largeTitle)
                     .foregroundColor(.colorBrown)
-                    .font(.custom("LexendDeca-ExtraBold", size: 20))
-                    .padding([.top, .leading])
+                    .font(.custom("LexendDeca-Bold", size: 30))
+                    .padding(.leading, 20)
                 
                 // 類別選擇按鈕
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -42,10 +45,9 @@ struct CategoryView: View {
                         }
                     )
                 }
+                .background(Color.clear)
+                .padding(.bottom, 10)
                 
-                Spacer().frame(height: 20)
-                
-                // 顯示添加類別的對話框
                     .sheet(isPresented: $isAddingCategory) {
                         AddCategoryForm(
                             newCategoryName: $newCategoryName,
@@ -59,6 +61,8 @@ struct CategoryView: View {
                                 newCategoryValidationMessage = nil
                             }
                         )
+                        .presentationDetents([.fraction(0.2)])  // 讓視窗只佔螢幕高度的30%
+                        .presentationDragIndicator(.hidden)     // 隱藏拖動指示器
                     }
                 
                 // 顯示寶藏列表

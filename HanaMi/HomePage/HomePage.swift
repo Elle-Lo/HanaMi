@@ -28,7 +28,6 @@ struct HomePage: View {
                     ScrollView {
                         ForEach(treasures) { treasure in
                             TreasureCardView(treasure: treasure)
-                                
                                 .padding(.vertical, 20)
                         }
                     }
