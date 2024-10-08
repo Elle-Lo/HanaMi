@@ -46,25 +46,31 @@ struct TreasureCardView: View {
                     }
                 }
                 .frame(height: 300)
-                .cornerRadius(8)  // 外層應用圓角
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always)) // 添加頁面指示器
+                .cornerRadius(8)
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: treasure.contents.count > 1 ? .always : .never)) // 這裡動態顯示或隱藏頁面指示器
             }
             
             // 音訊內容單獨處理，設置固定高度
             if let audioContent = treasure.contents.first(where: { $0.type == .audio }) {
                 if let audioURL = URL(string: audioContent.content) {
                     AudioPlayerView(audioURL: audioURL)
-                        .frame(height: 100) // 固定音訊播放器高度
+                        .frame(height: 100)
                         .padding(.top, 10)
+                        .padding(.bottom, 15)
                 }
             }
-
-            // 文字內容
+            
+            // 文字內容的 ScrollView，當文字內容過多時可以滾動
             if let textContent = treasure.contents.first(where: { $0.type == .text })?.content {
-                Text(textContent)
-                    .font(.custom("LexendDeca-SemiBold", size: 18))
-                    .foregroundColor(.black)
-                    .padding(.top, hasMediaContent ? 0 : 10) // 如果沒有媒體，則上方留一些間距
+                ScrollView {
+                    Text(textContent)
+                        .font(.custom("LexendDeca-Regular", size: 16))
+                        .foregroundColor(.black)
+                        .padding(.horizontal, 5)
+                        .lineSpacing(10.0)
+                        .padding(.top, hasMediaContent ? 8 : 10)
+                }
+                .frame(maxHeight: 300)
             }
             
             // 類別標籤

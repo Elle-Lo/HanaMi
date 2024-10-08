@@ -28,7 +28,7 @@ struct HomePage: View {
                     ScrollView {
                         ForEach(treasures) { treasure in
                             TreasureCardView(treasure: treasure)
-                                .padding(.vertical, 20)
+                                .padding(.top, 30)
                         }
                     }
                     .padding(.horizontal, 30)
@@ -37,7 +37,7 @@ struct HomePage: View {
                 
                 Spacer()
             }
-            .padding(.top, 15)
+//            .padding(.top, 15)
             
             VStack {
                 Spacer()

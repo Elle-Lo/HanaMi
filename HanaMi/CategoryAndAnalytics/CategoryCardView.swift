@@ -3,19 +3,18 @@ import Kingfisher
 
 struct CategoryCardView: View {
     @Binding var selectedCategory: String?
-    @Binding var categories: [String]      // 改为使用 @Binding
+    @Binding var categories: [String]
     @StateObject private var viewModel: CategoryCardViewModel
     var onDelete: () -> Void
     var onCategoryChange: (_ newCategory: String) -> Void
 
-    // 更新 init，使其接受 selectedCategory 和 categories 的 Binding 参数
     init(treasure: Treasure, userID: String, selectedCategory: Binding<String?>, categories: Binding<[String]>, onDelete: @escaping () -> Void, onCategoryChange: @escaping (_ newCategory: String) -> Void) {
-           _viewModel = StateObject(wrappedValue: CategoryCardViewModel(treasure: treasure, userID: userID))
-           self._selectedCategory = selectedCategory  // 绑定 selectedCategory
-           self._categories = categories              // 绑定 categories
-           self.onDelete = onDelete
-           self.onCategoryChange = onCategoryChange
-       }
+        _viewModel = StateObject(wrappedValue: CategoryCardViewModel(treasure: treasure, userID: userID))
+        self._selectedCategory = selectedCategory
+        self._categories = categories
+        self.onDelete = onDelete
+        self.onCategoryChange = onCategoryChange
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -52,9 +51,9 @@ struct CategoryCardView: View {
                         .padding(.top, 5)
                 }
             }
-            .padding(.top, 5)
+            .padding(.vertical, 5)
 
-            // 显示经纬度
+            // 顯示經緯度
             HStack(spacing: 4) {
                 Image("pin")
                     .resizable()
@@ -70,46 +69,71 @@ struct CategoryCardView: View {
             Divider()
                 .padding(.vertical, 10)
 
-            // 显示宝藏内容
-            ForEach(viewModel.treasure.contents.sorted(by: { $0.index < $1.index })) { content in
-                VStack(alignment: .leading, spacing: 10) {
-                    switch content.type {
-                    case .text:
-                        Text(content.content)
-                            .font(.body)
-                            .foregroundColor(.black)
-                            .fixedSize(horizontal: false, vertical: true)
-
-                    case .image:
-                        if let imageURL = URL(string: content.content) {
-                            KFImage(imageURL)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxWidth: .infinity)
-                                .cornerRadius(10)
-                        }
-                        
-                    case .link:
-                        if let url = URL(string: content.content) {
-                            LinkPreviewView(url: url)
-                                .cornerRadius(10)  // 保持圆角
-                                .shadow(radius: 5)  // 阴影
-                                .padding(.vertical, 5)  // 垂直间距
-                        }
-                        
-                    default:
-                        EmptyView()
-                    }
-                }
-                .padding(.bottom, 5)
+            // 檢查是否有圖片、影片或連結的內容
+            let mediaContents = viewModel.treasure.contents.filter { $0.type == .image || $0.type == .video || $0.type == .link }
+                       
+                       // 如果有圖片、影片、連結，顯示 TabView
+                       if !mediaContents.isEmpty {
+                           TabView {
+                               ForEach(mediaContents.sorted(by: { $0.index < $1.index })) { content in
+                                   VStack(alignment: .leading, spacing: 10) {
+                                       switch content.type {
+                                       case .image:
+                                           if let imageURL = URL(string: content.content) {
+                                               URLImageViewWithPreview(imageURL: imageURL)
+                                           }
+                                       case .video:
+                                           if let videoURL = URL(string: content.content) {
+                                               VideoPlayerView(url: videoURL)
+                                                   .scaledToFill()
+                                                   .frame(width: 350, height: 300)
+                                                   .cornerRadius(8)
+                                                   .clipped()
+                                           }
+                                       case .link:
+                                           if let url = URL(string: content.content) {
+                                               LinkPreviewView(url: url)
+                                                   .cornerRadius(10)
+                                                   .shadow(radius: 5)
+                                                   .padding(.vertical, 5)
+                                           }
+                                       default:
+                                           EmptyView()
+                                       }
+                                   }
+                               }
+                           }
+                .frame(height: 300)
+                .cornerRadius(8)
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: treasure.contents.count > 1 ? .always : .never)) // 這裡動態顯示或隱藏頁面指示器
             }
+
+            // 音訊內容單獨處理
+            if let audioContent = viewModel.treasure.contents.first(where: { $0.type == .audio }) {
+                if let audioURL = URL(string: audioContent.content) {
+                    AudioPlayerView(audioURL: audioURL)
+                        .frame(height: 100) // 固定音訊播放器高度
+                        .padding(.top, 10)
+                        .padding(.bottom, 20)
+                }
+            }
+
+            // 文字內容
+            if let textContent = viewModel.treasure.contents.first(where: { $0.type == .text })?.content {
+                ScrollView {
+                    Text(textContent)
+                        .font(.custom("LexendDeca-Regular", size: 16))
+                        .foregroundColor(.black)
+                        .padding(.top, mediaContents.isEmpty ? 0 : 10) // 如果沒有媒體，則不留間距
+                }
+            }
+
         }
         .padding(.horizontal, 30)
         .padding(.vertical, 15)
         .background(Color.white.opacity(0.75))
         .cornerRadius(15)
         .shadow(radius: 2)
-        // 使用新的 alert 语法
         .alert("確認删除嗎？", isPresented: $viewModel.showTreasureDeleteAlert) {
             Button("確認", role: .destructive) {
                 viewModel.deleteTreasure { success in
@@ -121,7 +145,6 @@ struct CategoryCardView: View {
             Button("取消", role: .cancel) { }
         } message: {
             Text("確認删除這項寶藏嗎？這個動作無法撤回！")
-        } 
+        }
     }
-       
 }

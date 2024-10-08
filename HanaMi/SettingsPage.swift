@@ -36,7 +36,9 @@ struct SettingsPage: View {
     
     private let firestoreService = FirestoreService()
     private let storageRef = Storage.storage().reference()
-    private let uid = Auth.auth().currentUser!.uid
+    private var uid: String? {
+        return Auth.auth().currentUser?.uid
+    }
     private var userID: String {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
@@ -238,19 +240,20 @@ struct SettingsPage: View {
     // MARK: - Functions
     
     private func saveUserName() {
-        guard !newUserName.isEmpty else { return }
+        guard let uid = uid, !newUserName.isEmpty else { return }
         firestoreService.updateUserName(uid: uid, name: newUserName)
         userName = newUserName
         isEditingName = false
     }
     
     private func updateCharacterName() {
-        guard !newCharacterName.isEmpty else { return }
+        guard let uid = uid, !newCharacterName.isEmpty else { return }
         firestoreService.updateUserCharacterName(uid: uid, characterName: newCharacterName)
         characterName = newCharacterName
     }
     
     private func uploadProfileImageToStorage(image: UIImage) {
+        guard let uid = uid else { return }
         let imageName = UUID().uuidString
         let imagePath = "user_images/\(uid)/profile/\(imageName).jpg"
         guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
@@ -276,6 +279,7 @@ struct SettingsPage: View {
     }
     
     private func uploadBackgroundImageToStorage(image: UIImage) {
+        guard let uid = uid else { return }
         let imageName = UUID().uuidString
         let imagePath = "background_images/\(uid)/\(imageName).jpg"
         guard let imageData = image.jpegData(compressionQuality: 0.8) else { return }
@@ -301,7 +305,7 @@ struct SettingsPage: View {
     }
     
     private func removeProfileImage() {
-        guard let currentImageUrl = userProfileImageUrl?.absoluteString else {
+        guard let uid = uid, let currentImageUrl = userProfileImageUrl?.absoluteString else {
             print("没有头像可移除。")
             return
         }
@@ -317,7 +321,7 @@ struct SettingsPage: View {
     }
     
     private func removeBackgroundImage() {
-        guard let imageUrl = backgroundImageUrl?.absoluteString else { return }
+        guard let uid = uid, let imageUrl = backgroundImageUrl?.absoluteString else { return }
         
         firestoreService.removeUserBackgroundImage(uid: uid, imageUrl: imageUrl) { success in
             if success {
@@ -330,6 +334,8 @@ struct SettingsPage: View {
     }
     
     private func fetchUserNameAndProfileImage() {
+        guard let uid = uid else { return }
+        
         firestoreService.fetchUserData(uid: uid) { name, profileImageUrl, backgroundImageUrl, characterName in
             self.userName = name ?? "No name"
             if let profileImageUrlString = profileImageUrl, let url = URL(string: profileImageUrlString) {
