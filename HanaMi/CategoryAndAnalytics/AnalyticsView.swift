@@ -17,9 +17,10 @@ struct AnalyticsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // 標題
-            Text("ANALYTICS")
+            Text("Analytics")
                 .foregroundColor(.colorBrown)
                 .font(.custom("LexendDeca-Bold", size: 30))
+                .padding(.top, 10)
 
             // 副標題
             Text("最常儲存的類別")
@@ -68,15 +69,17 @@ struct AnalyticsView: View {
                                     .font(.custom("LexendDeca-Bold", size: 18))
                                     .foregroundColor(.gray)
 
-                                Spacer()
+                                
 
                                 // 确保 totalCount 不为 0
                                 let percentage = totalCount > 0 ? CGFloat(categoryCounts[category, default: 0]) / CGFloat(totalCount) : 0
                                 
                                 RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color.orange.opacity(0.2))
+                                    .fill(Color(hex: "FFECC8"))
                                     .frame(width: percentage * 200, height: 10)  // 防止除以0的问题
-
+                                
+                                Spacer()
+                                
                                 Text(String(format: "%.0f%%", percentage * 100))
                                     .font(.custom("LexendDeca-Bold", size: 15))
                                     .foregroundColor(.gray)

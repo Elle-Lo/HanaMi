@@ -40,6 +40,9 @@ struct CustomAlert: View {
                     Button(action: {
                         audioRecorder.stopRecording()
                         isRecording = false
+                        if let recordingURL = audioRecorder.recordingURL {
+                            setupAudioPlayer(from: recordingURL)
+                        }
                     }) {
                         Image(systemName: "stop.circle.fill")
                             .resizable()
