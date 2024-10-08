@@ -29,53 +29,62 @@ struct AudioPlayerView: View {
     @State private var isDragging = false // 用於標記是否正在拖動進度條
 
     var body: some View {
-        VStack {
-            // 播放按鈕
-            Button(action: {
-                if isPlaying {
-                    audioPlayer?.pause()
-                    isPlaying = false
-                } else {
-                    setupAudioSession()  // 確保在播放前設置音訊會話
-                    playAudio()
-                    isPlaying = true
-                }
-            }) {
-                ZStack {
-                    Circle()
-                        .fill(Color(red: 1, green: 0.97, blue: 0.94)) // 背景顏色FFF7EF
-                        .frame(width: 60, height: 60)
-                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(Color(red: 82 / 255, green: 37 / 255, blue: 4 / 255)) // 按鈕顏色522504
-                }
-            }
+        ZStack {
+            // 灰色邊框背景
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.colorYellow, lineWidth: 2) // 灰色邊框
+                .background(Color.white.opacity(0.2)) // 背景顏色
+                .cornerRadius(10) // 確保背景也有圓角
             
-            // 播放進度條和時間顯示
-            HStack {
-                // 開始時間
-                Text(formatTime(seconds: currentTime))
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                
-                // 播放進度條
-                Slider(value: $currentTime, in: 0...duration, onEditingChanged: { editing in
-                    isDragging = editing
-                    if !editing {
-                        audioPlayer?.seek(to: CMTime(seconds: currentTime, preferredTimescale: 600))
+            VStack {
+                // 播放按鈕
+                Button(action: {
+                    if isPlaying {
+                        audioPlayer?.pause()
+                        isPlaying = false
+                    } else {
+                        setupAudioSession()  // 確保在播放前設置音訊會話
+                        playAudio()
+                        isPlaying = true
                     }
-                })
-                .accentColor(Color.gray)
-                .padding(.horizontal, 10)
+                }) {
+                    ZStack {
+                        Circle()
+                            .fill(Color(hex:"FFF7EF")) // 背景顏色FFF7EF
+                            .frame(width: 60, height: 60)
+                        Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(Color(hex:"522504")) // 按鈕顏色522504
+                    }
+                }
                 
-                // 結束時間
-                Text(formatTime(seconds: duration))
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                // 播放進度條和時間顯示
+                HStack {
+                    // 開始時間
+                    Text(formatTime(seconds: currentTime))
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    
+                    // 播放進度條
+                    Slider(value: $currentTime, in: 0...duration, onEditingChanged: { editing in
+                        isDragging = editing
+                        if !editing {
+                            audioPlayer?.seek(to: CMTime(seconds: currentTime, preferredTimescale: 600))
+                        }
+                    })
+                    .accentColor(Color.gray)
+                    .padding(.horizontal, 10)
+                    
+                    // 結束時間
+                    Text(formatTime(seconds: duration))
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                .padding(.horizontal, 20)
             }
-            .padding(.horizontal, 20)
+            .padding()
         }
         .onAppear {
             prepareAudio()
@@ -90,6 +99,7 @@ struct AudioPlayerView: View {
             currentTime = 0
             audioPlayer?.seek(to: CMTime(seconds: 0, preferredTimescale: 600)) // 重置播放到頭部
         }
+        .frame(maxWidth: .infinity, minHeight: 100) // 設置固定高度
     }
 
     private func playAudio() {

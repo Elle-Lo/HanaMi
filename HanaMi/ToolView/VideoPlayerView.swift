@@ -4,7 +4,6 @@ import AVKit
 struct VideoPlayerView: View {
     let url: URL
     @State private var player: AVPlayer? = nil
-    @State private var isPlaying: Bool = false
     @State private var showFullScreenPlayer: Bool = false  // 控制全屏播放的狀態
     @State private var dragOffset: CGSize = .zero  // 控制拖動手勢
     @State private var scale: CGFloat = 1.0  // 縮放比例
@@ -18,22 +17,16 @@ struct VideoPlayerView: View {
                     // ScrollView 中的影片縮略圖
                     VideoPlayer(player: player)
                         .onAppear {
-                            player.play()
-                            isPlaying = true
-                        }
-                        .onDisappear {
-                            player.pause()
-                            isPlaying = false
+                            player.seek(to: .zero)  // 初始化時將影片設置到最開始
                         }
                         .scaledToFill()  // 讓影片填滿範圍
                         .frame(width: 300, height: 300)  // 設置寬高一致
                         .cornerRadius(8)
                         .onTapGesture {
-                            // 點擊影片縮略圖，進入全屏播放模式
+                            // 點擊影片進入全屏播放模式
                             showFullScreenPlayer = true
                         }
                 }
-                
             } else {
                 Text("Loading video...")
                     .onAppear {
@@ -52,13 +45,6 @@ struct VideoPlayerView: View {
                     VideoPlayer(player: player)
                         .scaleEffect(scale)
                         .offset(x: dragOffset.width + videoOffset.width, y: dragOffset.height + videoOffset.height)
-                        .onAppear {
-                            player.play()
-                        }
-                        .onDisappear {
-                            player.pause()
-                        }
-                        // 優先縮放手勢，再處理拖動手勢
                         .gesture(
                             MagnificationGesture()
                                 .onChanged { value in
@@ -86,25 +72,29 @@ struct VideoPlayerView: View {
                                 )
                         )
                         .edgesIgnoringSafeArea(.all)
-                }
 
-                // 右上角的關閉按鈕
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            showFullScreenPlayer = false
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.white)
-                                .padding()
+                    // 全屏模式的右上角關閉按鈕
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                showFullScreenPlayer = false
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                    .padding()
+                            }
                         }
+                        Spacer()
                     }
-                    Spacer()
                 }
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime)) { _ in
+            // 影片播放完畢，重置影片至開頭
+            player?.seek(to: .zero)
         }
     }
 

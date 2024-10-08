@@ -54,7 +54,7 @@ struct TreasureCardView: View {
             if let audioContent = treasure.contents.first(where: { $0.type == .audio }) {
                 if let audioURL = URL(string: audioContent.content) {
                     AudioPlayerView(audioURL: audioURL)
-                        .frame(height: 50) // 固定音訊播放器高度
+                        .frame(height: 100) // 固定音訊播放器高度
                         .padding(.top, 10)
                 }
             }
