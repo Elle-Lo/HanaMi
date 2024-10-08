@@ -15,41 +15,40 @@ struct AnalyticsView: View {
     private let firestoreService = FirestoreService()
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: 10) {
             // 標題
             Text("ANALYTICS")
-                .font(.largeTitle)
-                .bold()
-                .foregroundColor(.brown)
-                .padding(.top)
+                .foregroundColor(.colorBrown)
+                .font(.custom("LexendDeca-Bold", size: 30))
 
             // 副標題
             Text("最常儲存的類別")
-                .font(.subheadline)
+                .font(.custom("LexendDeca-Bold", size: 15))
                 .foregroundColor(.gray)
+                .padding(.bottom, 50)
 
             // 最常儲存的類別與圓形圖表
             if isLoading {
                 ProgressView("加載中...")
             } else if let mostSaved = mostSavedCategory {
-                VStack {
+                ZStack {
                     Text(mostSaved)
-                        .font(.largeTitle)
-                        .bold()
-                        .foregroundColor(.gray)
+                        .font(.custom("LexendDeca-Bold", size: 30))
+                        .foregroundColor(.colorBrown)
+                        .offset(x: -80, y: 55)
+                        .zIndex(1)
 
                     // 圓形圖表 - 顯示最多儲存類別的百分比
                     Circle()
                         .trim(from: 0.0, to: CGFloat(mostSavedPercentage))
                         .stroke(style: StrokeStyle(lineWidth: 20, lineCap: .round))
-                        .fill(Color.orange.opacity(0.3))
+                        .fill(Color(hex: "FFECC8"))
                         .rotationEffect(.degrees(-90))
                         .frame(width: 180, height: 180)
                         .overlay(
                             Text(String(format: "%.0f%%", mostSavedPercentage * 100))
-                                .font(.title)
-                                .bold()
-                                .foregroundColor(.orange)
+                                .font(.custom("LexendDeca-Bold", size: 30))
+                                .foregroundColor(Color(hex: "FFECC8"))
                         )
                         .padding(.top, 10) // 圓形圖表與最常儲存類別之間的間距
                 }
@@ -57,17 +56,16 @@ struct AnalyticsView: View {
             }
 
             // 加大其他類別與圓形的間距
-            Spacer().frame(height: 20)
+            Spacer().frame(height: 50)
 
             // 顯示其他類別的比例，使用 ScrollView 以防放不下
             ScrollView {
-                VStack(alignment: .leading, spacing: 15) {
+                VStack(alignment: .leading, spacing: 18) {
                     ForEach(categories, id: \.self) { category in
                         if category != mostSavedCategory {  // 排除最常儲存的類別
                             HStack {
                                 Text(category)
-                                    .font(.title3)  // 字體大小變大
-                                    .fontWeight(.bold)
+                                    .font(.custom("LexendDeca-Bold", size: 18))
                                     .foregroundColor(.gray)
 
                                 Spacer()
@@ -80,10 +78,10 @@ struct AnalyticsView: View {
                                     .frame(width: percentage * 200, height: 10)  // 防止除以0的问题
 
                                 Text(String(format: "%.0f%%", percentage * 100))
-                                    .font(.subheadline)
+                                    .font(.custom("LexendDeca-Bold", size: 15))
                                     .foregroundColor(.gray)
                             }
-
+                            
                         }
                     }
                 }

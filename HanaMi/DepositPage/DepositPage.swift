@@ -629,8 +629,8 @@ struct DepositPage: View {
                     .zIndex(1)
                 CustomAlert(
                     show: $customAlert,
+                    richText: .constant(NSAttributedString(string: "")), 
                     audioRecorder: audioRecorder,
-                    richText: .constant(NSAttributedString(string: "")),
                     isRecording: $isRecording,
                     isPlaying: $isPlaying,
                     uploadedAudioURL: $uploadedAudioURL

@@ -13,11 +13,11 @@ struct CollectionTreasureCardView: View {
                 .foregroundColor(.gray)
             
             // 這裡可加上圖片或其他內容
-            if let imageURL = URL(string: treasure.imageUrl) {
-                URLImageViewWithPreview(imageURL: imageURL)
-                    .frame(height: 200)
-                    .cornerRadius(10)
-            }
+//            if let imageURL = URL(string: treasure.imageUrl) {
+//                URLImageViewWithPreview(imageURL: imageURL)
+//                    .frame(height: 200)
+//                    .cornerRadius(10)
+//            }
         }
         .padding()
         .background(Color.white)
