@@ -381,15 +381,14 @@ class FirestoreService {
         }
     }
     
-    // 不需要 userID 參數，因為你只需要抓取公開的寶藏
-    func fetchAllTreasuresNear(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
-        let publicTreasuresQuery = db.collection("Treasures")
+    func fetchAllTreasuresNear(minLat: Double, maxLat: Double, maxLng: Double, minLng: Double, currentUserID: String, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
+        let publicTreasuresQuery = db.collectionGroup("Treasures")
             .whereField("isPublic", isEqualTo: true) // 只抓取公開寶藏
             .whereField("latitude", isGreaterThanOrEqualTo: minLat)
             .whereField("latitude", isLessThanOrEqualTo: maxLat)
             .whereField("longitude", isGreaterThanOrEqualTo: minLng)
             .whereField("longitude", isLessThanOrEqualTo: maxLng)
-        
+
         publicTreasuresQuery.getDocuments { snapshot, error in
             if let error = error {
                 completion(.failure(error))
@@ -401,6 +400,12 @@ class FirestoreService {
                           let userID = data["userID"] as? String else {
                         return nil
                     }
+                    
+                    // 手動過濾掉當前用戶的寶藏
+                    if userID == currentUserID {
+                        return nil
+                    }
+
                     let treasureID = document.documentID
                     return TreasureSummary(id: treasureID, latitude: latitude, longitude: longitude, userID: userID)
                 } ?? []
@@ -408,6 +413,7 @@ class FirestoreService {
             }
         }
     }
+
     
     
     // 查询用户自己的宝藏

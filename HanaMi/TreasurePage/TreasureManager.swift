@@ -12,47 +12,31 @@ class TreasureManager: ObservableObject {
     
     // 加載所有公開的寶藏以及當前用戶的所有寶藏
     func fetchAllPublicAndUserTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {
-        self.displayedTreasures.removeAll() // 清空舊的寶藏
-//        let userID = self.userID // 直接使用userID，因為它不是可選的
-        
-        // 創建 DispatchGroup 來管理兩個請求的並行處理
-        let dispatchGroup = DispatchGroup()
-        
-        var publicTreasures: [TreasureSummary] = []
-//        var userTreasures: [TreasureSummary] = []
-        
-        // 先抓取所有公開寶藏
-        dispatchGroup.enter()
-        firestoreService.fetchAllTreasuresNear(minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { result in
-            switch result {
-            case .success(let fetchedPublicTreasures):
-                publicTreasures = fetchedPublicTreasures
-            case .failure(let error):
-                print("Error fetching public treasures: \(error.localizedDescription)")
+            DispatchQueue.main.async {
+                self.displayedTreasures.removeAll() // 確保清空舊的寶藏在主線程上執行
             }
-            dispatchGroup.leave()
-        }
 
-        
-//        // 再抓取當前用戶的所有寶藏
-//        dispatchGroup.enter()
-//        firestoreService.fetchUserTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { result in
-//            switch result {
-//            case .success(let fetchedUserTreasures):
-//                userTreasures = fetchedUserTreasures
-//            case .failure(let error):
-//                print("Error fetching user's treasures: \(error.localizedDescription)")
-//            }
-//            dispatchGroup.leave()
-//        }
-//        
-//        // 當兩個請求都完成後，合併結果
-//        dispatchGroup.notify(queue: .main) {
-//            let allTreasures = publicTreasures + userTreasures
-//            self.displayedTreasures = allTreasures
-//            completion(allTreasures)
-//        }
-    }
+            let dispatchGroup = DispatchGroup()
+            var publicTreasures: [TreasureSummary] = []
+
+            // 先抓取所有公開寶藏
+            dispatchGroup.enter()
+            firestoreService.fetchAllTreasuresNear(minLat: minLat, maxLat: maxLat, maxLng: maxLng, minLng: minLng, currentUserID: userID) { result in
+                switch result {
+                case .success(let fetchedPublicTreasures):
+                    publicTreasures = fetchedPublicTreasures
+                case .failure(let error):
+                    print("Error fetching public treasures: \(error.localizedDescription)")
+                }
+                dispatchGroup.leave()
+            }
+
+            dispatchGroup.notify(queue: .main) {
+                // 確保所有結果合併並回傳後在主線程上更新 displayedTreasures
+                self.displayedTreasures = publicTreasures
+                completion(publicTreasures)
+            }
+        }
 
     
     // 只抓取當前用戶自己的寶藏（公開和非公開）
