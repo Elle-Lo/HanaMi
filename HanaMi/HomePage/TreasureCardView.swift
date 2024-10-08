@@ -90,7 +90,7 @@ struct TreasureCardView: View {
             }
             .cornerRadius(15)
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 15)
         .padding(.vertical, 20)
         .background(Color.white.opacity(0.6))
         .cornerRadius(15)

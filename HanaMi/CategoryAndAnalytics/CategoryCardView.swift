@@ -105,7 +105,7 @@ struct CategoryCardView: View {
                            }
                 .frame(height: 300)
                 .cornerRadius(8)
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: treasure.contents.count > 1 ? .always : .never)) // 這裡動態顯示或隱藏頁面指示器
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: viewModel.treasure.contents.count > 1 ? .always : .never)) // 這裡動態顯示或隱藏頁面指示器
             }
 
             // 音訊內容單獨處理
@@ -124,12 +124,14 @@ struct CategoryCardView: View {
                     Text(textContent)
                         .font(.custom("LexendDeca-Regular", size: 16))
                         .foregroundColor(.black)
+                        .padding(.horizontal, 5)
+                        .lineSpacing(10.0)
                         .padding(.top, mediaContents.isEmpty ? 0 : 10) // 如果沒有媒體，則不留間距
                 }
             }
 
         }
-        .padding(.horizontal, 30)
+        .padding(.horizontal, 15)
         .padding(.vertical, 15)
         .background(Color.white.opacity(0.75))
         .cornerRadius(15)
