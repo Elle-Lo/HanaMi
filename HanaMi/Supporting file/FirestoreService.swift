@@ -587,6 +587,28 @@ class FirestoreService {
             }
         }
     
+    func fetchFavoriteTreasures(userID: String, completion: @escaping (Result<[Treasure], Error>) -> Void) {
+            // 從使用者的 collectionList 中抓取 treasureID
+            db.collection("Users").document(userID).getDocument { document, error in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let document = document, let data = document.data(), let treasureIDs = data["collectionList"] as? [String] {
+                    // 根據 treasureID 抓取 "AllTreasures" 中的寶藏
+                    let treasuresRef = self.db.collection("AllTreasures").whereField(FieldPath.documentID(), in: treasureIDs)
+                    treasuresRef.getDocuments { snapshot, error in
+                        if let error = error {
+                            completion(.failure(error))
+                        } else {
+                            let treasures = snapshot?.documents.compactMap { doc -> Treasure? in
+                                try? doc.data(as: Treasure.self)
+                            } ?? []
+                            completion(.success(treasures))
+                        }
+                    }
+                }
+            }
+        }
+    
     // MARK: - 類別處理
     func loadCategories(userID: String, completion: @escaping ([String]) -> Void) {
         let defaultCategories = ["Creative", "Energetic", "Happy"]  // 設置預設的類別

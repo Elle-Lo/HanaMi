@@ -594,7 +594,7 @@ struct DepositPage: View {
                     }) {
                         Image(systemName: audioRecorder.recordingURL != nil ? "checkmark.seal.fill" : "mic.fill")
                             .font(.system(size: 22))
-                            .foregroundColor(audioRecorder.recordingURL != nil ? .red : .colorBrown)
+                            .foregroundColor(Color.colorBrown)
                             .padding(10)
                     }
                     

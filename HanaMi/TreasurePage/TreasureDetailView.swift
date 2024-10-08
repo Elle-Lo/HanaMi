@@ -156,7 +156,7 @@ struct TreasureDetailView: View {
                             .font(.system(size: 30))
                             .foregroundColor(.colorBrown)
                             .padding()
-                            .background(Color.white.opacity(0.3))
+                            .background(Color.white.opacity(0.6))
                             .cornerRadius(50)
                             .shadow(radius: 10)
                     }

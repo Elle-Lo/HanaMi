@@ -23,7 +23,7 @@
 		AB06AA652CA9788A00E49F5C /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = AB06AA642CA9788A00E49F5C /* FirebaseFirestoreCombine-Community */; };
 		AB06AA672CA9788A00E49F5C /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = AB06AA662CA9788A00E49F5C /* FirebaseStorage */; };
 		AB06AA692CA982BB00E49F5C /* SignUpPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA682CA982BB00E49F5C /* SignUpPage.swift */; };
-		AB06AA6B2CABFBC700E49F5C /* FavoritesPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA6A2CABFBC700E49F5C /* FavoritesPage.swift */; };
+		AB06AA6B2CABFBC700E49F5C /* CollectionsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA6A2CABFBC700E49F5C /* CollectionsPage.swift */; };
 		AB06AA6E2CAD050C00E49F5C /* MediaPicker in Frameworks */ = {isa = PBXBuildFile; productRef = AB06AA6D2CAD050C00E49F5C /* MediaPicker */; };
 		AB06AA722CAD802C00E49F5C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB06AA712CAD802C00E49F5C /* Launch Screen.storyboard */; };
 		AB06AA912CAD942F00E49F5C /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB06AA902CAD942F00E49F5C /* ImagePicker.swift */; };
@@ -39,6 +39,7 @@
 		AB825DA02CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB825D9F2CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf */; };
 		AB825DA22CB3E5B800965502 /* URLImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */; };
 		AB825DA42CB4C74B00965502 /* LexendDeca-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB825DA32CB4C74B00965502 /* LexendDeca-Regular.ttf */; };
+		AB825DA62CB5748C00965502 /* CollectionTreasureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */; };
 		ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */; };
 		ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */; };
 		ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */; };
@@ -94,7 +95,7 @@
 		AB06AA4C2CA9420D00E49F5C /* TreasureListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureListView.swift; sourceTree = "<group>"; };
 		AB06AA4E2CA96ABA00E49F5C /* HanaMi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HanaMi.entitlements; sourceTree = "<group>"; };
 		AB06AA682CA982BB00E49F5C /* SignUpPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpPage.swift; sourceTree = "<group>"; };
-		AB06AA6A2CABFBC700E49F5C /* FavoritesPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesPage.swift; sourceTree = "<group>"; };
+		AB06AA6A2CABFBC700E49F5C /* CollectionsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsPage.swift; sourceTree = "<group>"; };
 		AB06AA712CAD802C00E49F5C /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AB06AA732CAD848D00E49F5C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AB06AA902CAD942F00E49F5C /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -110,6 +111,7 @@
 		AB825D9F2CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-ExtraBold.ttf"; sourceTree = "<group>"; };
 		AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageViewWithPreview.swift; sourceTree = "<group>"; };
 		AB825DA32CB4C74B00965502 /* LexendDeca-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-Regular.ttf"; sourceTree = "<group>"; };
+		AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTreasureCardView.swift; sourceTree = "<group>"; };
 		ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanaMi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaMiApp.swift; sourceTree = "<group>"; };
 		ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -240,7 +242,8 @@
 				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
 				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
 				ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */,
-				AB06AA6A2CABFBC700E49F5C /* FavoritesPage.swift */,
+				AB06AA6A2CABFBC700E49F5C /* CollectionsPage.swift */,
+				AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */,
 				ABB59A072CB307DB00E61CF2 /* ToolView */,
 				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				ABB59A062CB307A800E61CF2 /* HomePage */,
@@ -495,7 +498,7 @@
 				ABAFAB212C9A7EEB007CDB45 /* CustomMapView.swift in Sources */,
 				ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */,
 				AB06AA692CA982BB00E49F5C /* SignUpPage.swift in Sources */,
-				AB06AA6B2CABFBC700E49F5C /* FavoritesPage.swift in Sources */,
+				AB06AA6B2CABFBC700E49F5C /* CollectionsPage.swift in Sources */,
 				AB06AA4B2CA93EF400E49F5C /* AddCategoryForm.swift in Sources */,
 				ABB59A032CB268CC00E61CF2 /* ImageViewWithPreview.swift in Sources */,
 				ABAFAAE22C9585B5007CDB45 /* TreasureMapPage.swift in Sources */,
@@ -503,6 +506,7 @@
 				ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */,
 				ABAFAB042C98907E007CDB45 /* SaveButtonView.swift in Sources */,
 				ABAFAB1F2C9A7D9E007CDB45 /* TreasureManager.swift in Sources */,
+				AB825DA62CB5748C00965502 /* CollectionTreasureCardView.swift in Sources */,
 				ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */,
 				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,

@@ -58,7 +58,7 @@ struct CategoryCardView: View {
                 Image("pin")
                     .resizable()
                     .frame(width: 10, height: 10)
-                Text("\(viewModel.treasure.longitude), \(viewModel.treasure.latitude)")
+                Text("\(viewModel.treasure.locationName)  \(viewModel.treasure.longitude), \(viewModel.treasure.latitude)")
                     .font(.caption)
                     .foregroundColor(.black)
             }

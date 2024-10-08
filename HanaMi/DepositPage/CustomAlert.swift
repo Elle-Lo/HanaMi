@@ -38,19 +38,20 @@ struct CustomAlert: View {
                         Image(systemName: "play.circle.fill")
                             .resizable()
                             .frame(width: 60, height: 60)
-                            .foregroundColor(.green)
+                            .foregroundColor(.colorYellow)
                     }
                     
-                    HStack {
+                    HStack(spacing: 5) {
                         // 保存按鈕
                         Button(action: {
                                show = false // 保存後關閉
                                 
                         }) {
                             Text("保存")
-                                .foregroundColor(.green)
-                                .padding()
-                                .background(Capsule().stroke(Color.green, lineWidth: 2))
+                                .foregroundColor(.colorYellow)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 5)
+                                .background(.colorBrown)
                         }
 
                         // 刪除按鈕
@@ -60,9 +61,10 @@ struct CustomAlert: View {
                             show = false // 刪除後關閉
                         }) {
                             Text("刪除")
-                                .foregroundColor(.red)
-                                .padding()
-                                .background(Capsule().stroke(Color.red, lineWidth: 2))
+                                .foregroundColor(.colorBrown)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 5)
+                                .background(.colorYellow)
                         }
                     }
                 } else {
@@ -74,7 +76,7 @@ struct CustomAlert: View {
                         Image(systemName: "mic.circle.fill")
                             .resizable()
                             .frame(width: 60, height: 60)
-                            .foregroundColor(.blue)
+                            .foregroundColor(.colorBrown)
                     }
                 }
 

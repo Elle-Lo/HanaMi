@@ -486,7 +486,7 @@ struct CharacterButton: View {
 
 struct FavoriteButton: View {
     var body: some View {
-        NavigationLink(destination: FavoritesPage()) {
+        NavigationLink(destination: CollectionsPage()) {
             
             HStack {
                 
