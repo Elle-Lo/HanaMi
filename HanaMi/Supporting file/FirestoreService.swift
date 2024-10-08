@@ -413,8 +413,6 @@ class FirestoreService {
             }
         }
     }
-
-    
     
     // 查询用户自己的宝藏
     func fetchUserTreasuresNear(userID: String, minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {

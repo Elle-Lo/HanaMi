@@ -10,8 +10,14 @@ class TreasureManager: ObservableObject {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
     
+    func clearDisplayedTreasures() {
+            displayedTreasures.removeAll()
+        }
+    
     // 加載所有公開的寶藏以及當前用戶的所有寶藏
     func fetchAllPublicAndUserTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {
+        self.displayedTreasures.removeAll() // 清空舊的寶藏
+        
             DispatchQueue.main.async {
                 self.displayedTreasures.removeAll() // 確保清空舊的寶藏在主線程上執行
             }
@@ -36,6 +42,7 @@ class TreasureManager: ObservableObject {
                 self.displayedTreasures = publicTreasures
                 completion(publicTreasures)
             }
+        print(treasures)
         }
 
     
