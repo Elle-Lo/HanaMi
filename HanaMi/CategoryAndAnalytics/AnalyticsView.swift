@@ -65,24 +65,29 @@ struct AnalyticsView: View {
                     ForEach(categories, id: \.self) { category in
                         if category != mostSavedCategory {  // 排除最常儲存的類別
                             HStack {
+                                // 類別名稱
                                 Text(category)
-                                    .font(.custom("LexendDeca-Bold", size: 18))
-                                    .foregroundColor(.gray)
-
-                                
-
-                                // 确保 totalCount 不为 0
-                                let percentage = totalCount > 0 ? CGFloat(categoryCounts[category, default: 0]) / CGFloat(totalCount) : 0
-                                
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color(hex: "FFECC8"))
-                                    .frame(width: percentage * 200, height: 10)  // 防止除以0的问题
-                                
-                                Spacer()
-                                
-                                Text(String(format: "%.0f%%", percentage * 100))
                                     .font(.custom("LexendDeca-Bold", size: 15))
                                     .foregroundColor(.gray)
+                                    .frame(width: 110, alignment: .leading) // 限制類別名稱寬度，確保統一對齊
+
+                                // 進度條和百分比包在一起
+                                HStack(spacing: 10) {
+                                    // 設定進度條和百分比之間的間距
+                                    // 确保 totalCount 不为 0
+                                    let percentage = totalCount > 0 ? CGFloat(categoryCounts[category, default: 0]) / CGFloat(totalCount) : 0
+                                    
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .fill(Color(hex: "FFECC8"))
+                                        .frame(width: percentage * 200, height: 10)
+                                    
+                                    Spacer()
+                                    
+                                    Text(String(format: "%.0f%%", percentage * 100))
+                                        .font(.custom("LexendDeca-Bold", size: 15))
+                                        .foregroundColor(.gray)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading) // 確保進度條和百分比的對齊一致
                             }
                             
                         }
