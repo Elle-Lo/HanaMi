@@ -133,9 +133,9 @@ struct CategoryCardView: View {
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 15)
-        .background(Color.white.opacity(0.75))
+        .background(Color.white.opacity(0.6))
         .cornerRadius(15)
-        .shadow(radius: 2)
+        .shadow(radius: 1)
         .alert("確認删除嗎？", isPresented: $viewModel.showTreasureDeleteAlert) {
             Button("確認", role: .destructive) {
                 viewModel.deleteTreasure { success in

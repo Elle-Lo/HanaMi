@@ -23,7 +23,7 @@ struct HomePage: View {
             
             VStack {
                 if isLoading {
-                    ProgressView("加載中...")
+                    ProgressView("Loading...")
                 } else {
                     ScrollView {
                         ForEach(treasures) { treasure in

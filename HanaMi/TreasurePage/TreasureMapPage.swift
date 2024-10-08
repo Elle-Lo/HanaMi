@@ -16,13 +16,13 @@ struct TreasureMapPage: View {
     let userID: String
     
     var body: some View {
-        VStack {
+        ZStack {
             // 顯示選中的寶藏名稱
-            if let selectedLocationName = selectedLocationName {
-                Text("選中的寶藏: \(selectedLocationName)")
-                    .font(.headline)
-                    .padding()
-            }
+            //            if let selectedLocationName = selectedLocationName {
+            //                Text("選中的寶藏: \(selectedLocationName)")
+            //                    .font(.headline)
+            //                    .padding()
+            //            }
             
             // CustomMapView 顯示地圖與寶藏標註
             CustomMapView(
@@ -37,27 +37,45 @@ struct TreasureMapPage: View {
                 mode: .viewTreasures,
                 userID: userID
             )
-            .edgesIgnoringSafeArea(.all) // 地圖填滿整個頁面
+            .edgesIgnoringSafeArea(.all)
             
-            // 控制顯示模式的兩個按鈕
-            HStack {
-                Button(action: {
-                    isShowingAllTreasures = true
-                    fetchTreasuresForCurrentBounds() // 全部宝藏
-                }) {
-                    Image(systemName: "globe")
-                        .font(.largeTitle)
-                }
-                .padding()
+            VStack {
+                Spacer()
                 
-                Button(action: {
-                    isShowingAllTreasures = false
-                    fetchTreasuresForCurrentBounds() // 个人宝藏
-                }) {
-                    Image(systemName: "person")
-                        .font(.largeTitle)
+                // 控制顯示模式的兩個按鈕
+                HStack(spacing: 5) { // 縮小按鈕之間的間距
+                    Button(action: {
+                        isShowingAllTreasures = true
+                        fetchTreasuresForCurrentBounds() // 全部宝藏
+                    }) {
+                        Image(systemName: "globe.asia.australia.fill")
+                            .font(.system(size: 18)) // 縮小圖標大小
+                            .foregroundColor(isShowingAllTreasures ? .colorBrown : .colorBrown)
+                            .frame(width: 50, height: 40) // 調整按鈕框的大小
+                            .background(isShowingAllTreasures ? Color.white : Color.clear)
+                            .cornerRadius(20)
+                    }
+                    .padding(.horizontal, 8) // 減少 padding
+
+                    Button(action: {
+                        isShowingAllTreasures = false
+                        fetchTreasuresForCurrentBounds() // 个人宝藏
+                    }) {
+                        Image(systemName: "figure.wave")
+                            .font(.system(size: 22)) // 縮小圖標大小
+                            .foregroundColor(!isShowingAllTreasures ? .colorBrown : .colorBrown)
+                            .frame(width: 50, height: 40) // 調整按鈕框的大小
+                            .background(!isShowingAllTreasures ? Color.white : Color.clear)
+                            .cornerRadius(20)
+                    }
+                    .padding(.horizontal, 8) // 減少 padding
                 }
-                .padding()
+                .padding(.vertical, 3) // 縮小垂直 padding
+                .background(Color(hex: "FCEEDF"))
+                .clipShape(Capsule())
+                .shadow(radius: 5)
+                .padding(.bottom, 40) // 調整區塊的底部距離
+
             }
         }
         .navigationTitle("寶藏地圖")

@@ -89,6 +89,7 @@ struct LocationSelectionView: View {
                     mode: .selectLocation,
                     userID: userID
                 )
+                .edgesIgnoringSafeArea(.all)
                 
             case .search:
                 LocationSearchView(

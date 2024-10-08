@@ -551,6 +551,7 @@ struct DepositPage: View {
                     // 打開相機的 Sheet
                     .sheet(isPresented: $isShowingCameraPicker) {
                         ImagePicker(mediaURL: $cameraMediaURL, mediaType: $mediaType, sourceType: .camera)
+                            .edgesIgnoringSafeArea(.all)
                             .onDisappear {
                                 if let cameraMediaURL = cameraMediaURL, let mediaType = mediaType {
                                     handlePickedMedia(urls: [cameraMediaURL], mediaType: mediaType)
@@ -567,6 +568,7 @@ struct DepositPage: View {
                             print("Error selecting media: \(error)")
                         }
                     }
+                    
                     // 插入連結按鈕
                     Button(action: {
                         showingLinkAlert = true
@@ -592,7 +594,7 @@ struct DepositPage: View {
                             errorMessage = nil
                         }
                     }) {
-                        Image(audioRecorder.recordingURL != nil ? "record" : "mic")
+                        Image(systemName: audioRecorder.recordingURL != nil ? "checkmark.seal.fill" : "mic.fill")
                             .resizable()
                             .frame(width: 30, height: 30)
                             .font(.system(size: 24))

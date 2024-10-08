@@ -90,6 +90,7 @@ struct SettingsPage: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $isProfilePhotoPickerPresented) {
             PhotoPicker(image: $selectedProfileImage)
+                .edgesIgnoringSafeArea(.all)
         }
         .onChange(of: selectedProfileImage) { newImage in
             if let newImage = newImage {
@@ -98,6 +99,7 @@ struct SettingsPage: View {
         }
         .sheet(isPresented: $isBackgroundPhotoPickerPresented) {
             PhotoPicker(image: $selectedBackgroundImage)
+                .edgesIgnoringSafeArea(.all)
         }
         .onChange(of: selectedBackgroundImage) { newImage in
             if let newImage = newImage {

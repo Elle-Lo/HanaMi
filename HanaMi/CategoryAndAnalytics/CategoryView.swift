@@ -12,6 +12,7 @@ struct CategoryView: View {
     @State private var showChangeNameAlert = false
     @State private var editedCategoryName = ""
     @State private var editCategoryValidationMessage: String?
+    @State private var isLoading = true
     private var userID: String {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
@@ -70,6 +71,7 @@ struct CategoryView: View {
                     treasures: $treasures,
                     categories: $categories,
                     selectedCategory: $selectedCategory,
+                    isLoading: isLoading,
                     loadAllTreasures: loadAllTreasures,
                     loadTreasuresDetail: loadTreasuresDetail,
                     onDeleteTreasure: { treasure in
@@ -94,15 +96,26 @@ struct CategoryView: View {
                         Button(action: {
                             showEditOptions = true
                         }) {
-                            Image(systemName: "pencil.circle.fill")
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.blue)
-                                .padding()
+                            ZStack {
+                                // 背景圓形
+                                Circle()
+                                    .fill(Color(hex: "522504")) // 圓形背景顏色
+                                    .frame(width: 55, height: 55) // 設置圓形大小
+
+                                // 鉛筆圖標
+                                Image(systemName: "pencil")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 25, height: 25) // 設置圖標大小
+                                    .foregroundColor(Color(hex: "FFF7EF")) // 鉛筆顏色
+                            }
                         }
+                        .padding()
+                        .offset(x: -10, y: -10) // 控制按鈕向左和向上的偏移
                     }
                 }
             }
+
         }
         
         // 彈出操作選項
@@ -215,6 +228,7 @@ struct CategoryView: View {
     private func loadTreasuresDetail(for category: String) {
         FirestoreService().fetchTreasuresForCategory(userID: userID, category: category) { result in
             DispatchQueue.main.async {
+                isLoading = false
                 switch result {
                 case .success(let treasures):
                     self.treasures = treasures
@@ -229,6 +243,7 @@ struct CategoryView: View {
     private func loadAllTreasures() {
         FirestoreService().fetchAllTreasures(userID: userID) { result in
             DispatchQueue.main.async {
+                isLoading = false 
                 switch result {
                 case .success(let treasures):
                     self.treasures = treasures
