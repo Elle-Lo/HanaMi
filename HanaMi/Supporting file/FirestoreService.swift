@@ -237,28 +237,60 @@ class FirestoreService {
         }
     }
     
-    // 保存新宝藏及其内容 並將寶藏id存取到treasureList中
     func saveTreasure(userID: String, coordinate: CLLocationCoordinate2D, locationName: String, category: String, isPublic: Bool, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
+        
+        // 生成相同的 treasureID
         let treasureID = db.collection("Users").document(userID).collection("Treasures").document().documentID
+
         let treasureData: [String: Any] = [
             "latitude": coordinate.latitude,
             "longitude": coordinate.longitude,
             "locationName": locationName,
             "category": category,
             "isPublic": isPublic,
-            "createdTime": Timestamp()
+            "createdTime": Timestamp(),
+            "userID": userID
         ]
+
+        // 用相同的 treasureID 保存到 "Users" 集合
+        let userTreasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
         
-        let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+        // 用相同的 treasureID 保存到 "AllTreasures" 集合
+        let allTreasureRef = db.collection("AllTreasures").document(treasureID)
+
+        // 開始保存數據到 "Users" 和 "AllTreasures" 集合
+        let dispatchGroup = DispatchGroup()
         
-        treasureRef.setData(treasureData) { [weak self] error in
-            guard let self = self else { return }
+        var errorOccurred: Error?
+
+        // 保存到 "Users" 集合
+        dispatchGroup.enter()
+        userTreasureRef.setData(treasureData) { error in
             if let error = error {
+                errorOccurred = error
+            }
+            dispatchGroup.leave()
+        }
+
+        // 保存到 "AllTreasures" 集合
+        dispatchGroup.enter()
+        allTreasureRef.setData(treasureData) { error in
+            if let error = error {
+                errorOccurred = error
+            }
+            dispatchGroup.leave()
+        }
+
+        // 在兩個保存操作完成後，處理結果
+        dispatchGroup.notify(queue: .main) {
+            if let error = errorOccurred {
                 completion(.failure(error))
             } else {
+                // 保存 treasure 內容，兩個集合內容保持一致
                 self.saveTreasureContents(treasureID: treasureID, userID: userID, contents: contents) { result in
                     switch result {
                     case .success():
+                        // 添加 treasureID 到用戶數據中
                         self.addTreasureIDToUser(userID: userID, treasureID: treasureID, completion: completion)
                     case .failure(let error):
                         completion(.failure(error))
@@ -267,33 +299,119 @@ class FirestoreService {
             }
         }
     }
+
+    // 保存新宝藏及其内容 並將寶藏id存取到treasureList中
+//    func saveTreasure(userID: String, coordinate: CLLocationCoordinate2D, locationName: String, category: String, isPublic: Bool, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
+//        let treasureID = db.collection("Users").document(userID).collection("Treasures").document().documentID
+//        let treasureData: [String: Any] = [
+//            "latitude": coordinate.latitude,
+//            "longitude": coordinate.longitude,
+//            "locationName": locationName,
+//            "category": category,
+//            "isPublic": isPublic,
+//            "createdTime": Timestamp()
+//        ]
+//        
+//        let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+//        
+//        treasureRef.setData(treasureData) { [weak self] error in
+//            guard let self = self else { return }
+//            if let error = error {
+//                completion(.failure(error))
+//            } else {
+//                self.saveTreasureContents(treasureID: treasureID, userID: userID, contents: contents) { result in
+//                    switch result {
+//                    case .success():
+//                        self.addTreasureIDToUser(userID: userID, treasureID: treasureID, completion: completion)
+//                    case .failure(let error):
+//                        completion(.failure(error))
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     // 保存宝藏詳細内容
     func saveTreasureContents(treasureID: String, userID: String, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
-        let contentCollectionRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID).collection("Contents")
-        let dispatchGroup = DispatchGroup()
+        let userContentCollectionRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID).collection("Contents")
+        let allContentCollectionRef = db.collection("AllTreasures").document(treasureID).collection("Contents")
         
+        let dispatchGroup = DispatchGroup()
+        var errorOccurred: Error?
+
         for content in contents {
+            // 使用 TreasureContent 內的 contentID 來同步保存到兩個集合
+            let contentID = content.id
+            
+            // 將內容存到 "Users" 集合
             dispatchGroup.enter()
-            let contentRef = contentCollectionRef.document(content.id)
+            let userContentRef = userContentCollectionRef.document(contentID) // 使用 contentID 作為 documentID
             
             do {
-                try contentRef.setData(from: content) { error in
+                try userContentRef.setData(from: content) { error in
                     if let error = error {
-                        completion(.failure(error))
+                        errorOccurred = error
                     }
                     dispatchGroup.leave()
                 }
             } catch let error {
-                completion(.failure(error))
+                errorOccurred = error
+                dispatchGroup.leave()
+            }
+            
+            // 將內容存到 "AllTreasures" 集合
+            dispatchGroup.enter()
+            let allContentRef = allContentCollectionRef.document(contentID) // 使用 contentID 作為 documentID
+            
+            do {
+                try allContentRef.setData(from: content) { error in
+                    if let error = error {
+                        errorOccurred = error
+                    }
+                    dispatchGroup.leave()
+                }
+            } catch let error {
+                errorOccurred = error
                 dispatchGroup.leave()
             }
         }
-        
+
+        // 當所有保存操作都完成後，處理結果
         dispatchGroup.notify(queue: .main) {
-            completion(.success(()))
+            if let error = errorOccurred {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
         }
     }
+
+    
+//    func saveTreasureContents(treasureID: String, userID: String, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
+//        let contentCollectionRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID).collection("Contents")
+//        let dispatchGroup = DispatchGroup()
+//        
+//        for content in contents {
+//            dispatchGroup.enter()
+//            let contentRef = contentCollectionRef.document(content.id)
+//            
+//            do {
+//                try contentRef.setData(from: content) { error in
+//                    if let error = error {
+//                        completion(.failure(error))
+//                    }
+//                    dispatchGroup.leave()
+//                }
+//            } catch let error {
+//                completion(.failure(error))
+//                dispatchGroup.leave()
+//            }
+//        }
+//        
+//        dispatchGroup.notify(queue: .main) {
+//            completion(.success(()))
+//        }
+//    }
     
     // 将宝藏ID加入用户的treasure list
     func addTreasureIDToUser(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -382,7 +500,7 @@ class FirestoreService {
     }
     
     func fetchAllTreasuresNear(minLat: Double, maxLat: Double, maxLng: Double, minLng: Double, currentUserID: String, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
-        let publicTreasuresQuery = db.collectionGroup("Treasures")
+        let publicTreasuresQuery = db.collection("AllTreasures")
             .whereField("isPublic", isEqualTo: true) // 只抓取公開寶藏
             .whereField("latitude", isGreaterThanOrEqualTo: minLat)
             .whereField("latitude", isLessThanOrEqualTo: maxLat)
@@ -400,7 +518,7 @@ class FirestoreService {
                           let userID = data["userID"] as? String else {
                         return nil
                     }
-                    
+
                     // 手動過濾掉當前用戶的寶藏
                     if userID == currentUserID {
                         return nil
@@ -580,6 +698,7 @@ class FirestoreService {
     
     
     func deleteTreasureAndRemoveFromList(userID: String, treasureID: String, completion: @escaping (Bool) -> Void) {
+        let allContentCollectionRef = db.collection("AllTreasures").document(treasureID)
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
         
         // 刪除寶藏文檔
@@ -603,23 +722,46 @@ class FirestoreService {
                 }
             }
         }
-    }
-    
-    
-    func deleteTreasure(userID: String, treasureID: String, completion: @escaping (Bool) -> Void) {
-        let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
-        treasureRef.delete { error in
+        
+        allContentCollectionRef.delete { error in
             if let error = error {
                 print("刪除寶藏錯誤: \(error.localizedDescription)")
                 completion(false)
-            } else {
-                completion(true)
             }
         }
     }
+    
+//    func deleteTreasure(userID: String, treasureID: String, completion: @escaping (Bool) -> Void) {
+//        
+//        let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+//        treasureRef.delete { error in
+//            if let error = error {
+//                print("刪除寶藏錯誤: \(error.localizedDescription)")
+//                completion(false)
+//            } else {
+//                completion(true)
+//            }
+//        }
+//    }
+    
     func updateTreasureFields(userID: String, treasureID: String, category: String, isPublic: Bool, completion: @escaping (Bool) -> Void) {
+        let allContentCollectionRef = db.collection("AllTreasures").document(treasureID)
         let documentRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
+        
         documentRef.updateData([
+            "category": category,
+            "isPublic": isPublic
+        ]) { error in
+            if let error = error {
+                print("Error updating treasure: \(error)")
+                completion(false)
+            } else {
+                print("Treasure successfully updated")
+                completion(true)
+            }
+        }
+        
+        allContentCollectionRef.updateData([
             "category": category,
             "isPublic": isPublic
         ]) { error in
@@ -635,29 +777,99 @@ class FirestoreService {
     
     
     func deleteSingleTreasure(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let allContentCollectionRef = db.collection("AllTreasures").document(treasureID)
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
         
-        // 首先刪除寶藏文檔
-        treasureRef.delete { error in
+        // 首先刪除寶藏的 Contents 子集合
+        let contentsCollection = treasureRef.collection("Contents")
+        
+        // 1. 刪除 Contents 子集合中的所有文件
+        contentsCollection.getDocuments { snapshot, error in
             if let error = error {
                 completion(.failure(error))
             } else {
-                // 刪除成功後，從 treasureList 中移除該 treasureID
-                let userDocRef = self.db.collection("Users").document(userID)
-                userDocRef.updateData([
-                    "treasureList": FieldValue.arrayRemove([treasureID])
-                ]) { error in
-                    if let error = error {
-                        print("從 treasureList 移除 treasureID 失敗: \(error.localizedDescription)")
-                        completion(.failure(error))
+                let batch = self.db.batch()
+                
+                snapshot?.documents.forEach { document in
+                    let contentRef = contentsCollection.document(document.documentID)
+                    batch.deleteDocument(contentRef)
+                }
+                
+                // 提交批次刪除
+                batch.commit { batchError in
+                    if let batchError = batchError {
+                        completion(.failure(batchError))
                     } else {
-                        print("成功刪除寶藏並從 treasureList 移除")
-                        completion(.success(()))
+                        // 2. 在成功刪除子集合後，刪除主文件
+                        treasureRef.delete { error in
+                            if let error = error {
+                                completion(.failure(error))
+                            } else {
+                                // 刪除成功後，從 treasureList 中移除該 treasureID
+                                let userDocRef = self.db.collection("Users").document(userID)
+                                userDocRef.updateData([
+                                    "treasureList": FieldValue.arrayRemove([treasureID])
+                                ]) { error in
+                                    if let error = error {
+                                        print("從 treasureList 移除 treasureID 失敗: \(error.localizedDescription)")
+                                        completion(.failure(error))
+                                    } else {
+                                        print("成功刪除寶藏並從 treasureList 移除")
+                                        completion(.success(()))
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        let allContentsCollection = allContentCollectionRef.collection("Contents")
+        
+        // 1. 刪除 Contents 子集合中的所有文件
+        allContentsCollection.getDocuments { snapshot, error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                let batch = self.db.batch()
+                
+                snapshot?.documents.forEach { document in
+                    let contentRef = allContentsCollection.document(document.documentID)
+                    batch.deleteDocument(contentRef)
+                }
+                
+                // 提交批次刪除
+                batch.commit { batchError in
+                    if let batchError = batchError {
+                        completion(.failure(batchError))
+                    } else {
+                        // 2. 在成功刪除子集合後，刪除主文件
+                        treasureRef.delete { error in
+                            if let error = error {
+                                completion(.failure(error))
+                            } else {
+                                // 刪除成功後，從 treasureList 中移除該 treasureID
+                                let userDocRef = self.db.collection("Users").document(userID)
+                                userDocRef.updateData([
+                                    "treasureList": FieldValue.arrayRemove([treasureID])
+                                ]) { error in
+                                    if let error = error {
+                                        print("從 treasureList 移除 treasureID 失敗: \(error.localizedDescription)")
+                                        completion(.failure(error))
+                                    } else {
+                                        print("成功刪除寶藏並從 treasureList 移除")
+                                        completion(.success(()))
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
+
     
     func updateCategoryNameAndTreasures(userID: String, oldName: String, newName: String, completion: @escaping (Bool) -> Void) {
         // 先更新 Firestore 中的類別名稱
@@ -677,13 +889,23 @@ class FirestoreService {
                             }
                             
                             dispatchGroup.enter()
+                            let allContentCollectionRef = self.db.collection("AllTreasures").document(treasureID)
+                            
                             let treasureRef = self.db.collection("Users").document(userID).collection("Treasures").document(treasureID)
                             treasureRef.updateData(["category": newName]) { error in
                                 if let error = error {
                                     print("更新寶藏類別名稱失敗: \(error.localizedDescription)")
                                 }
-                                dispatchGroup.leave()
+                                
+                                allContentCollectionRef.updateData(["category": newName]) { error in
+                                    if let error = error {
+                                        print("更新寶藏類別名稱失敗: \(error.localizedDescription)")
+                                    }
+                                    dispatchGroup.leave()
+                                }
                             }
+                            
+                            
                         }
                         
                         dispatchGroup.notify(queue: .main) {
