@@ -383,7 +383,7 @@ class FirestoreService {
     
     // 不需要 userID 參數，因為你只需要抓取公開的寶藏
     func fetchAllTreasuresNear(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
-        let publicTreasuresQuery = db.collectionGroup("Treasures")
+        let publicTreasuresQuery = db.collection("Treasures")
             .whereField("isPublic", isEqualTo: true) // 只抓取公開寶藏
             .whereField("latitude", isGreaterThanOrEqualTo: minLat)
             .whereField("latitude", isLessThanOrEqualTo: maxLat)

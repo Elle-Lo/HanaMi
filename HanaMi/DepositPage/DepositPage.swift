@@ -531,7 +531,7 @@ struct DepositPage: View {
                         errorMessage = nil
                     }) {
                         Image("camera")
-                            .resizable()
+//                            .resizable()
                             .frame(width: 30, height: 30)
                             .font(.system(size: 24))
                             .foregroundColor(.colorBrown)
@@ -575,9 +575,7 @@ struct DepositPage: View {
                         errorMessage = nil
                     }) {
                         Image(systemName: "link")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .font(.system(size: 24))
+                            .font(.system(size: 22))
                             .foregroundColor(.colorBrown)
                             .padding(10)
                     }
@@ -595,9 +593,7 @@ struct DepositPage: View {
                         }
                     }) {
                         Image(systemName: audioRecorder.recordingURL != nil ? "checkmark.seal.fill" : "mic.fill")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .font(.system(size: 24))
+                            .font(.system(size: 22))
                             .foregroundColor(audioRecorder.recordingURL != nil ? .red : .colorBrown)
                             .padding(10)
                     }
