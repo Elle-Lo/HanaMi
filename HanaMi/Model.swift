@@ -6,14 +6,7 @@ enum ContentType: String, Codable {
     case image
     case video
     case link
-    case map
     case audio
-}
-
-enum LinkType {
-    case youtube
-    case googleMaps
-    case regular
 }
 
 struct Users: Identifiable, Codable {
@@ -25,6 +18,7 @@ struct Users: Identifiable, Codable {
     var characterName: String
     var image: String
     var backgroundImage: String
+    var collectionTreasureList: [String]
 }
 
 struct Treasure: Identifiable, Codable {
@@ -36,6 +30,7 @@ struct Treasure: Identifiable, Codable {
     var longitude: Double
     var locationName: String
     var contents: [TreasureContent]
+    var userID: String
 }
 
 struct TreasureContent: Identifiable, Codable {
@@ -47,16 +42,15 @@ struct TreasureContent: Identifiable, Codable {
     var timestamp: Date = Date()
 }
 
-struct LinkMetadata {
+struct LinkMetadata: Codable {
     var title: String
     var description: String
     var imageUrl: String?
 }
 
-struct TreasureSummary {
+struct TreasureSummary: Codable {
     let id: String
     let latitude: Double
     let longitude: Double
-    let userID: String // 添加 userID
+    let userID: String
 }
-

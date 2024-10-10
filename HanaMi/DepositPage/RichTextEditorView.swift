@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import AVKit
 import AVFoundation
 import FirebaseStorage
 import LinkPresentation
@@ -8,6 +9,7 @@ struct RichTextEditorView: UIViewRepresentable {
     @Binding var text: NSAttributedString
     @State private var lastInsertedAudioURL: URL? // 保存最新插入的音頻 URL
     @State private var lastInsertedLinkURL: URL?
+    var onVideoTapped: (URL) -> Void // 回调函数，点击视频时触发
 
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
@@ -51,6 +53,7 @@ struct RichTextEditorView: UIViewRepresentable {
         // 打開連結的點擊行為
         func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
             UIApplication.shared.open(URL)
+            parent.onVideoTapped(URL)
             return false // 阻止 UITextView 的默認行為
         }
 
@@ -87,6 +90,39 @@ struct RichTextEditorView: UIViewRepresentable {
         text = mutableRichText
     }
     
+    func insertVideoPreview(from url: URL) {
+           let asset = AVAsset(url: url)
+           let assetImageGenerator = AVAssetImageGenerator(asset: asset)
+           assetImageGenerator.appliesPreferredTrackTransform = true
+
+           var time = asset.duration
+           time.value = min(time.value, 2)  // 獲取影片的第二秒作為縮圖
+
+           if let cgImage = try? assetImageGenerator.copyCGImage(at: time, actualTime: nil) {
+               let thumbnail = UIImage(cgImage: cgImage)
+               
+               // 設定縮圖大小
+               let maxWidth: CGFloat = 200
+               let aspectRatio = thumbnail.size.width / thumbnail.size.height
+               let targetHeight = maxWidth / aspectRatio
+
+               let attachment = NSTextAttachment()
+               attachment.image = thumbnail
+               attachment.bounds = CGRect(x: 0, y: 0, width: maxWidth, height: targetHeight)
+
+               // 創建包含影片縮圖的富文本
+               let attributedString = NSMutableAttributedString(attachment: attachment)
+               
+               // 添加影片的 URL，當點擊時使用
+               attributedString.addAttribute(.link, value: url, range: NSRange(location: 0, length: attributedString.length))
+               
+               // 將影片縮圖插入到富文本編輯器
+               let mutableRichText = NSMutableAttributedString(attributedString: text)
+               mutableRichText.append(attributedString)
+               text = mutableRichText
+           }
+       }
+
     func insertLinkPreview(url: URL) {
         let provider = LPMetadataProvider()
         provider.startFetchingMetadata(for: url) { metadata, error in

@@ -12,17 +12,22 @@ struct CategoryView: View {
     @State private var showChangeNameAlert = false
     @State private var editedCategoryName = ""
     @State private var editCategoryValidationMessage: String?
+    @State private var isLoading = true
     private var userID: String {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
     
     var body: some View {
         ZStack {
+            
+            Color(.colorYellow)  // 這裡可以替換成任何你想要的顏色或圖片
+                .edgesIgnoringSafeArea(.all)  // 擴展到整個屏幕
+            
             VStack(alignment: .leading) {
                 Text("Category")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding([.top, .leading])
+                    .foregroundColor(.colorBrown)
+                    .font(.custom("LexendDeca-Bold", size: 30))
+                    .padding(.leading, 20)
                 
                 // 類別選擇按鈕
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -41,10 +46,9 @@ struct CategoryView: View {
                         }
                     )
                 }
+                .background(Color.clear)
+                .padding(.bottom, 10)
                 
-                Spacer().frame(height: 20)
-                
-                // 顯示添加類別的對話框
                     .sheet(isPresented: $isAddingCategory) {
                         AddCategoryForm(
                             newCategoryName: $newCategoryName,
@@ -58,6 +62,8 @@ struct CategoryView: View {
                                 newCategoryValidationMessage = nil
                             }
                         )
+                        .presentationDetents([.fraction(0.2)])  // 讓視窗只佔螢幕高度的30%
+                        .presentationDragIndicator(.hidden)     // 隱藏拖動指示器
                     }
                 
                 // 顯示寶藏列表
@@ -65,6 +71,7 @@ struct CategoryView: View {
                     treasures: $treasures,
                     categories: $categories,
                     selectedCategory: $selectedCategory,
+                    isLoading: isLoading,
                     loadAllTreasures: loadAllTreasures,
                     loadTreasuresDetail: loadTreasuresDetail,
                     onDeleteTreasure: { treasure in
@@ -89,15 +96,26 @@ struct CategoryView: View {
                         Button(action: {
                             showEditOptions = true
                         }) {
-                            Image(systemName: "pencil.circle.fill")
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .foregroundColor(.blue)
-                                .padding()
+                            ZStack {
+                                // 背景圓形
+                                Circle()
+                                    .fill(Color(hex: "522504")) // 圓形背景顏色
+                                    .frame(width: 55, height: 55) // 設置圓形大小
+
+                                // 鉛筆圖標
+                                Image(systemName: "pencil")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 25, height: 25) // 設置圖標大小
+                                    .foregroundColor(Color(hex: "FFF7EF")) // 鉛筆顏色
+                            }
                         }
+                        .padding()
+                        .offset(x: -10, y: -10) // 控制按鈕向左和向上的偏移
                     }
                 }
             }
+
         }
         
         // 彈出操作選項
@@ -210,6 +228,7 @@ struct CategoryView: View {
     private func loadTreasuresDetail(for category: String) {
         FirestoreService().fetchTreasuresForCategory(userID: userID, category: category) { result in
             DispatchQueue.main.async {
+                isLoading = false
                 switch result {
                 case .success(let treasures):
                     self.treasures = treasures
@@ -224,6 +243,7 @@ struct CategoryView: View {
     private func loadAllTreasures() {
         FirestoreService().fetchAllTreasures(userID: userID) { result in
             DispatchQueue.main.async {
+                isLoading = false 
                 switch result {
                 case .success(let treasures):
                     self.treasures = treasures
