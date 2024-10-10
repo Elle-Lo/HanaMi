@@ -1,4 +1,5 @@
 import SwiftUI
+import Firebase
 import FirebaseCore
 import IQKeyboardManagerSwift
 
@@ -16,7 +17,8 @@ struct HanaMiApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
-            IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.keyboardDistanceFromTextField = 0 // 关闭默认的距离调整
         }
     
     var body: some Scene {

@@ -1,18 +1,25 @@
 import SwiftUI
 
 struct MainTabView: View {
-    private var userID: String = "g61HUemIJIRIC1wvvIqa"
-    @State private var selectedTab: Int = 0 // 用於追蹤當前選中的 Tab 頁面
+    @State private var selectedTab: Int = 0
     @State private var showCategory = true
-    
-    init() {
-        // 修改选中的 tab 颜色
-        UITabBar.appearance().barTintColor = UIColor.white.withAlphaComponent(0.7) // 半透明白色背景
-        UITabBar.appearance().unselectedItemTintColor = UIColor.lightGray
+    private var userID: String {
+        return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
     
+    init() {
+           // 修改 tab bar 的背景色為透明
+           let appearance = UITabBarAppearance()
+           appearance.configureWithTransparentBackground()
+           appearance.backgroundEffect = UIBlurEffect(style: .light) // 添加模糊效果
+           appearance.backgroundColor = UIColor.clear // 設置為完全透明
+           UITabBar.appearance().standardAppearance = appearance
+           UITabBar.appearance().scrollEdgeAppearance = appearance
+           UITabBar.appearance().unselectedItemTintColor = UIColor.yellow
+       }
+    
     var body: some View {
-        NavigationView {
+//        NavigationView {
             TabView(selection: $selectedTab) {
                 HomePage()
                     .tabItem {
@@ -45,9 +52,9 @@ struct MainTabView: View {
                     .tag(4)
             }
             
-            .accentColor(.black) // 选中的 tab 项目变为黑色
+            .accentColor(.colorBrown) // 选中的 tab 项目变为黑色
             .background(
-                Color.white.opacity(0.7) // 添加半透明的白色背景
+                Color.white.opacity(0.3) // 添加半透明的白色背景
                     .edgesIgnoringSafeArea(.all)
             )
             .navigationBarTitleDisplayMode(.inline)
@@ -57,7 +64,7 @@ struct MainTabView: View {
                 }
                 settingsButton // 全局設定按鈕
             })
-        }
+//        }
     }
 
     // 切換顯示 Category 或 Analytics 的按鈕

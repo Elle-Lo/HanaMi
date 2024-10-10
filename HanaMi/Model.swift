@@ -6,17 +6,19 @@ enum ContentType: String, Codable {
     case image
     case video
     case link
-    case map
     case audio
 }
 
 struct Users: Identifiable, Codable {
-    @DocumentID var id: String? 
+    @DocumentID var id: String? // 用戶的 Firestore document ID
     var name: String
     var email: String
-    var password: String
     var treasureList: [String]
     var categories: [String]
+    var characterName: String
+    var image: String
+    var backgroundImage: String
+    var collectionTreasureList: [String]
 }
 
 struct Treasure: Identifiable, Codable {
@@ -28,6 +30,7 @@ struct Treasure: Identifiable, Codable {
     var longitude: Double
     var locationName: String
     var contents: [TreasureContent]
+    var userID: String
 }
 
 struct TreasureContent: Identifiable, Codable {
@@ -39,14 +42,15 @@ struct TreasureContent: Identifiable, Codable {
     var timestamp: Date = Date()
 }
 
-struct LinkMetadata {
+struct LinkMetadata: Codable {
     var title: String
     var description: String
     var imageUrl: String?
 }
 
-struct TreasureSummary {
+struct TreasureSummary: Codable {
     let id: String
     let latitude: Double
     let longitude: Double
+    let userID: String
 }

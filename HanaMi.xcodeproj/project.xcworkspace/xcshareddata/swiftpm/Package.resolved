@@ -1,5 +1,5 @@
 {
-  "originHash" : "96f4e7b9db3b149ca3f922adb4226868d06dba914d8d81b6527f43f5b1f6c75a",
+  "originHash" : "4f9066e0fd92660dcda59a1207822ed623f56c2ba8315b0df6a2489960a7e5de",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -143,6 +143,15 @@
       "state" : {
         "revision" : "3c2c7e1e72b8abd96eafbae80323c5c1e5317437",
         "version" : "2.7.5"
+      }
+    },
+    {
+      "identity" : "swiftui-mediapicker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/UWAppDev/SwiftUI-MediaPicker.git",
+      "state" : {
+        "revision" : "96f18b1350873dec0a76355c7060cd0a06100901",
+        "version" : "0.2.0"
       }
     }
   ],

@@ -6,10 +6,10 @@ struct CategorySelectionView: View {
     @Binding var categories: [String]
     @State private var showAddCategorySheet: Bool = false
     @State private var newCategory: String = ""
+    @State private var validationMessage: String? = nil
     let firestoreService = FirestoreService()
     let userID: String
-    let defaultCategories = ["Creative", "Energetic", "Happy"]
-
+    
     var body: some View {
         HStack(spacing: 10) {
             Menu {
@@ -20,7 +20,7 @@ struct CategorySelectionView: View {
                         Text(category)
                     }
                 }
-
+                
                 Button(action: {
                     showAddCategorySheet = true
                 }) {
@@ -31,20 +31,18 @@ struct CategorySelectionView: View {
                 }
             } label: {
                 Text(selectedCategory)
-                    .font(.system(size: 13))
+                    .font(.system(size: 15))
                     .fontWeight(.bold)
-                    .padding(.vertical, 13)
-                    .padding(.horizontal, 20)
-                    .foregroundColor(Color(hex: "#FFF7EF"))
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 18)
+                    .foregroundColor(Color.colorYellow)
                     .background(Color(hex: "#CDCDCD"))
-                    .cornerRadius(25)
+                    .cornerRadius(10)
             }
         }
-        .padding(.horizontal)
         .onAppear {
-            firestoreService.loadCategories(userID: userID, defaultCategories: defaultCategories) { loadedCategories in
+            firestoreService.loadCategories(userID: userID) { loadedCategories in
                 categories = loadedCategories
-                // 不再修改 selectedCategory，以避免覆盖父视图的值
             }
         }
         .sheet(isPresented: $showAddCategorySheet) {
@@ -52,40 +50,62 @@ struct CategorySelectionView: View {
                 Text("新增類別")
                     .font(.headline)
                     .padding(.top)
-
+                
                 TextField("請輸入新的類別名稱", text: $newCategory)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
-
+                    .onChange(of: newCategory) { _ in
+                        validateCategory()
+                    }
+                
+                if let message = validationMessage {
+                    Text(message)
+                        .foregroundColor(.red)
+                        .padding(.horizontal)
+                }
+                
                 HStack {
                     Button("取消") {
                         showAddCategorySheet = false
                         newCategory = ""
+                        validationMessage = nil
                     }
                     .foregroundColor(.red)
-
+                    
                     Spacer()
-
+                    
                     Button("完成") {
-                        if !newCategory.isEmpty {
-                            firestoreService.addCategory(userID: userID, category: newCategory) { success in
-                                if success {
-                                    selectedCategory = newCategory
-                                    categories.append(newCategory)
-                                    showAddCategorySheet = false
-                                    newCategory = ""
-                                }
+                        let trimmedCategory = newCategory.trimmingCharacters(in: .whitespaces)
+                        firestoreService.addCategory(userID: userID, category: trimmedCategory) { success in
+                            if success {
+                                selectedCategory = trimmedCategory
+                                categories.append(trimmedCategory)
+                                showAddCategorySheet = false
+                                newCategory = ""
+                                validationMessage = nil
                             }
                         }
                     }
                     .foregroundColor(.blue)
+                    .disabled(validationMessage != nil)
                 }
                 .padding()
-
+                
                 Spacer()
             }
             .frame(height: 200)
             .presentationDetents([.fraction(0.25)])
+        }
+    }
+    
+    private func validateCategory() {
+        let trimmedCategory = newCategory.trimmingCharacters(in: .whitespaces)
+        if trimmedCategory.isEmpty {
+            validationMessage = "類別名稱不能為空或全為空格"
+        } else if categories.contains(trimmedCategory) {
+            validationMessage = "類別已存在"
+        } else {
+            validationMessage = nil
         }
     }
 }
