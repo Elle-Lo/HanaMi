@@ -8,6 +8,7 @@ struct LogInPage: View {
     @State private var isPasswordVisible = false // 控制密碼是否可見
     @AppStorage("log_Status") private var logStatus: Bool = false // 使用 AppStorage 來追蹤登入狀態
     @State private var errorMessage: String = "" // 顯示錯誤訊息的狀態變數
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         VStack {
@@ -123,6 +124,17 @@ struct LogInPage: View {
             
         }
         .padding(.top, 50)
+        .navigationBarBackButtonHidden(true)  // 隱藏系統默認的返回按鈕
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()  // 返回到上一頁
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.colorBrown)
+                }
+            }
+        }
     }
     
     // Log In function with error handling

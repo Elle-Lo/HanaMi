@@ -20,7 +20,6 @@ struct AnalyticsView: View {
             Text("Analytics")
                 .foregroundColor(.colorBrown)
                 .font(.custom("LexendDeca-Bold", size: 30))
-                .padding(.top, 10)
 
             // 副標題
             Text("最常儲存的類別")
@@ -94,7 +93,7 @@ struct AnalyticsView: View {
                     }
                 }
             }
-            .padding(.horizontal) 
+            .padding(.horizontal, 10)
             .scrollIndicators(.hidden)
 
             Spacer()

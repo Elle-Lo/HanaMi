@@ -130,20 +130,18 @@ struct TreasureDetailView: View {
                         
                         // 文字內容
                         if let textContent = treasure.contents.first(where: { $0.type == .text })?.content {
-                            ScrollView {
                                 Text(textContent)
                                     .font(.custom("LexendDeca-Regular", size: 16))
                                     .foregroundColor(.black)
                                     .padding(.horizontal, 5)
                                     .lineSpacing(10.0)
                                     .padding(.top, mediaContents.isEmpty ? 0 : 10) // 如果沒有媒體，則不留間距
-                            }
+
                         }
-                        
-                        Spacer()
                     }
                 }
-                .padding(.vertical, 50)
+                .padding(.top, 40)
+                .padding(.bottom, 110)
                 .padding(.horizontal, 20)
             }
                 // 收藏按鈕，位於頁面底部中間

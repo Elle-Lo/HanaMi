@@ -31,6 +31,7 @@ struct SettingsPage: View {
     @State private var errorMessage: String = ""
     
     @FocusState private var isNameFocused: Bool
+    @Environment(\.presentationMode) var presentationMode
 
     // MARK: - Services and References
     
@@ -88,6 +89,17 @@ struct SettingsPage: View {
         }
         .navigationTitle("設定")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)  // 隱藏系統默認的返回按鈕
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()  // 返回到上一頁
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.colorBrown)
+                }
+            }
+        }
         .sheet(isPresented: $isProfilePhotoPickerPresented) {
             PhotoPicker(image: $selectedProfileImage)
                 .edgesIgnoringSafeArea(.all)

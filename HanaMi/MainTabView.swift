@@ -15,11 +15,10 @@ struct MainTabView: View {
            appearance.backgroundColor = UIColor.clear // 設置為完全透明
            UITabBar.appearance().standardAppearance = appearance
            UITabBar.appearance().scrollEdgeAppearance = appearance
-           UITabBar.appearance().unselectedItemTintColor = UIColor.yellow
+           UITabBar.appearance().unselectedItemTintColor = UIColor.gray
        }
     
     var body: some View {
-//        NavigationView {
             TabView(selection: $selectedTab) {
                 HomePage()
                     .tabItem {
@@ -64,7 +63,6 @@ struct MainTabView: View {
                 }
                 settingsButton // 全局設定按鈕
             })
-//        }
     }
 
     // 切換顯示 Category 或 Analytics 的按鈕
@@ -103,6 +101,15 @@ struct MainTabView: View {
                 )
         }
     }
+    
+    var backButton: some View {
+            Button(action: {
+                // 添加自定義返回邏輯，或使用默認返回
+            }) {
+                Image(systemName: "arrow.left")
+                    .foregroundColor(.colorBrown)
+            }
+        }
 }
 
 #Preview {

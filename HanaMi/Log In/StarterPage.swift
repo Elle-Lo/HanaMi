@@ -17,7 +17,7 @@ struct StarterPage: View {
         } else {
             VStack(spacing: 10) { // 設置較小的間距以控制元素之間的距離
                 // 調整 Welcome 和 Capybara 的上方 padding，使其往上移動
-                Text("Welcome")
+                Text("HanaMi")
                     .font(.largeTitle)
                     .foregroundColor(Color(hex: "#522504"))
                     .padding(.bottom, 30)

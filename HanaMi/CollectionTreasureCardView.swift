@@ -70,7 +70,7 @@ struct CollectionTreasureCardView: View {
                         .lineSpacing(10.0)
                         .padding(.top, hasMediaContent ? 8 : 10)
                 }
-                .frame(maxHeight: 300)
+                .frame(maxHeight: 190)
             }
             
             // 類別標籤
@@ -94,7 +94,7 @@ struct CollectionTreasureCardView: View {
         .padding(.vertical, 20)
         .background(Color.white.opacity(0.6))
         .cornerRadius(15)
-        .shadow(radius: 5)
+        .shadow(radius: 2)
         .fullScreenCover(isPresented: $showFullScreenImage) {
             if let imageURL = selectedImageURL {
                 URLImageViewWithPreview(imageURL: imageURL)  // 使用URL來進行圖片預覽

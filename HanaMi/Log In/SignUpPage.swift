@@ -9,6 +9,7 @@ struct SignUpPage: View {
     
     @State private var passwordError: String = ""
     @State private var generalErrorMessage: String = "" // 用來顯示 Firebase 錯誤訊息
+    @Environment(\.presentationMode) var presentationMode
     
     @AppStorage("log_Status") private var logStatus: Bool = false // 追蹤登入狀態
     private let firestoreService = FirestoreService() // FirestoreService 實例
@@ -97,6 +98,17 @@ struct SignUpPage: View {
             .disabled(isButtonDisabled()) // Disable button if any errors or fields are empty
         }
         .padding(.horizontal, 30)
+        .navigationBarBackButtonHidden(true)  // 隱藏系統默認的返回按鈕
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()  // 返回到上一頁
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.colorBrown)
+                }
+            }
+        }
     }
     
     // 驗證並註冊使用者

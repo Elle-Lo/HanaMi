@@ -5,6 +5,10 @@ import CoreLocation
 
 class FirestoreService {
     private let db = Firestore.firestore()
+    private var lastDocument: DocumentSnapshot?
+
+    // 快取收藏的寶藏
+    private var cachedTreasures: [Treasure] = []
     
     func checkUserExists(uid: String, completion: @escaping (Bool) -> Void) {
         let docRef = db.collection("Users").document(uid)
@@ -590,28 +594,43 @@ class FirestoreService {
             }
         }
     
+    // 清除快取
+    func clearCache() {
+        self.cachedTreasures.removeAll()
+        self.lastDocument = nil
+    }
+    
+
     func fetchFavoriteTreasures(userID: String, completion: @escaping (Result<[Treasure], Error>) -> Void) {
-            // 從使用者的 collectionList 中抓取 treasureID
-            db.collection("Users").document(userID).getDocument { document, error in
-                if let error = error {
-                    completion(.failure(error))
-                } else if let document = document, let data = document.data(), let treasureIDs = data["collectionList"] as? [String] {
-                    // 根據 treasureID 抓取 "AllTreasures" 中的寶藏
-                    let treasuresRef = self.db.collection("AllTreasures").whereField(FieldPath.documentID(), in: treasureIDs)
-                    treasuresRef.getDocuments { snapshot, error in
-                        if let error = error {
-                            completion(.failure(error))
-                        } else {
-                            let treasures = snapshot?.documents.compactMap { doc -> Treasure? in
-                                try? doc.data(as: Treasure.self)
-                            } ?? []
-                            completion(.success(treasures))
+        db.collection("Users").document(userID).getDocument { document, error in
+            if let error = error {
+                completion(.failure(error))
+            } else if let document = document, let data = document.data(), let treasureIDs = data["collectionTreasureList"] as? [String] {
+                var treasures: [Treasure] = []
+                let dispatchGroup = DispatchGroup()
+
+                for treasureID in treasureIDs {
+                    dispatchGroup.enter()
+                    self.fetchTreasureFromAllTreasures(treasureID: treasureID) { result in
+                        switch result {
+                        case .success(let treasure):
+                            treasures.append(treasure)
+                        case .failure(let error):
+                            print("Error fetching treasure with ID \(treasureID): \(error.localizedDescription)")
                         }
+                        dispatchGroup.leave()
                     }
                 }
+
+                dispatchGroup.notify(queue: .main) {
+                    completion(.success(treasures))
+                }
+            } else {
+                completion(.success([])) // collectionList 為空時返回空列表
             }
         }
-    
+    }
+
     //利用treasureID去找寶藏詳細資料
     func fetchTreasureFromAllTreasures(treasureID: String, completion: @escaping (Result<Treasure, Error>) -> Void) {
         let treasureRef = db.collection("AllTreasures").document(treasureID)
@@ -687,9 +706,6 @@ class FirestoreService {
             }
         }
     }
-
-
-
     
     // MARK: - 類別處理
     func loadCategories(userID: String, completion: @escaping ([String]) -> Void) {
