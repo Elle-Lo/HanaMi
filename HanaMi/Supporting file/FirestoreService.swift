@@ -616,21 +616,79 @@ class FirestoreService {
     func fetchTreasureFromAllTreasures(treasureID: String, completion: @escaping (Result<Treasure, Error>) -> Void) {
         let treasureRef = db.collection("AllTreasures").document(treasureID)
         
+        // 首先获取 Treasure 文档数据
+        print("Fetching treasure with ID: \(treasureID)")
         treasureRef.getDocument { document, error in
             if let error = error {
                 completion(.failure(error))
-            } else if let document = document, document.exists {
-                do {
-                    let treasure = try document.data(as: Treasure.self)
-                    completion(.success(treasure))
-                } catch let error {
+                return
+            }
+            
+            guard let document = document, document.exists else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "寶藏不存在"])))
+                return
+            }
+            
+            let data = document.data() ?? [:]
+            
+            guard let category = data["category"] as? String,
+                  let latitude = data["latitude"] as? Double,
+                  let longitude = data["longitude"] as? Double,
+                  let locationName = data["locationName"] as? String,
+                  let isPublic = data["isPublic"] as? Bool,
+                  let timestamp = data["createdTime"] as? Timestamp,
+                  let userID = data["userID"] as? String
+            else {
+                completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "數據格式不匹配"])))
+                return
+            }
+            
+            // 创建一个 Treasure 对象，不包含内容
+            var treasure = Treasure(
+                id: treasureID,
+                category: category,
+                createdTime: timestamp.dateValue(),
+                isPublic: isPublic,
+                latitude: latitude,
+                longitude: longitude,
+                locationName: locationName,
+                contents: [],
+                userID: userID
+            )
+            
+            // 获取 Contents 子集合的数据
+            let contentsRef = treasureRef.collection("Contents")
+            contentsRef.getDocuments { snapshot, error in
+                if let error = error {
                     completion(.failure(error))
+                    return
                 }
-            } else {
-                completion(.failure(NSError(domain: "Treasure not found", code: 404, userInfo: nil)))
+                
+                guard let documents = snapshot?.documents else {
+                    completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "内容集合不存在"])))
+                    return
+                }
+                
+                // 遍历子集合并解析内容
+                let contents: [TreasureContent] = documents.compactMap { document in
+                    let data = document.data()
+                    guard let typeString = data["type"] as? String,
+                          let content = data["content"] as? String,
+                          let index = data["index"] as? Int else {
+                        return nil
+                    }
+                    let type = ContentType(rawValue: typeString) ?? .text
+                    return TreasureContent(id: document.documentID, type: type, content: content, index: index)
+                }
+                
+                // 将获取的内容赋值给 Treasure 对象
+                treasure.contents = contents
+                completion(.success(treasure))
             }
         }
     }
+
+
 
     
     // MARK: - 類別處理

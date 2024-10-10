@@ -42,7 +42,6 @@ class TreasureManager: ObservableObject {
                 self.displayedTreasures = publicTreasures
                 completion(publicTreasures)
             }
-        print(treasures)
         }
 
     
@@ -65,41 +64,66 @@ class TreasureManager: ObservableObject {
     }
     
     // 從緩存或遠程獲取寶藏詳細信息
-    func getTreasure(by treasureID: String, for userID: String, completion: @escaping (Treasure?) -> Void) {
+//    func getTreasure(by treasureID: String, for userID: String, completion: @escaping (Treasure?) -> Void) {
+//        // 先檢查緩存
+//        if let cachedTreasure = treasures.first(where: { $0.id == treasureID }) {
+//            completion(cachedTreasure)
+//            return
+//        }
+//        
+//        // 判斷是否是當前用戶的寶藏
+//        if userID == self.userID {  // 如果是當前用戶，使用用戶路徑查詢
+//            print(userID)
+//            firestoreService.fetchTreasure(userID: userID, treasureID: treasureID) { result in
+//                switch result {
+//                case .success(let treasure):
+//                    DispatchQueue.main.async {
+//                        // 將獲取到的寶藏添加到緩存中
+//                        self.treasures.append(treasure)
+//                        completion(treasure)
+//                    }
+//                case .failure(let error):
+//                    print("Failed to fetch treasure: \(error.localizedDescription)")
+//                    completion(nil)
+//                }
+//            }
+//        } else {  // 如果是其他用戶的寶藏，從 "AllTreasures" 集合中查詢
+//            print(userID)
+//            firestoreService.fetchTreasureFromAllTreasures(treasureID: treasureID) { result in
+//                switch result {
+//                case .success(let treasure):
+//                    DispatchQueue.main.async {
+//                        // 將獲取到的寶藏添加到緩存中
+//                        self.treasures.append(treasure)
+//                        completion(treasure)
+//                    }
+//                case .failure(let error):
+//                    print("Failed to fetch treasure from AllTreasures: \(error.localizedDescription)")
+//                    completion(nil)
+//                }
+//            }
+//        }
+//    }
+    func getTreasure(by treasureID: String, completion: @escaping (Treasure?) -> Void) {
         // 先檢查緩存
         if let cachedTreasure = treasures.first(where: { $0.id == treasureID }) {
             completion(cachedTreasure)
             return
         }
-        
-        // 判斷是否是當前用戶的寶藏
-        if userID == self.userID {  // 如果是當前用戶，使用用戶路徑查詢
-            firestoreService.fetchTreasure(userID: userID, treasureID: treasureID) { result in
-                switch result {
-                case .success(let treasure):
-                    DispatchQueue.main.async {
-                        // 將獲取到的寶藏添加到緩存中
-                        self.treasures.append(treasure)
-                        completion(treasure)
-                    }
-                case .failure(let error):
-                    print("Failed to fetch treasure: \(error.localizedDescription)")
-                    completion(nil)
+
+        // 直接從 "AllTreasures" 集合中查詢
+        print("Fetching treasure from AllTreasures with ID: \(treasureID)")
+        firestoreService.fetchTreasureFromAllTreasures(treasureID: treasureID) { result in
+            switch result {
+            case .success(let treasure):
+                DispatchQueue.main.async {
+                    // 將獲取到的寶藏添加到緩存中
+                    self.treasures.append(treasure)
+                    completion(treasure)
                 }
-            }
-        } else {  // 如果是其他用戶的寶藏，從 "AllTreasures" 集合中查詢
-            firestoreService.fetchTreasureFromAllTreasures(treasureID: treasureID) { result in
-                switch result {
-                case .success(let treasure):
-                    DispatchQueue.main.async {
-                        // 將獲取到的寶藏添加到緩存中
-                        self.treasures.append(treasure)
-                        completion(treasure)
-                    }
-                case .failure(let error):
-                    print("Failed to fetch treasure from AllTreasures: \(error.localizedDescription)")
-                    completion(nil)
-                }
+            case .failure(let error):
+                print("Failed to fetch treasure from AllTreasures: \(error.localizedDescription)")
+                completion(nil)
             }
         }
     }

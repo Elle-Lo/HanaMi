@@ -79,20 +79,36 @@ struct CustomMapView: UIViewRepresentable {
             }
         
         // 当用户点击标注时，获取宝藏详细信息并显示 Sheet
-           func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-               if let treasureAnnotation = view.annotation as? TreasureAnnotation {
-                   // 调用 TreasureManager 来获取宝藏详细信息
-                   print("Selected treasure annotation with ID: \(treasureAnnotation.treasureID)")  // 添加日志
-                   parent.treasureManager.getTreasure(by: treasureAnnotation.treasureID, for: userID) { treasure in
-                       if let treasure = treasure {
-                           DispatchQueue.main.async {
-                               self.parent.selectedTreasure = treasure  // 更新选中的宝藏
-                               self.parent.showTreasureDetail = true    // 显示 Sheet
-                           }
-                       }
-                   }
-               }
-           }
+//           func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+//               if let treasureAnnotation = view.annotation as? TreasureAnnotation {
+//                   // 调用 TreasureManager 来获取宝藏详细信息
+//                   print("Selected treasure annotation with ID: \(treasureAnnotation.treasureID)")  // 添加日志
+//                   parent.treasureManager.getTreasure(by: treasureAnnotation.treasureID, for: userID) { treasure in
+//                       if let treasure = treasure {
+//                           DispatchQueue.main.async {
+//                               self.parent.selectedTreasure = treasure  // 更新选中的宝藏
+//                               self.parent.showTreasureDetail = true    // 显示 Sheet
+//                           }
+//                       }
+//                   }
+//               }
+//           }
+        
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            if let treasureAnnotation = view.annotation as? TreasureAnnotation {
+                print("Selected treasure annotation with ID: \(treasureAnnotation.treasureID)")
+                
+                // 直接傳遞 isUserTreasure，讓 TreasureManager 處理邏輯
+                parent.treasureManager.getTreasure(by: treasureAnnotation.treasureID)  { treasure in
+                    if let treasure = treasure {
+                        DispatchQueue.main.async {
+                            self.parent.selectedTreasure = treasure  // 更新选中的宝藏
+                            self.parent.showTreasureDetail = true    // 顯示詳情
+                        }
+                    }
+                }
+            }
+        }
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation {

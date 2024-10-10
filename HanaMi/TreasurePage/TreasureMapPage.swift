@@ -17,12 +17,6 @@ struct TreasureMapPage: View {
     
     var body: some View {
         ZStack {
-            // 顯示選中的寶藏名稱
-            //            if let selectedLocationName = selectedLocationName {
-            //                Text("選中的寶藏: \(selectedLocationName)")
-            //                    .font(.headline)
-            //                    .padding()
-            //            }
             
             // CustomMapView 顯示地圖與寶藏標註
             CustomMapView(
