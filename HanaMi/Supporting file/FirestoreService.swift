@@ -427,7 +427,7 @@ class FirestoreService {
         }
     }
     
-    //抓取treasure的資料
+    //抓取user的treasure的資料
     func fetchTreasure(userID: String, treasureID: String, completion: @escaping (Result<Treasure, Error>) -> Void) {
         let treasureRef = db.collection("Users").document(userID).collection("Treasures").document(treasureID)
         
@@ -450,7 +450,9 @@ class FirestoreService {
                   let longitude = data["longitude"] as? Double,
                   let locationName = data["locationName"] as? String,
                   let isPublic = data["isPublic"] as? Bool,
-                  let timestamp = data["createdTime"] as? Timestamp else {
+                  let timestamp = data["createdTime"] as? Timestamp,
+                  let userID = data["userID"] as? String
+            else {
                 completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "數據格式不匹配"])))
                 return
             }
@@ -464,7 +466,8 @@ class FirestoreService {
                 latitude: latitude,
                 longitude: longitude,
                 locationName: locationName,
-                contents: []
+                contents: [],
+                userID: userID
             )
             
             // 获取 Contents 子集合的数据
@@ -608,6 +611,27 @@ class FirestoreService {
                 }
             }
         }
+    
+    //利用treasureID去找寶藏詳細資料
+    func fetchTreasureFromAllTreasures(treasureID: String, completion: @escaping (Result<Treasure, Error>) -> Void) {
+        let treasureRef = db.collection("AllTreasures").document(treasureID)
+        
+        treasureRef.getDocument { document, error in
+            if let error = error {
+                completion(.failure(error))
+            } else if let document = document, document.exists {
+                do {
+                    let treasure = try document.data(as: Treasure.self)
+                    completion(.success(treasure))
+                } catch let error {
+                    completion(.failure(error))
+                }
+            } else {
+                completion(.failure(NSError(domain: "Treasure not found", code: 404, userInfo: nil)))
+            }
+        }
+    }
+
     
     // MARK: - 類別處理
     func loadCategories(userID: String, completion: @escaping ([String]) -> Void) {
@@ -1014,7 +1038,8 @@ class FirestoreService {
                     latitude: latitude,
                     longitude: longitude,
                     locationName: locationName,
-                    contents: []  // 這裡先初始化空的 contents
+                    contents: [],  // 這裡先初始化空的 contents
+                    userID: userID
                 )
                 
                 // 開始獲取這個寶藏的 contents
@@ -1084,7 +1109,8 @@ class FirestoreService {
                     latitude: latitude,
                     longitude: longitude,
                     locationName: locationName,
-                    contents: []  // 初始化為空
+                    contents: [], // 初始化為空
+                    userID: userID
                 )
                 
                 dispatchGroup.enter()

@@ -30,6 +30,7 @@ struct Treasure: Identifiable, Codable {
     var longitude: Double
     var locationName: String
     var contents: [TreasureContent]
+    var userID: String
 }
 
 struct TreasureContent: Identifiable, Codable {
@@ -53,4 +54,3 @@ struct TreasureSummary: Codable {
     let longitude: Double
     let userID: String
 }
-

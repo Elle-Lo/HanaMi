@@ -37,7 +37,6 @@ struct HomePage: View {
                 
                 Spacer()
             }
-//            .padding(.top, 15)
             
             VStack {
                 Spacer()

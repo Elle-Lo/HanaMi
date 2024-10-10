@@ -25,6 +25,7 @@ struct CollectionsPage: View {
                     ProgressView()
                         .scaleEffect(2)
                         .padding(.top, 50)
+                    
                 } else {
                     ScrollView {
                         ForEach(favoriteTreasures, id: \.id) { treasure in
@@ -32,6 +33,8 @@ struct CollectionsPage: View {
                                 .padding(.horizontal)
                         }
                     }
+                    .padding(.horizontal, 30)
+                    .scrollIndicators(.hidden)
                 }
             }
             .onAppear {
