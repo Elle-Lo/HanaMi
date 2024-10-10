@@ -96,7 +96,7 @@ struct CustomMapView: UIViewRepresentable {
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation {
-                return nil // 不自定义用户位置的标注
+                return nil            
             }
 
             if let treasureAnnotation = annotation as? TreasureAnnotation {
