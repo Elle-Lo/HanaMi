@@ -47,7 +47,7 @@ struct CollectionTreasureCardView: View {
                 }
                 .frame(height: 300)
                 .cornerRadius(8)
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: treasure.contents.count > 1 ? .always : .never)) // 這裡動態顯示或隱藏頁面指示器
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: treasure.contents.count > 1 ? .always : .never))
             }
             
             // 音訊內容單獨處理，設置固定高度

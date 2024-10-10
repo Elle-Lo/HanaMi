@@ -18,7 +18,7 @@ struct StarterPage: View {
             VStack(spacing: 10) { // 設置較小的間距以控制元素之間的距離
                 // 調整 Welcome 和 Capybara 的上方 padding，使其往上移動
                 Text("HanaMi")
-                    .font(.largeTitle)
+                    .font(.custom("LexendDeca-SemiBold", size: 30))
                     .foregroundColor(Color(hex: "#522504"))
                     .padding(.bottom, 30)
                 
@@ -31,6 +31,7 @@ struct StarterPage: View {
                 NavigationLink(destination: LogInPage()) {
                     Text("LOG IN")
                         .foregroundColor(Color(hex: "#522504"))
+                        .font(.custom("LexendDeca-Regular", size: 18))
                         .padding()
                         .frame(width: 250, height: 50)
                         .background(Color(hex: "#FFF7EF"))
@@ -44,6 +45,7 @@ struct StarterPage: View {
                 }) {
                     Text("OTHER LOGIN METHODS")
                         .foregroundColor(Color(hex: "#522504"))
+                        .font(.custom("LexendDeca-Regular", size: 15))
                         .padding()
                         .frame(width: 250, height: 50)
                         .background(Color(hex: "#FFF7EF"))

@@ -8,15 +8,44 @@ struct MainTabView: View {
     }
     
     init() {
-           // 修改 tab bar 的背景色為透明
-           let appearance = UITabBarAppearance()
-           appearance.configureWithTransparentBackground()
-           appearance.backgroundEffect = UIBlurEffect(style: .light) // 添加模糊效果
-           appearance.backgroundColor = UIColor.clear // 設置為完全透明
-           UITabBar.appearance().standardAppearance = appearance
-           UITabBar.appearance().scrollEdgeAppearance = appearance
-           UITabBar.appearance().unselectedItemTintColor = UIColor.gray
-       }
+        let appearance = UITabBarAppearance()
+        appearance.shadowImage = UIImage()
+        appearance.shadowColor = .clear
+
+        // 使用 createGradientImage 函數來創建漸變圖像，並應用到 UITabBar 的背景
+        if let gradientImage = createGradientImage(colors: [UIColor.white], size: CGSize(width: UIScreen.main.bounds.width, height: 50), startOpacity: 1.0, endOpacity: 0.6) {
+                appearance.backgroundImage = gradientImage  // 將漸變圖像作為背景
+            }
+
+        // 設置未選中項目的顏色
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.colorGray
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.colorGray]
+
+        // 設置選中項目的顏色
+        appearance.stackedLayoutAppearance.selected.iconColor = UIColor.brown
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown]
+
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        
+    }
+    
+    func createGradientImage(colors: [UIColor], size: CGSize, startOpacity: CGFloat, endOpacity: CGFloat) -> UIImage? {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(origin: .zero, size: size)
+
+        // 設置漸變顏色的透明度，從 startOpacity 到 endOpacity
+        gradientLayer.colors = colors.map { $0.withAlphaComponent(startOpacity).cgColor } + [UIColor.white.withAlphaComponent(endOpacity).cgColor]
+
+        UIGraphicsBeginImageContext(gradientLayer.bounds.size)
+        if let context = UIGraphicsGetCurrentContext() {
+            gradientLayer.render(in: context)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        }
+        return nil
+    }
     
     var body: some View {
             TabView(selection: $selectedTab) {
@@ -28,7 +57,7 @@ struct MainTabView: View {
                 
                 CategoryAndAnalyticsPage(showCategory: $showCategory)
                     .tabItem {
-                        Label("類別分析", systemImage: "chart.pie")
+                        Label("類別", systemImage: "chart.pie")
                     }
                     .tag(1)
                 
