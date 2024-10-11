@@ -13,9 +13,9 @@ struct MainTabView: View {
         appearance.shadowColor = .clear
 
         // 使用 createGradientImage 函數來創建漸變圖像，並應用到 UITabBar 的背景
-        if let gradientImage = createGradientImage(colors: [UIColor.white], size: CGSize(width: UIScreen.main.bounds.width, height: 50), startOpacity: 1.0, endOpacity: 0.6) {
-                appearance.backgroundImage = gradientImage  // 將漸變圖像作為背景
-            }
+        if let gradientImage = createGradientImage(colors: [UIColor.colorDarkYellow, UIColor.white], size: CGSize(width: UIScreen.main.bounds.width, height: 50), opacity: 0.3) {
+            appearance.backgroundImage = gradientImage  // 將漸變圖像作為背景
+        }
 
         // 設置未選中項目的顏色
         appearance.stackedLayoutAppearance.normal.iconColor = UIColor.colorGray
@@ -30,12 +30,10 @@ struct MainTabView: View {
         
     }
     
-    func createGradientImage(colors: [UIColor], size: CGSize, startOpacity: CGFloat, endOpacity: CGFloat) -> UIImage? {
+    func createGradientImage(colors: [UIColor], size: CGSize, opacity: CGFloat) -> UIImage? {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = CGRect(origin: .zero, size: size)
-
-        // 設置漸變顏色的透明度，從 startOpacity 到 endOpacity
-        gradientLayer.colors = colors.map { $0.withAlphaComponent(startOpacity).cgColor } + [UIColor.white.withAlphaComponent(endOpacity).cgColor]
+        gradientLayer.colors = colors.map { $0.withAlphaComponent(opacity).cgColor }
 
         UIGraphicsBeginImageContext(gradientLayer.bounds.size)
         if let context = UIGraphicsGetCurrentContext() {
@@ -46,6 +44,7 @@ struct MainTabView: View {
         }
         return nil
     }
+
     
     var body: some View {
             TabView(selection: $selectedTab) {
@@ -69,7 +68,7 @@ struct MainTabView: View {
 
                 TreasureMapPage(userID: userID)
                     .tabItem {
-                        Label("地圖", systemImage: "mappin.and.ellipse.circle.fill")
+                        Label("地圖", systemImage: "mappin.and.ellipse")
                     }
                     .tag(3)
 
@@ -99,7 +98,7 @@ struct MainTabView: View {
             Button(action: {
                 showCategory.toggle() // 切換頁面
             }) {
-                Image(systemName: showCategory ? "chart.bar.fill" : "list.bullet")
+                Image(systemName: showCategory ? "chart.bar.xaxis" : "list.bullet")
                     .resizable()
                     .foregroundColor(.white)
                     .frame(width: 18, height: 18)

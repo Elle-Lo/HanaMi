@@ -28,6 +28,7 @@ struct SettingsPage: View {
     
     @State private var showActionSheet: Bool = false
     @State private var showDeleteAccountAlert: Bool = false
+    @State private var showLogOutAccountAlert: Bool = false
     @State private var errorMessage: String = ""
     
     @FocusState private var isNameFocused: Bool
@@ -56,22 +57,19 @@ struct SettingsPage: View {
                 .offset(y: UIScreen.main.bounds.height * 0.2)
             
             VStack(spacing: 0) {
-                // 个人信息区域
+               
                 profileSection
                     .padding(.top, 40)
                 
-                // 水豚图片
                 Image("capybaraRight")
                     .resizable()
                     .frame(width: 60, height: 40)
                     .offset(x: -120, y: -20)
                 
-                // 设置选项
                 VStack {
                     settingsOptions
                         .padding(.horizontal, 20)
                 }
-//                .padding(.top, 5)
             }
             .alert("確認要刪除帳號嗎？取消好嗎:)", isPresented: $showDeleteAccountAlert) {
                 Button("確認", role: .destructive) {
@@ -85,6 +83,16 @@ struct SettingsPage: View {
                 Button("取消", role: .cancel) {}
             } message: {
                 Text("我會很難過～而且這個操作無法還原，帳號和所有數據將永遠刪除。")
+            }
+            .alert("登出", isPresented: $showLogOutAccountAlert) {
+                Button("確認", role: .destructive) {
+                    try? Auth.auth().signOut()
+                    UserDefaults.standard.removeObject(forKey: "userID")
+                    logStatus = false
+                }
+                Button("取消", role: .cancel) {}
+            } message: {
+                Text("您確認要登出嗎？")
             }
         }
         .navigationTitle("設定")
@@ -235,13 +243,11 @@ struct SettingsPage: View {
                 removeBackgroundImage()
             }
             
-            SettingsButton(iconName: "arrow.right.square", text: "登出") {
-                try? Auth.auth().signOut()
-                UserDefaults.standard.removeObject(forKey: "userID")
-                logStatus = false
-            }
-            
             FavoriteButton()
+            
+            SettingsButton(iconName: "arrow.right.square", text: "登出") {
+                showLogOutAccountAlert = true
+            }
             
             Divider()
             
