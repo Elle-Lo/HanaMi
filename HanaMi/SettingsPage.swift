@@ -25,6 +25,7 @@ struct SettingsPage: View {
     @State private var backgroundImageUrl: URL?
     @State private var isBackgroundPhotoPickerPresented: Bool = false
     @State private var isRemoveBackgroundEnabled: Bool = false
+    @State private var isPrivacyPolicyPresented = false
     
     @State private var showActionSheet: Bool = false
     @State private var showDeleteAccountAlert: Bool = false
@@ -48,27 +49,31 @@ struct SettingsPage: View {
     // MARK: - Body
     
     var body: some View {
-        ScrollView {
+
         ZStack {
-            // 背景圆角矩形
-            RoundedRectangle(cornerRadius: 60, style: .continuous)
-                .fill(Color.colorYellow)
-                .frame(height: UIScreen.main.bounds.height * 0.75)
-                .offset(y: UIScreen.main.bounds.height * 0.2)
             
-            VStack(spacing: 0) {
-               
-                profileSection
-                    .padding(.top, 40)
-                
-                Image("capybaraRight")
-                    .resizable()
-                    .frame(width: 60, height: 40)
-                    .offset(x: -120, y: -20)
-                
-                VStack {
-                    settingsOptions
-                        .padding(.horizontal, 20)
+            ScrollView {
+                // 背景圆角矩形
+                RoundedRectangle(cornerRadius: 60, style: .continuous)
+                    .fill(Color.colorYellow)
+                    .frame(height: UIScreen.main.bounds.height * 0.75)
+                    .offset(y: UIScreen.main.bounds.height * 0.25)
+            }
+                VStack(spacing: 0) {
+                    
+                    profileSection
+                        .padding(.top, 40)
+                    
+                    Image("capybaraRight")
+                        .resizable()
+                        .frame(width: 60, height: 40)
+                        .offset(x: -120, y: -20)
+                    
+                ScrollView {
+                    VStack {
+                        settingsOptions
+                            .padding(.horizontal, 20)
+                    }
                 }
             }
             .alert("確認要刪除帳號嗎？取消好嗎:)", isPresented: $showDeleteAccountAlert) {
@@ -136,7 +141,7 @@ struct SettingsPage: View {
         .onAppear {
             fetchUserNameAndProfileImage()
         }
-    }
+    
 }
     
     // MARK: - Subviews
@@ -244,6 +249,8 @@ struct SettingsPage: View {
             }
             
             FavoriteButton()
+            
+            PrivacyPolicyButton()
             
             SettingsButton(iconName: "arrow.right.square", text: "登出") {
                 showLogOutAccountAlert = true
@@ -468,6 +475,13 @@ struct SettingsPage: View {
         }
         return result
     }
+    
+    // 打開隱私權政策頁面
+//    private func openPrivacyPolicy() {
+//        if let url = URL(string: "https://www.privacypolicies.com/live/87b7a63c-e519-440a-9f90-370fcdff9b0a") {
+//            UIApplication.shared.open(url)
+//        }
+//    }
 }
 
 struct CharacterButton: View {
@@ -536,6 +550,35 @@ struct FavoriteButton: View {
     }
 }
 
+struct PrivacyPolicyButton: View {
+    var body: some View {
+        NavigationLink(destination: PrivacyPolicyPage()) {
+            HStack {
+                Image(systemName: "lock.shield")
+                    .foregroundColor(.colorBrown)
+                    .font(.system(size: 24))
+                    .padding(.trailing, 20)
+                    .frame(width: 40)
+
+                Text("隱私權政策")
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
+                    .foregroundColor(.colorBrown)
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.colorBrown)
+                    .font(.system(size: 16))
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.clear)
+            .cornerRadius(10)
+        }
+        .padding(.vertical, 5)
+    }
+}
+
 // MARK: - SettingsButton 视图
 
 struct SettingsButton: View {
@@ -570,4 +613,5 @@ struct SettingsButton: View {
         }
         .padding(.vertical, 5)
     }
+
 }
