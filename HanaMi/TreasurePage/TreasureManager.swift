@@ -16,42 +16,46 @@ class TreasureManager: ObservableObject {
     
     // 加載所有公開的寶藏以及當前用戶的所有寶藏
     func fetchAllPublicAndUserTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {
-        self.displayedTreasures.removeAll() // 清空舊的寶藏
-        
+        // 清空舊的寶藏，但不要在視圖更新過程中執行
+        DispatchQueue.main.async {
+            self.displayedTreasures.removeAll()
+        }
+
+        let dispatchGroup = DispatchGroup()
+        var publicTreasures: [TreasureSummary] = []
+
+        // 先抓取所有公開寶藏
+        dispatchGroup.enter()
+        firestoreService.fetchAllTreasuresNear(minLat: minLat, maxLat: maxLat, maxLng: maxLng, minLng: minLng, currentUserID: userID) { result in
+            switch result {
+            case .success(let fetchedPublicTreasures):
+                publicTreasures = fetchedPublicTreasures
+            case .failure(let error):
+                print("Error fetching public treasures: \(error.localizedDescription)")
+            }
+            dispatchGroup.leave()
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            // 在主線程上安全地更新 displayedTreasures
             DispatchQueue.main.async {
-                self.displayedTreasures.removeAll() // 確保清空舊的寶藏在主線程上執行
-            }
-
-            let dispatchGroup = DispatchGroup()
-            var publicTreasures: [TreasureSummary] = []
-
-            // 先抓取所有公開寶藏
-            dispatchGroup.enter()
-            firestoreService.fetchAllTreasuresNear(minLat: minLat, maxLat: maxLat, maxLng: maxLng, minLng: minLng, currentUserID: userID) { result in
-                switch result {
-                case .success(let fetchedPublicTreasures):
-                    publicTreasures = fetchedPublicTreasures
-                case .failure(let error):
-                    print("Error fetching public treasures: \(error.localizedDescription)")
-                }
-                dispatchGroup.leave()
-            }
-
-            dispatchGroup.notify(queue: .main) {
-                // 確保所有結果合併並回傳後在主線程上更新 displayedTreasures
                 self.displayedTreasures = publicTreasures
                 completion(publicTreasures)
             }
         }
+    }
 
-    
     // 只抓取當前用戶自己的寶藏（公開和非公開）
     func fetchUserTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {
-        self.displayedTreasures.removeAll() // 清空舊的寶藏
-        
+        // 在主線程安全地清空舊的寶藏
+        DispatchQueue.main.async {
+            self.displayedTreasures.removeAll()
+        }
+
         firestoreService.fetchUserTreasuresNear(userID: userID, minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng) { [weak self] result in
             switch result {
             case .success(let treasures):
+                // 在主線程上更新 displayedTreasures
                 DispatchQueue.main.async {
                     self?.displayedTreasures = treasures
                     completion(treasures)
@@ -62,7 +66,7 @@ class TreasureManager: ObservableObject {
             }
         }
     }
-    
+
     // 從緩存或遠程獲取寶藏詳細信息
 //    func getTreasure(by treasureID: String, for userID: String, completion: @escaping (Treasure?) -> Void) {
 //        // 先檢查緩存
