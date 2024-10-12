@@ -5,6 +5,7 @@ struct CollectionsPage: View {
     @State private var favoriteTreasures: [Treasure] = []
     @State private var isLoading = true
     @State private var isEditing = false // 控制是否顯示編輯模式
+    @State private var isPlayingAnimation = true // 控制動畫播放
     @Environment(\.presentationMode) var presentationMode
     private let firestoreService = FirestoreService()
 
@@ -31,7 +32,7 @@ struct CollectionsPage: View {
                         Button(action: {
                             isEditing.toggle()
                         }) {
-                            Text(isEditing ? "完成" : "編輯")
+                            Text(isEditing ? "Done" : "Edit")
                                 .foregroundColor(.colorBrown)
                         }
                     }
@@ -40,9 +41,17 @@ struct CollectionsPage: View {
                 .padding(.top, 10)
 
                 if isLoading {
-                    ProgressView()
-                        .scaleEffect(2)
-                        .padding(.top, 50)
+                    // Lottie 動畫替代 ProgressView
+                    LottieView(animationFileName: "walking", loopMode: .loop, isPlaying: $isPlayingAnimation)
+                        .frame(width: 140, height: 140)
+                        .offset(y: 550)  // 調整動畫在按鈕上方的位置
+                        .scaleEffect(0.3)  // 調整動畫大小
+                        .onAppear {
+                            isPlayingAnimation = true // 開始播放動畫
+                        }
+                        .onDisappear {
+                            isPlayingAnimation = false // 停止動畫
+                        }
 
                     Spacer()
 
