@@ -70,8 +70,6 @@ struct CollectionsPage: View {
                             ForEach(favoriteTreasures, id: \.id) { treasure in
                                 HStack {
                                     CollectionTreasureCardView(treasure: treasure)
-                                        .padding(.horizontal, 10)
-                                        .padding(.vertical, 10)
 
                                     if isEditing {
                                         Button(action: {
