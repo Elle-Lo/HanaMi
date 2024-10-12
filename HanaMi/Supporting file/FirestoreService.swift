@@ -630,6 +630,20 @@ class FirestoreService {
             }
         }
     }
+    
+    func removeTreasureFromFavorites(userID: String, treasureID: String, completion: @escaping (Result<Void, Error>) -> Void) {
+            let userDocRef = db.collection("Users").document(userID)
+
+            userDocRef.updateData([
+                "collectionTreasureList": FieldValue.arrayRemove([treasureID])
+            ]) { error in
+                if let error = error {
+                    completion(.failure(error))
+                } else {
+                    completion(.success(()))
+                }
+            }
+        }
 
     //利用treasureID去找寶藏詳細資料
     func fetchTreasureFromAllTreasures(treasureID: String, completion: @escaping (Result<Treasure, Error>) -> Void) {

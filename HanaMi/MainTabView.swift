@@ -62,7 +62,7 @@ struct MainTabView: View {
                 
                 DepositPage()
                     .tabItem {
-                        Label("儲存", systemImage: "plus.circle.fill")
+                        Label("新增", systemImage: "plus.circle.fill")
                     }
                     .tag(2)
 

@@ -4,6 +4,7 @@ import FirebaseFirestore
 struct CollectionsPage: View {
     @State private var favoriteTreasures: [Treasure] = []
     @State private var isLoading = true
+    @State private var isEditing = false // 控制是否顯示編輯模式
     @Environment(\.presentationMode) var presentationMode
     private let firestoreService = FirestoreService()
 
@@ -16,54 +17,80 @@ struct CollectionsPage: View {
             Color(.colorYellow)
                 .edgesIgnoringSafeArea(.all)
 
-            VStack(alignment: .center) {
-                // 標題
-                Text("Collection")
-                    .foregroundColor(.colorBrown)
-                    .font(.custom("LexendDeca-Bold", size: 30))
+            VStack {
+                // 標題和編輯按鈕
+                ZStack {
+                    // 中間的標題
+                    Text("Collection")
+                        .foregroundColor(.colorBrown)
+                        .font(.custom("LexendDeca-Bold", size: 30))
 
-                // 卡片列表
+                    // 右上角的編輯按鈕
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            isEditing.toggle()
+                        }) {
+                            Text(isEditing ? "完成" : "編輯")
+                                .foregroundColor(.colorBrown)
+                        }
+                    }
+                    .padding(.trailing, 20) // 調整按鈕的右邊距離
+                }
+                .padding(.top, 10)
+
                 if isLoading {
                     ProgressView()
                         .scaleEffect(2)
                         .padding(.top, 50)
-                    
+
                     Spacer()
 
                 } else if favoriteTreasures.isEmpty {
-                    // 顯示 "No collection" 當寶藏列表為空時
                     Text("No collection")
                         .foregroundColor(.gray)
                         .font(.custom("LexendDeca-Regular", size: 18))
                         .padding(.top, 50)
                         .frame(maxWidth: .infinity, alignment: .center)
-                    
+
                     Spacer()
 
                 } else {
-                        ScrollView {
-                            LazyVStack {
-                                ForEach(favoriteTreasures, id: \.id) { treasure in
+                    ScrollView {
+                        LazyVStack {
+                            ForEach(favoriteTreasures, id: \.id) { treasure in
+                                HStack {
                                     CollectionTreasureCardView(treasure: treasure)
                                         .padding(.horizontal, 10)
                                         .padding(.vertical, 10)
+
+                                    if isEditing {
+                                        Button(action: {
+                                            removeTreasureFromFavorites(treasureID: treasure.id ?? "")
+                                        }) {
+                                            Image(systemName: "trash")
+                                                .foregroundColor(.red)
+                                                .padding(10)
+                                        }
+                                    }
                                 }
                             }
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
-                        .scrollIndicators(.hidden)
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .scrollIndicators(.hidden)
                 }
-                    .onAppear {
-                        loadFavoriteTreasures()
-                    }
             }
-        .navigationBarBackButtonHidden(true)  // 隱藏系統默認的返回按鈕
+            .onAppear {
+                loadFavoriteTreasures()
+            }
+        }
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()  // 返回到上一頁
+                    presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "chevron.backward")
                         .foregroundColor(.colorBrown)
@@ -72,27 +99,31 @@ struct CollectionsPage: View {
         }
     }
 
-    // 初次加載收藏寶藏
     private func loadFavoriteTreasures() {
-            print("Starting to load favorite treasures...")
-            FirestoreService().fetchFavoriteTreasures(userID: userID) { result in
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                    switch result {
-                    case .success(let treasures):
-                        self.favoriteTreasures = treasures
-                        print("Successfully fetched treasures: \(treasures.count) treasures found.")
-                        if treasures.isEmpty {
-                            print("No favorite treasures found.")
-                        } else {
-                            for treasure in treasures {
-                                print("Treasure found: \(treasure.id ?? "Unknown ID") - Category: \(treasure.category)")
-                            }
-                        }
-                    case .failure(let error):
-                        print("Error fetching favorite treasures: \(error.localizedDescription)")
-                    }
+        print("Starting to load favorite treasures...")
+        firestoreService.fetchFavoriteTreasures(userID: userID) { result in
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success(let treasures):
+                    self.favoriteTreasures = treasures
+                    print("Successfully fetched treasures: \(treasures.count) treasures found.")
+                case .failure(let error):
+                    print("Error fetching favorite treasures: \(error.localizedDescription)")
                 }
             }
         }
+    }
+
+    private func removeTreasureFromFavorites(treasureID: String) {
+        firestoreService.removeTreasureFromFavorites(userID: userID, treasureID: treasureID) { result in
+            switch result {
+            case .success:
+                print("Successfully removed treasure with ID: \(treasureID)")
+                loadFavoriteTreasures()
+            case .failure(let error):
+                print("Failed to remove treasure: \(error.localizedDescription)")
+            }
+        }
+    }
 }
