@@ -272,6 +272,7 @@ struct SaveButtonView: View {
     let isPublic: Bool
     let textContent: String  // 純文字內容
     let selectedMediaItems: [(url: URL, type: String)]  // 已選擇的媒體項目
+    @State private var isShowingSaveAnimation = false
     @Binding var errorMessage: String?
 
     @StateObject var audioRecorder: AudioRecorder

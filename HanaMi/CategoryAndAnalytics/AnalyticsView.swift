@@ -20,23 +20,18 @@ struct AnalyticsView: View {
             Text("Analytics")
                 .foregroundColor(.colorBrown)
                 .font(.custom("LexendDeca-Bold", size: 30))
-
-            // 副標題
-            Text("最常儲存的類別")
-                .font(.custom("LexendDeca-Bold", size: 15))
-                .foregroundColor(.gray)
                 .padding(.bottom, 50)
+            // 副標題
+//            Text("最常儲存的類別")
+//                .font(.custom("LexendDeca-Bold", size: 15))
+//                .foregroundColor(.gray)
+//                .padding(.bottom, 50)
 
             // 最常儲存的類別與圓形圖表
             if isLoading {
                 ProgressView("加載中...")
             } else if let mostSaved = mostSavedCategory {
-                ZStack {
-                    Text(mostSaved)
-                        .font(.custom("LexendDeca-Bold", size: 30))
-                        .foregroundColor(.colorBrown)
-                        .offset(x: -80, y: 55)
-                        .zIndex(1)
+                VStack {
 
                     // 圓形圖表 - 顯示最多儲存類別的百分比
                     Circle()
@@ -50,13 +45,26 @@ struct AnalyticsView: View {
                                 .font(.custom("LexendDeca-Bold", size: 30))
                                 .foregroundColor(Color(hex: "FFECC8"))
                         )
-                        .padding(.top, 10) // 圓形圖表與最常儲存類別之間的間距
+                    .padding(.bottom, 30) // 圓形圖表與最常儲存類別之間的間距
+                    
+                    Text("最常儲存的類別")
+                        .font(.custom("LexendDeca-SemiBold", size: 15))
+                        .foregroundColor(.gray)
+                        .padding(.bottom, 1)
+
+                    Text(mostSaved)
+                        .font(.custom("LexendDeca-Bold", size: 20))
+                        .foregroundColor(.colorBrown)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(.colorYellow)
+                        .cornerRadius(20)
+                       
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
             }
-
             // 加大其他類別與圓形的間距
-            Spacer().frame(height: 50)
+            Spacer().frame(height: 20)
 
             // 顯示其他類別的比例，使用 ScrollView 以防放不下
             ScrollView {
@@ -98,7 +106,7 @@ struct AnalyticsView: View {
 
             Spacer()
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 20)
         .onAppear {
             fetchCategoryData()
         }

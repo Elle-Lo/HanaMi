@@ -4,6 +4,7 @@ import FirebaseStorage
 import Kingfisher
 import AuthenticationServices
 import IQKeyboardManagerSwift
+import Lottie
 
 struct SettingsPage: View {
     // MARK: - State Properties
@@ -26,6 +27,7 @@ struct SettingsPage: View {
     @State private var isBackgroundPhotoPickerPresented: Bool = false
     @State private var isRemoveBackgroundEnabled: Bool = false
     @State private var isPrivacyPolicyPresented = false
+    @State private var isLottiePlaying: Bool = false
     
     @State private var showActionSheet: Bool = false
     @State private var showDeleteAccountAlert: Bool = false
@@ -98,6 +100,22 @@ struct SettingsPage: View {
                 Button("取消", role: .cancel) {}
             } message: {
                 Text("您確認要登出嗎？")
+            }
+            
+            // Lottie 動畫 (置於最上層，並縮小尺寸)
+            if isLottiePlaying {
+                LottieView(animationFileName: "check", isPlaying: $isLottiePlaying)
+                    .frame(width: 140, height: 140)
+                    .scaleEffect(0.15)  // 調整動畫大小
+                    .background(Color.white.opacity(0.6))
+                    .cornerRadius(10)
+                    .shadow(radius: 10)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            isLottiePlaying = false
+                        }
+                    }
+                    .zIndex(1)
             }
         }
         .navigationTitle("設定")
@@ -305,6 +323,8 @@ struct SettingsPage: View {
         selectedProfileImage = nil
     }
     
+    
+    
     private func uploadBackgroundImageToStorage(image: UIImage) {
         guard let uid = uid else { return }
         let imageName = UUID().uuidString
@@ -325,6 +345,8 @@ struct SettingsPage: View {
                 if let downloadURL = url {
                     firestoreService.updateUserBackgroundImage(uid: uid, imageUrl: downloadURL.absoluteString)
                     self.backgroundImageUrl = downloadURL
+                    
+                    isLottiePlaying = true
                 }
             }
         }
@@ -353,6 +375,7 @@ struct SettingsPage: View {
         firestoreService.removeUserBackgroundImage(uid: uid, imageUrl: imageUrl) { success in
             if success {
                 self.backgroundImageUrl = nil
+                isLottiePlaying = true
                 print("背景图片已删除")
             } else {
                 print("删除背景图片失败")

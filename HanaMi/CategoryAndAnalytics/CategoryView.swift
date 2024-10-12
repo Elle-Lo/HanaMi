@@ -20,7 +20,7 @@ struct CategoryView: View {
     var body: some View {
         ZStack {
             
-            Color(.colorYellow)  // 這裡可以替換成任何你想要的顏色或圖片
+            Color(.colorGrayBlue)  // 這裡可以替換成任何你想要的顏色或圖片
                 .edgesIgnoringSafeArea(.all)  // 擴展到整個屏幕
             
             VStack(alignment: .leading) {
