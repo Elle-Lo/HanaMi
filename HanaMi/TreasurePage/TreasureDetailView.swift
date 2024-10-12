@@ -9,7 +9,10 @@ struct TreasureDetailView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var showImageViewer = false
-    @State private var selectedImageURL: URL? = nil
+    @State private var selectedImageURL: URL?
+    @State private var isPlayingHeartAnimation = false  // 控制心形動畫播放
+    @State private var isFavorite = false
+    @State private var collectionTreasureList: [String] = []
     private let firestoreService = FirestoreService()
 
     private var userID: String {
@@ -145,24 +148,46 @@ struct TreasureDetailView: View {
                 .padding(.horizontal, 20)
             }
                 // 收藏按鈕，位於頁面底部中間
-                VStack {
-                    Spacer()
-                    Button(action: {
-                        addTreasureToFavorites()
-                    }) {
-                        Image("treasure")
-                            .font(.system(size: 30))
-                            .foregroundColor(.colorBrown)
-                            .padding()
-                            .background(Color.white.opacity(0.6))
-                            .cornerRadius(50)
-                            .shadow(radius: 10)
+            // 收藏按鈕及動畫顯示
+                        VStack {
+                            Spacer()
+
+                            // Lottie 動畫
+                            if isPlayingHeartAnimation {
+                                LottieView(animationFileName: "heart", isPlaying: $isPlayingHeartAnimation)
+                                    .frame(width: 140, height: 140)
+                                    .offset(y: 40)  // 調整動畫在按鈕上方的位置
+                                    .scaleEffect(0.9)  // 調整動畫大小
+                                    .onAppear {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            isPlayingHeartAnimation = false
+                                        }
+                                    }
+                            }
+
+                            // 收藏按鈕
+                            Button(action: {
+                                isPlayingHeartAnimation = true  // 直接觸發動畫播放
+                                addTreasureToFavorites()
+                            }) {
+                                Image("treasure")
+                                    .font(.system(size: 30))
+                                    .foregroundColor(.colorBrown)
+                                    .padding()
+                                    .background(Color.white.opacity(0.6))
+                                    .cornerRadius(50)
+                                    .shadow(radius: 10)
+                            }
+                            .padding(.bottom, 30)
+                        }
                     }
-                    .padding(.bottom, 30)
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text(alertMessage))
+                    }
+                    .onAppear {
+                        fetchUserFavorites()
+                            }
                 }
-            
-        }
-    }
 
     var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
@@ -170,15 +195,48 @@ struct TreasureDetailView: View {
         return formatter
     }
     
+    private func fetchUserFavorites() {
+           firestoreService.fetchFavoriteTreasures(userID: userID) { result in
+               switch result {
+               case .success(let treasures):
+                   collectionTreasureList = treasures.map { $0.id ?? "" }
+                   isFavorite = collectionTreasureList.contains(treasure.id ?? "")
+               case .failure(let error):
+                   print("無法取得收藏寶藏：\(error.localizedDescription)")
+               }
+           }
+       }
+
+       private func handleFavoriteAction() {
+           if collectionTreasureList.contains(treasure.id ?? "") {
+               alertMessage = "此寶藏已在收藏中"
+               showAlert = true
+           } else {
+               isPlayingHeartAnimation = true
+               addTreasureToFavorites()
+           }
+       }
+    
     private func addTreasureToFavorites() {
+        // 先檢查該寶藏是否已經在收藏列表中
+        guard !collectionTreasureList.contains(treasure.id ?? "") else {
+            alertMessage = "此寶藏已在收藏中"
+            showAlert = true
+            isPlayingHeartAnimation = false
+            return
+        }
+
+        // 若未收藏，才進行 Firebase 的存取操作
         firestoreService.addTreasureToFavorites(userID: userID, treasureID: treasure.id ?? "") { result in
             switch result {
             case .success:
-                alertMessage = "寶藏成功添加到收藏"
+                collectionTreasureList.append(treasure.id ?? "")
+                isFavorite = true
             case .failure(let error):
                 alertMessage = "添加寶藏到收藏失敗：\(error.localizedDescription)"
+                showAlert = true
             }
-            showAlert = true
         }
     }
+
 }

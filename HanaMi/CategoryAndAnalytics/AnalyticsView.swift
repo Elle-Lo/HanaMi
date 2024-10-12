@@ -48,7 +48,7 @@ struct AnalyticsView: View {
                     .padding(.bottom, 30) // 圓形圖表與最常儲存類別之間的間距
                     
                     Text("最常儲存的類別")
-                        .font(.custom("LexendDeca-SemiBold", size: 15))
+                        .font(.custom("LexendDeca-SemiBold", size: 13))
                         .foregroundColor(.gray)
                         .padding(.bottom, 1)
 
@@ -64,7 +64,7 @@ struct AnalyticsView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
             // 加大其他類別與圓形的間距
-            Spacer().frame(height: 20)
+            Spacer().frame(height: 15)
 
             // 顯示其他類別的比例，使用 ScrollView 以防放不下
             ScrollView {
@@ -100,8 +100,12 @@ struct AnalyticsView: View {
                         }
                     }
                 }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 25)
             }
             .padding(.horizontal, 10)
+            .background(Color.colorYellow)
+            .cornerRadius(15)
             .scrollIndicators(.hidden)
 
             Spacer()

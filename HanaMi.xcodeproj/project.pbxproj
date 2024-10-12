@@ -48,6 +48,7 @@
 		AB825DB92CB9277E00965502 /* walking.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DB82CB9277D00965502 /* walking.json */; };
 		AB825DBD2CB92EF600965502 /* save.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DBC2CB92EF600965502 /* save.json */; };
 		AB825DBF2CBA20F800965502 /* flying.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DBE2CBA20F700965502 /* flying.json */; };
+		AB825DCB2CBA7C2100965502 /* heart.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DCA2CBA7C2100965502 /* heart.json */; };
 		ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */; };
 		ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */; };
 		ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */; };
@@ -127,6 +128,7 @@
 		AB825DB82CB9277D00965502 /* walking.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = walking.json; sourceTree = "<group>"; };
 		AB825DBC2CB92EF600965502 /* save.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = save.json; sourceTree = "<group>"; };
 		AB825DBE2CBA20F700965502 /* flying.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = flying.json; sourceTree = "<group>"; };
+		AB825DCA2CBA7C2100965502 /* heart.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = heart.json; sourceTree = "<group>"; };
 		ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanaMi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaMiApp.swift; sourceTree = "<group>"; };
 		ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				AB825DB82CB9277D00965502 /* walking.json */,
 				AB825DBC2CB92EF600965502 /* save.json */,
 				AB825DBE2CBA20F700965502 /* flying.json */,
+				AB825DCA2CBA7C2100965502 /* heart.json */,
 				ABB59A072CB307DB00E61CF2 /* ToolView */,
 				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				ABB59A062CB307A800E61CF2 /* HomePage */,
@@ -465,6 +468,7 @@
 				ABB59A092CB380F300E61CF2 /* LexendDeca-Bold.ttf in Resources */,
 				AB06AA9E2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf in Resources */,
 				AB825DB92CB9277E00965502 /* walking.json in Resources */,
+				AB825DCB2CBA7C2100965502 /* heart.json in Resources */,
 				AB825DBD2CB92EF600965502 /* save.json in Resources */,
 				AB825DB32CB90D7600965502 /* check.json in Resources */,
 				AB06AA722CAD802C00E49F5C /* Launch Screen.storyboard in Resources */,
