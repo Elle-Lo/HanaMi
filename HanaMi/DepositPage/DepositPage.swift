@@ -386,7 +386,7 @@ import AVKit
 struct DepositPage: View {
     @State private var isPublic: Bool = true
     @State private var categories: [String] = []
-    @State private var selectedCategory: String = "Creative"
+    @State private var selectedCategory: String = ""
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var selectedLocationName: String?
     @State private var shouldZoomToUserLocation: Bool = true
@@ -662,6 +662,22 @@ struct DepositPage: View {
                 .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2.5)  // 顯示在螢幕中央
             }
         }
+        .onAppear {
+                // 在畫面出現時檢查類別並設定選中的類別
+                if let firstCategory = categories.first {
+                    selectedCategory = firstCategory
+                } else {
+                    selectedCategory = "未分類"
+                }
+            }
+            .onChange(of: categories) { newCategories in
+                // 類別變更時重新設定選中的類別
+                if let firstCategory = newCategories.first {
+                    selectedCategory = firstCategory
+                } else {
+                    selectedCategory = "未分類"
+                }
+            }
     }
     
     // 處理選取的多媒體並將其添加到 ScrollView
