@@ -77,19 +77,24 @@ struct LocationSelectionView: View {
         .sheet(item: $activeSheet) { item in
             switch item {
             case .map:
-                CustomMapView(
-                    selectedCoordinate: $selectedCoordinate,
-                    selectedLocationName: $selectedLocationName,
-                    shouldZoomToUserLocation: $shouldZoomToUserLocation,
-                    selectedTreasure: .constant(nil),
-                    showTreasureDetail: .constant(false),
-                    isShowingAllTreasures: .constant(false),
-                    locationManager: locationManager,
-                    treasureManager: TreasureManager(), // 傳入空的 treasureManager
-                    mode: .selectLocation,
-                    userID: userID
-                )
-                .edgesIgnoringSafeArea(.all)
+                VStack {
+                    
+                    CustomMapView(
+                        selectedCoordinate: $selectedCoordinate,
+                        selectedLocationName: $selectedLocationName,
+                        shouldZoomToUserLocation: $shouldZoomToUserLocation,
+                        selectedTreasure: .constant(nil),
+                        showTreasureDetail: .constant(false),
+                        isShowingAllTreasures: .constant(false),
+                        locationManager: locationManager,
+                        treasureManager: TreasureManager(), // 傳入空的 treasureManager
+                        mode: .selectLocation,
+                        userID: userID
+                    )
+                    .edgesIgnoringSafeArea(.all)
+                }
+                .presentationDetents([.height(650), .large])
+                .presentationDragIndicator(.visible)
                 
             case .search:
                 LocationSearchView(

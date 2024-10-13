@@ -386,7 +386,7 @@ import AVKit
 struct DepositPage: View {
     @State private var isPublic: Bool = true
     @State private var categories: [String] = []
-    @State private var selectedCategory: String = "Creative"
+    @State private var selectedCategory: String = ""
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var selectedLocationName: String?
     @State private var shouldZoomToUserLocation: Bool = true
@@ -411,6 +411,8 @@ struct DepositPage: View {
     @State private var isRecording: Bool = false
     @State private var isPlaying: Bool = false
     @State private var uploadedAudioURL: URL?
+    
+    @State private var isSaveAnimationPlaying: Bool = false
     
     @StateObject private var locationManager = LocationManager()
     @StateObject private var searchViewModel = LocationSearchViewModel()
@@ -613,6 +615,10 @@ struct DepositPage: View {
                         onSave: {
                             resetFields()
                             showErrorMessage = false  // 成功保存後，隱藏錯誤訊息
+                            isSaveAnimationPlaying = true
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+//                                isSaveAnimationPlaying = false
+//                            }
                         }
                     )
                     .opacity(canSave ? 1 : 0.5)  // 不可保存時降低不透明度
@@ -622,6 +628,20 @@ struct DepositPage: View {
                 .background(Color.clear)
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
+            // 顯示保存成功動畫
+            if isSaveAnimationPlaying {
+                LottieView(animationFileName: "flying", isPlaying: $isSaveAnimationPlaying)
+                    .frame(width: 300, height: 300)
+                    .scaleEffect(0.2)  // 調整動畫大小
+                    .cornerRadius(10)
+                    .shadow(radius: 3)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            isSaveAnimationPlaying = false
+                        }
+                    }
+                    .zIndex(1)
+            }
             
             // CustomAlert 彈出視窗，並添加背景遮罩和顯示在中間
             if customAlert {
@@ -642,6 +662,22 @@ struct DepositPage: View {
                 .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2.5)  // 顯示在螢幕中央
             }
         }
+        .onAppear {
+                // 在畫面出現時檢查類別並設定選中的類別
+                if let firstCategory = categories.first {
+                    selectedCategory = firstCategory
+                } else {
+                    selectedCategory = "未分類"
+                }
+            }
+            .onChange(of: categories) { newCategories in
+                // 類別變更時重新設定選中的類別
+                if let firstCategory = newCategories.first {
+                    selectedCategory = firstCategory
+                } else {
+                    selectedCategory = "未分類"
+                }
+            }
     }
     
     // 處理選取的多媒體並將其添加到 ScrollView

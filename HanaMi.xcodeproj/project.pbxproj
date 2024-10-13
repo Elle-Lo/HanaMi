@@ -40,6 +40,16 @@
 		AB825DA22CB3E5B800965502 /* URLImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */; };
 		AB825DA42CB4C74B00965502 /* LexendDeca-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB825DA32CB4C74B00965502 /* LexendDeca-Regular.ttf */; };
 		AB825DA62CB5748C00965502 /* CollectionTreasureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */; };
+		AB825DA82CB8D3E700965502 /* PrivacyPolicyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA72CB8D3E700965502 /* PrivacyPolicyPage.swift */; };
+		AB825DAB2CB9014A00965502 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = AB825DAA2CB9014A00965502 /* Lottie */; };
+		AB825DAD2CB9059600965502 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DAC2CB9059600965502 /* LottieView.swift */; };
+		AB825DB32CB90D7600965502 /* check.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DB22CB90D7600965502 /* check.json */; };
+		AB825DB52CB91B4B00965502 /* treasure.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DB42CB91B4B00965502 /* treasure.json */; };
+		AB825DB92CB9277E00965502 /* walking.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DB82CB9277D00965502 /* walking.json */; };
+		AB825DBD2CB92EF600965502 /* save.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DBC2CB92EF600965502 /* save.json */; };
+		AB825DBF2CBA20F800965502 /* flying.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DBE2CBA20F700965502 /* flying.json */; };
+		AB825DCB2CBA7C2100965502 /* heart.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DCA2CBA7C2100965502 /* heart.json */; };
+		AB825DCD2CBA902300965502 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DCC2CBA902300965502 /* BlurView.swift */; };
 		ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */; };
 		ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */; };
 		ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */; };
@@ -112,6 +122,15 @@
 		AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageViewWithPreview.swift; sourceTree = "<group>"; };
 		AB825DA32CB4C74B00965502 /* LexendDeca-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-Regular.ttf"; sourceTree = "<group>"; };
 		AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTreasureCardView.swift; sourceTree = "<group>"; };
+		AB825DA72CB8D3E700965502 /* PrivacyPolicyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyPage.swift; sourceTree = "<group>"; };
+		AB825DAC2CB9059600965502 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
+		AB825DB22CB90D7600965502 /* check.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = check.json; sourceTree = "<group>"; };
+		AB825DB42CB91B4B00965502 /* treasure.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = treasure.json; sourceTree = "<group>"; };
+		AB825DB82CB9277D00965502 /* walking.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = walking.json; sourceTree = "<group>"; };
+		AB825DBC2CB92EF600965502 /* save.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = save.json; sourceTree = "<group>"; };
+		AB825DBE2CBA20F700965502 /* flying.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = flying.json; sourceTree = "<group>"; };
+		AB825DCA2CBA7C2100965502 /* heart.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = heart.json; sourceTree = "<group>"; };
+		AB825DCC2CBA902300965502 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanaMi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaMiApp.swift; sourceTree = "<group>"; };
 		ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -170,6 +189,7 @@
 				AB06AA632CA9788A00E49F5C /* FirebaseFirestore in Frameworks */,
 				AB06AA612CA9788A00E49F5C /* FirebaseDatabase in Frameworks */,
 				ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */,
+				AB825DAB2CB9014A00965502 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,8 +262,16 @@
 				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
 				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
 				ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */,
+				AB825DA72CB8D3E700965502 /* PrivacyPolicyPage.swift */,
 				AB06AA6A2CABFBC700E49F5C /* CollectionsPage.swift */,
 				AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */,
+				AB825DAC2CB9059600965502 /* LottieView.swift */,
+				AB825DB22CB90D7600965502 /* check.json */,
+				AB825DB42CB91B4B00965502 /* treasure.json */,
+				AB825DB82CB9277D00965502 /* walking.json */,
+				AB825DBC2CB92EF600965502 /* save.json */,
+				AB825DBE2CBA20F700965502 /* flying.json */,
+				AB825DCA2CBA7C2100965502 /* heart.json */,
 				ABB59A072CB307DB00E61CF2 /* ToolView */,
 				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				ABB59A062CB307A800E61CF2 /* HomePage */,
@@ -348,6 +376,7 @@
 				ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */,
 				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
 				AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */,
+				AB825DCC2CBA902300965502 /* BlurView.swift */,
 				ABAFAB112C996B5B007CDB45 /* Map */,
 			);
 			path = ToolView;
@@ -382,6 +411,7 @@
 				AB06AA642CA9788A00E49F5C /* FirebaseFirestoreCombine-Community */,
 				AB06AA662CA9788A00E49F5C /* FirebaseStorage */,
 				AB06AA6D2CAD050C00E49F5C /* MediaPicker */,
+				AB825DAA2CB9014A00965502 /* Lottie */,
 			);
 			productName = HanaMi;
 			productReference = ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */;
@@ -417,6 +447,7 @@
 				ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				AB06AA592CA9788A00E49F5C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				AB06AA6C2CAD050C00E49F5C /* XCRemoteSwiftPackageReference "SwiftUI-MediaPicker" */,
+				AB825DA92CB9014A00965502 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = ABAFAAB42C93DBBF007CDB45 /* Products */;
 			projectDirPath = "";
@@ -432,15 +463,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB825DB52CB91B4B00965502 /* treasure.json in Resources */,
 				AB825DA42CB4C74B00965502 /* LexendDeca-Regular.ttf in Resources */,
 				ABAFAABE2C93DBC1007CDB45 /* Preview Assets.xcassets in Resources */,
 				AB825DA02CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf in Resources */,
 				ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */,
 				ABB59A092CB380F300E61CF2 /* LexendDeca-Bold.ttf in Resources */,
 				AB06AA9E2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf in Resources */,
+				AB825DB92CB9277E00965502 /* walking.json in Resources */,
+				AB825DCB2CBA7C2100965502 /* heart.json in Resources */,
+				AB825DBD2CB92EF600965502 /* save.json in Resources */,
+				AB825DB32CB90D7600965502 /* check.json in Resources */,
 				AB06AA722CAD802C00E49F5C /* Launch Screen.storyboard in Resources */,
 				ABAFAAC52C93F726007CDB45 /* GoogleService-Info.plist in Resources */,
 				AB06AAA22CB1FDE200E49F5C /* NotoSansHK-Regular.ttf in Resources */,
+				AB825DBF2CBA20F800965502 /* flying.json in Resources */,
 				AB06AAA02CB1FDD800E49F5C /* NotoSansHK-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -495,6 +532,7 @@
 				ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */,
 				AB06AA052CA01CC300E49F5C /* StatusSelectionSheet.swift in Sources */,
 				ABB59A012CB2582A00E61CF2 /* VideoPlayerView.swift in Sources */,
+				AB825DA82CB8D3E700965502 /* PrivacyPolicyPage.swift in Sources */,
 				ABAFAB212C9A7EEB007CDB45 /* CustomMapView.swift in Sources */,
 				ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */,
 				AB06AA692CA982BB00E49F5C /* SignUpPage.swift in Sources */,
@@ -508,10 +546,12 @@
 				ABAFAB1F2C9A7D9E007CDB45 /* TreasureManager.swift in Sources */,
 				AB825DA62CB5748C00965502 /* CollectionTreasureCardView.swift in Sources */,
 				ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */,
+				AB825DCD2CBA902300965502 /* BlurView.swift in Sources */,
 				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
 				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,
 				AB06AA972CAFDB6700E49F5C /* ImageViewer.swift in Sources */,
+				AB825DAD2CB9059600965502 /* LottieView.swift in Sources */,
 				AB06AA4D2CA9420D00E49F5C /* TreasureListView.swift in Sources */,
 				ABAFAB1C2C99ACF5007CDB45 /* CustomAlert.swift in Sources */,
 				ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */,
@@ -675,6 +715,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -689,7 +730,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -715,6 +756,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -729,7 +771,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -771,6 +813,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.2.0;
+			};
+		};
+		AB825DA92CB9014A00965502 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.0;
 			};
 		};
 		ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -839,6 +889,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AB06AA6C2CAD050C00E49F5C /* XCRemoteSwiftPackageReference "SwiftUI-MediaPicker" */;
 			productName = MediaPicker;
+		};
+		AB825DAA2CB9014A00965502 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB825DA92CB9014A00965502 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 		ABAFAB0A2C993504007CDB45 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

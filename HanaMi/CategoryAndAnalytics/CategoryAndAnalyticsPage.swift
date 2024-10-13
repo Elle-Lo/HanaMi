@@ -11,8 +11,6 @@ struct CategoryAndAnalyticsPage: View {
             } else {
                 AnalyticsView() // 顯示分析頁面
             }
-
-            Spacer()
         }
         .navigationTitle(showCategory ? "Category" : "Analytics")
         .navigationBarTitleDisplayMode(.inline) // 只保留標題和頁面顯示邏輯

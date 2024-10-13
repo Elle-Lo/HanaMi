@@ -6,9 +6,11 @@ struct SignUpPage: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
+    @State private var isPasswordVisible = false // 控制密碼是否可見
     
     @State private var passwordError: String = ""
     @State private var generalErrorMessage: String = "" // 用來顯示 Firebase 錯誤訊息
+    @Environment(\.presentationMode) var presentationMode
     
     @AppStorage("log_Status") private var logStatus: Bool = false // 追蹤登入狀態
     private let firestoreService = FirestoreService() // FirestoreService 實例
@@ -55,11 +57,39 @@ struct SignUpPage: View {
                     .foregroundColor(Color(hex: "#522504"))
                     .font(.system(size: 16, weight: .medium))
                 
-                SecureField("", text: $password)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 25)
-                                    .stroke(Color(hex: "#FFF7EF"), lineWidth: 4))
-                    .frame(height: 40)
+                ZStack(alignment: .trailing) {
+                    if isPasswordVisible {
+                        TextField("", text: $password) // 顯示明文密碼
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(25)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .stroke(Color(hex: "#FFF7EF"), lineWidth: 4)
+                            )
+                            .frame(height: 45)
+                    } else {
+                        SecureField("", text: $password) // 顯示密文密碼
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(25)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .stroke(Color(hex: "#FFF7EF"), lineWidth: 4)
+                            )
+                            .frame(height: 45)
+                    }
+                    
+                    // 眼睛圖示，用來切換顯示或隱藏密碼
+                    Button(action: {
+                        isPasswordVisible.toggle()
+                    }) {
+                        Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 13))
+                            .padding(.trailing, 15)
+                    }
+                }
             }
           
             // Confirm password field
@@ -68,11 +98,40 @@ struct SignUpPage: View {
                     .foregroundColor(Color(hex: "#522504"))
                     .font(.system(size: 16, weight: .medium))
                 
-                SecureField("", text: $confirmPassword)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 25)
-                                    .stroke(Color(hex: "#FFF7EF"), lineWidth: 4))
-                    .frame(height: 40)
+                
+                ZStack(alignment: .trailing) {
+                    if isPasswordVisible {
+                        TextField("", text: $confirmPassword) // 顯示明文密碼
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(25)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .stroke(Color(hex: "#FFF7EF"), lineWidth: 4)
+                            )
+                            .frame(height: 45)
+                    } else {
+                        SecureField("", text: $confirmPassword) // 顯示密文密碼
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(25)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .stroke(Color(hex: "#FFF7EF"), lineWidth: 4)
+                            )
+                            .frame(height: 45)
+                    }
+                    
+                    // 眼睛圖示，用來切換顯示或隱藏密碼
+                    Button(action: {
+                        isPasswordVisible.toggle()
+                    }) {
+                        Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                            .foregroundColor(.gray)
+                            .font(.system(size: 13))
+                            .padding(.trailing, 15)
+                    }
+                }
                 
                 if !passwordError.isEmpty {
                     Text(passwordError)
@@ -97,6 +156,17 @@ struct SignUpPage: View {
             .disabled(isButtonDisabled()) // Disable button if any errors or fields are empty
         }
         .padding(.horizontal, 30)
+        .navigationBarBackButtonHidden(true)  // 隱藏系統默認的返回按鈕
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()  // 返回到上一頁
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.colorBrown)
+                }
+            }
+        }
     }
     
     // 驗證並註冊使用者

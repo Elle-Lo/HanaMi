@@ -21,7 +21,7 @@ struct Users: Identifiable, Codable {
     var collectionTreasureList: [String]
 }
 
-struct Treasure: Identifiable, Codable {
+struct Treasure: Identifiable, Codable, Equatable {
     @DocumentID var id: String?
     var category: String
     var createdTime: Date
@@ -33,7 +33,7 @@ struct Treasure: Identifiable, Codable {
     var userID: String
 }
 
-struct TreasureContent: Identifiable, Codable {
+struct TreasureContent: Identifiable, Codable, Equatable {
     var id: String = UUID().uuidString
     var type: ContentType
     var content: String

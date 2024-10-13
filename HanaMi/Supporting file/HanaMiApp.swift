@@ -18,7 +18,9 @@ struct HanaMiApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     init() {
         IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.resignOnTouchOutside = true
         IQKeyboardManager.shared.keyboardDistanceFromTextField = 0 // 关闭默认的距离调整
+        UIView.appearance().overrideUserInterfaceStyle = .light
         }
     
     var body: some Scene {

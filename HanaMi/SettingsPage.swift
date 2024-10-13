@@ -4,6 +4,7 @@ import FirebaseStorage
 import Kingfisher
 import AuthenticationServices
 import IQKeyboardManagerSwift
+import Lottie
 
 struct SettingsPage: View {
     // MARK: - State Properties
@@ -25,12 +26,16 @@ struct SettingsPage: View {
     @State private var backgroundImageUrl: URL?
     @State private var isBackgroundPhotoPickerPresented: Bool = false
     @State private var isRemoveBackgroundEnabled: Bool = false
+    @State private var isPrivacyPolicyPresented = false
+    @State private var isLottiePlaying: Bool = false
     
     @State private var showActionSheet: Bool = false
     @State private var showDeleteAccountAlert: Bool = false
+    @State private var showLogOutAccountAlert: Bool = false
     @State private var errorMessage: String = ""
     
     @FocusState private var isNameFocused: Bool
+    @Environment(\.presentationMode) var presentationMode
 
     // MARK: - Services and References
     
@@ -46,31 +51,32 @@ struct SettingsPage: View {
     // MARK: - Body
     
     var body: some View {
-        ScrollView {
+
         ZStack {
-            // 背景圆角矩形
-            RoundedRectangle(cornerRadius: 60, style: .continuous)
-                .fill(Color.colorYellow)
-                .frame(height: UIScreen.main.bounds.height * 0.75)
-                .offset(y: UIScreen.main.bounds.height * 0.2)
             
-            VStack(spacing: 0) {
-                // 个人信息区域
-                profileSection
-                    .padding(.top, 40)
-                
-                // 水豚图片
-                Image("capybaraRight")
-                    .resizable()
-                    .frame(width: 60, height: 40)
-                    .offset(x: -120, y: -20)
-                
-                // 设置选项
-                VStack {
-                    settingsOptions
-                        .padding(.horizontal, 20)
+            ScrollView {
+                // 背景圆角矩形
+                RoundedRectangle(cornerRadius: 60, style: .continuous)
+                    .fill(Color.colorYellow)
+                    .frame(height: UIScreen.main.bounds.height * 0.75)
+                    .offset(y: UIScreen.main.bounds.height * 0.25)
+            }
+                VStack(spacing: 0) {
+                    
+                    profileSection
+                        .padding(.top, 40)
+                    
+                    Image("capybaraRight")
+                        .resizable()
+                        .frame(width: 60, height: 40)
+                        .offset(x: -120, y: -20)
+                    
+                ScrollView {
+                    VStack {
+                        settingsOptions
+                            .padding(.horizontal, 20)
+                    }
                 }
-//                .padding(.top, 5)
             }
             .alert("確認要刪除帳號嗎？取消好嗎:)", isPresented: $showDeleteAccountAlert) {
                 Button("確認", role: .destructive) {
@@ -85,9 +91,46 @@ struct SettingsPage: View {
             } message: {
                 Text("我會很難過～而且這個操作無法還原，帳號和所有數據將永遠刪除。")
             }
+            .alert("登出", isPresented: $showLogOutAccountAlert) {
+                Button("確認", role: .destructive) {
+                    try? Auth.auth().signOut()
+                    UserDefaults.standard.removeObject(forKey: "userID")
+                    logStatus = false
+                }
+                Button("取消", role: .cancel) {}
+            } message: {
+                Text("您確認要登出嗎？")
+            }
+            
+            // Lottie 動畫 (置於最上層，並縮小尺寸)
+            if isLottiePlaying {
+                LottieView(animationFileName: "check", isPlaying: $isLottiePlaying)
+                    .frame(width: 140, height: 140)
+                    .scaleEffect(0.15)  // 調整動畫大小
+                    .background(Color.white.opacity(0.6))
+                    .cornerRadius(10)
+                    .shadow(radius: 10)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            isLottiePlaying = false
+                        }
+                    }
+                    .zIndex(1)
+            }
         }
         .navigationTitle("設定")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)  // 隱藏系統默認的返回按鈕
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()  // 返回到上一頁
+                }) {
+                    Image(systemName: "chevron.backward")
+                        .foregroundColor(.colorBrown)
+                }
+            }
+        }
         .sheet(isPresented: $isProfilePhotoPickerPresented) {
             PhotoPicker(image: $selectedProfileImage)
                 .edgesIgnoringSafeArea(.all)
@@ -116,7 +159,7 @@ struct SettingsPage: View {
         .onAppear {
             fetchUserNameAndProfileImage()
         }
-    }
+    
 }
     
     // MARK: - Subviews
@@ -223,13 +266,13 @@ struct SettingsPage: View {
                 removeBackgroundImage()
             }
             
-            SettingsButton(iconName: "arrow.right.square", text: "登出") {
-                try? Auth.auth().signOut()
-                UserDefaults.standard.removeObject(forKey: "userID")
-                logStatus = false
-            }
-            
             FavoriteButton()
+            
+            PrivacyPolicyButton()
+            
+            SettingsButton(iconName: "arrow.right.square", text: "登出") {
+                showLogOutAccountAlert = true
+            }
             
             Divider()
             
@@ -280,6 +323,8 @@ struct SettingsPage: View {
         selectedProfileImage = nil
     }
     
+    
+    
     private func uploadBackgroundImageToStorage(image: UIImage) {
         guard let uid = uid else { return }
         let imageName = UUID().uuidString
@@ -300,6 +345,8 @@ struct SettingsPage: View {
                 if let downloadURL = url {
                     firestoreService.updateUserBackgroundImage(uid: uid, imageUrl: downloadURL.absoluteString)
                     self.backgroundImageUrl = downloadURL
+                    
+                    isLottiePlaying = true
                 }
             }
         }
@@ -328,6 +375,7 @@ struct SettingsPage: View {
         firestoreService.removeUserBackgroundImage(uid: uid, imageUrl: imageUrl) { success in
             if success {
                 self.backgroundImageUrl = nil
+                isLottiePlaying = true
                 print("背景图片已删除")
             } else {
                 print("删除背景图片失败")
@@ -450,6 +498,13 @@ struct SettingsPage: View {
         }
         return result
     }
+    
+    // 打開隱私權政策頁面
+//    private func openPrivacyPolicy() {
+//        if let url = URL(string: "https://www.privacypolicies.com/live/87b7a63c-e519-440a-9f90-370fcdff9b0a") {
+//            UIApplication.shared.open(url)
+//        }
+//    }
 }
 
 struct CharacterButton: View {
@@ -518,6 +573,35 @@ struct FavoriteButton: View {
     }
 }
 
+struct PrivacyPolicyButton: View {
+    var body: some View {
+        NavigationLink(destination: PrivacyPolicyPage()) {
+            HStack {
+                Image(systemName: "lock.shield")
+                    .foregroundColor(.colorBrown)
+                    .font(.system(size: 24))
+                    .padding(.trailing, 20)
+                    .frame(width: 40)
+
+                Text("隱私權政策")
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
+                    .foregroundColor(.colorBrown)
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.colorBrown)
+                    .font(.system(size: 16))
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.clear)
+            .cornerRadius(10)
+        }
+        .padding(.vertical, 5)
+    }
+}
+
 // MARK: - SettingsButton 视图
 
 struct SettingsButton: View {
@@ -552,4 +636,5 @@ struct SettingsButton: View {
         }
         .padding(.vertical, 5)
     }
+
 }
