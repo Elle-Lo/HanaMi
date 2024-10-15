@@ -92,6 +92,15 @@ struct StarterPage: View {
                     }
                 }
                 .padding(.top, 5)
+                
+                Button(action: openEULA) {
+                    Text("End User License Agreement (EULA)")
+                        .underline()
+                        .foregroundColor(.blue)
+                        .font(.custom("LexendDeca-Regular", size: 10))
+                        .padding(.top, 1)
+                }
+                
             }
             .alert(errorMessge, isPresented: $showAlert) { }
             .overlay {
@@ -199,6 +208,12 @@ struct StarterPage: View {
         
         return hashString
     }
+    
+    private func openEULA() {
+            if let url = URL(string: "https://www.privacypolicies.com/live/dd18a0b6-f1e4-4a93-b142-146fe5b80b6c") {
+                UIApplication.shared.open(url)
+            }
+        }
 }
 
 #Preview {

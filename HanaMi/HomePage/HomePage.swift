@@ -2,6 +2,7 @@ import SwiftUI
 import FirebaseFirestore
 import Kingfisher
 import AVFoundation
+import FirebaseCrashlytics
 
 struct HomePage: View {
     @State private var treasures: [Treasure] = []
@@ -40,6 +41,7 @@ struct HomePage: View {
             
             VStack {
                 Spacer()
+
                 HStack {
                     Spacer()
                     Button(action: {

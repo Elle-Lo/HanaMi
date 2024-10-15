@@ -19,6 +19,8 @@ struct Users: Identifiable, Codable {
     var image: String
     var backgroundImage: String
     var collectionTreasureList: [String]
+    var blockList: [String]
+    var wasBlockedByList: [String]
 }
 
 struct Treasure: Identifiable, Codable, Equatable {
@@ -53,4 +55,11 @@ struct TreasureSummary: Codable {
     let latitude: Double
     let longitude: Double
     let userID: String
+}
+
+struct Report: Codable {
+    var id: String = UUID().uuidString
+    var reason: String
+    var reporter: String
+    var reportedUser: String
 }

@@ -13,6 +13,10 @@ struct TreasureDetailView: View {
     @State private var isPlayingHeartAnimation = false  // 控制心形動畫播放
     @State private var isFavorite = false
     @State private var collectionTreasureList: [String] = []
+    @State private var showReportAlert = false
+    @State private var reportReason = ""
+    @State private var showMenu = false // 控制 Menu 的顯示
+    
     private let firestoreService = FirestoreService()
 
     private var userID: String {
@@ -29,55 +33,76 @@ struct TreasureDetailView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         // 顯示日期
-                        Text(treasure.createdTime, formatter: dateFormatter)
-                            .font(.custom("LexendDeca-SemiBold", size: 18))
-                            .foregroundColor(.colorBrown)
-                            .bold()
-                        
-                        // 公開狀態、類別和地點
-                        HStack(spacing: 8) {
-                            if treasure.isPublic {
-                                Text("公開")
-                                    .padding(.vertical, 10)
-                                    .padding(.horizontal, 12)
-                                    .font(.custom("LexendDeca-SemiBold", size: 15))
-                                    .background(Color.colorYellow)
-                                    .cornerRadius(10)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.colorBrown, lineWidth: 2)
-                                    )
-                                    .foregroundColor(.colorBrown)
-                                    .bold()
-                            } else {
-                                Text("私人")
+                        HStack {
+                            // 顯示日期
+                            Text(treasure.createdTime, formatter: dateFormatter)
+                                .font(.custom("LexendDeca-SemiBold", size: 18))
+                                .foregroundColor(.colorBrown)
+                                .bold()
+                            
+                            Spacer()
+                            
+                            // Menu 按鈕
+                            Menu {
+                                Button("檢舉", role: .none) {
+                                    showReportAlert = true
+                                }
+                                Button("封鎖", role: .destructive) {
+                                    blockUser()
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis")
+                                    .font(.system(size: 18)) // 調小按鈕圖示大小
+                                    .foregroundColor(.black)
+                                    .padding(8) // 控制內部間距
+                                    .background(Color.clear)
+                            }
+                            .frame(width: 30, height: 30) // 控制按鈕大小
+                        }
+                            // 公開狀態、類別和地點
+                            HStack(spacing: 8) {
+                                if treasure.isPublic {
+                                    Text("公開")
+                                        .padding(.vertical, 10)
+                                        .padding(.horizontal, 12)
+                                        .font(.custom("LexendDeca-SemiBold", size: 15))
+                                        .background(Color.colorYellow)
+                                        .cornerRadius(10)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke(Color.colorBrown, lineWidth: 2)
+                                        )
+                                        .foregroundColor(.colorBrown)
+                                        .bold()
+                                } else {
+                                    Text("私人")
+                                        .padding(.vertical, 10)
+                                        .padding(.horizontal, 18)
+                                        .font(.custom("LexendDeca-SemiBold", size: 15))
+                                        .background(Color.colorBrown)
+                                        .cornerRadius(10)
+                                        .foregroundColor(.colorYellow)
+                                        .bold()
+                                }
+                                
+                                Text(treasure.category)
                                     .padding(.vertical, 10)
                                     .padding(.horizontal, 18)
-                                    .font(.custom("LexendDeca-SemiBold", size: 15))
-                                    .background(Color.colorBrown)
+                                    .background(Color(hex: "D4D4D4").opacity(0.9))
                                     .cornerRadius(10)
                                     .foregroundColor(.colorYellow)
-                                    .bold()
+                                    .font(.custom("LexendDeca-SemiBold", size: 15))
                             }
+                            .padding(.leading, 2)
                             
-                            Text(treasure.category)
-                                .padding(.vertical, 10)
-                                .padding(.horizontal, 18)
-                                .background(Color(hex: "D4D4D4").opacity(0.9))
-                                .cornerRadius(10)
-                                .foregroundColor(.colorYellow)
-                                .font(.custom("LexendDeca-SemiBold", size: 15))
-                        }
-                        .padding(.leading, 2)
-                        
-                        HStack {
-                            Image(systemName: "mappin.and.ellipse")
-                                .foregroundColor(.colorBrown)
-                            Text(treasure.locationName)
-                                .foregroundColor(.colorBrown)
-                                .font(.custom("LexendDeca-SemiBold", size: 10))
-                        }
-                        .padding(.vertical, 8)
+                            HStack {
+                                Image(systemName: "mappin.and.ellipse")
+                                    .foregroundColor(.colorBrown)
+                                Text(treasure.locationName)
+                                    .foregroundColor(.colorBrown)
+                                    .font(.custom("LexendDeca-SemiBold", size: 10))
+                            }
+                            .padding(.vertical, 8)
                         .padding(.horizontal, 15)
                         .background(Color(hex: "E8E8E8").opacity(0.75))
                         .cornerRadius(10)
@@ -106,9 +131,6 @@ struct TreasureDetailView: View {
                                         case .link:
                                             if let url = URL(string: content.content) {
                                                 LinkPreviewView(url: url)
-                                                    .cornerRadius(10)
-                                                    .shadow(radius: 5)
-                                                    .padding(.vertical, 5)
                                             }
                                         default:
                                             EmptyView()
@@ -146,8 +168,10 @@ struct TreasureDetailView: View {
                 .padding(.top, 40)
                 .padding(.bottom, 110)
                 .padding(.horizontal, 20)
+                
             }
-                // 收藏按鈕，位於頁面底部中間
+            
+            
             // 收藏按鈕及動畫顯示
                         VStack {
                             Spacer()
@@ -183,6 +207,11 @@ struct TreasureDetailView: View {
                     }
                     .alert(isPresented: $showAlert) {
                         Alert(title: Text(alertMessage))
+                    }
+                    .alert("檢舉此寶藏", isPresented: $showReportAlert) {
+                        TextField("請輸入檢舉原因", text: $reportReason)
+                        Button("送出", action: submitReport)
+                        Button("取消", role: .cancel) {}
                     }
                     .onAppear {
                         fetchUserFavorites()
@@ -239,4 +268,37 @@ struct TreasureDetailView: View {
         }
     }
 
+    private func submitReport() {
+            guard !reportReason.trimmingCharacters(in: .whitespaces).isEmpty else {
+                print("檢舉原因不可為空")
+                return
+            }
+            let report = Report(
+                reason: reportReason,
+                reporter: userID,
+                reportedUser: treasure.userID
+            )
+            firestoreService.reportUser(report: report) { result in
+                switch result {
+                case .success:
+                    print("檢舉已成功送出")
+                case .failure(let error):
+                    print("檢舉失敗：\(error.localizedDescription)")
+                }
+            }
+        }
+    
+    private func blockUser() {
+        firestoreService.blockUser(currentUserID: userID, blockedUserID: treasure.userID) { result in
+            switch result {
+            case .success:
+                print("已成功封鎖該使用者")
+                // 可根據需求更新 UI 或跳轉頁面，避免繼續顯示該用戶的寶藏
+            case .failure(let error):
+                print("封鎖失敗：\(error.localizedDescription)")
+            }
+        }
+    }
+
+    
 }
