@@ -88,6 +88,7 @@
 		ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */; };
 		ABAFAB252C9A8533007CDB45 /* TreasureAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */; };
 		ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */; };
+		ABB37C222CBD0F6B00110FC7 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = ABB37C212CBD0F6B00110FC7 /* FirebaseCrashlytics */; };
 		ABB59A012CB2582A00E61CF2 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */; };
 		ABB59A032CB268CC00E61CF2 /* ImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */; };
 		ABB59A052CB3076A00E61CF2 /* TreasureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A042CB3076A00E61CF2 /* TreasureCardView.swift */; };
@@ -187,6 +188,7 @@
 				ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */,
 				AB06AA5B2CA9788A00E49F5C /* FirebaseAnalytics in Frameworks */,
 				AB06AA632CA9788A00E49F5C /* FirebaseFirestore in Frameworks */,
+				ABB37C222CBD0F6B00110FC7 /* FirebaseCrashlytics in Frameworks */,
 				AB06AA612CA9788A00E49F5C /* FirebaseDatabase in Frameworks */,
 				ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */,
 				AB825DAB2CB9014A00965502 /* Lottie in Frameworks */,
@@ -201,9 +203,9 @@
 			children = (
 				ABAFAAE32C958650007CDB45 /* CharacterPage.swift */,
 				AB06AA022CA0101800E49F5C /* CharacterAnimationScene.swift */,
-				AB06AA042CA01CC300E49F5C /* StatusSelectionSheet.swift */,
-				AB06AA062CA01CE700E49F5C /* ActionButton.swift */,
 				AB06AA082CA021C500E49F5C /* SpriteKitView.swift */,
+				AB06AA062CA01CE700E49F5C /* ActionButton.swift */,
+				AB06AA042CA01CC300E49F5C /* StatusSelectionSheet.swift */,
 			);
 			path = Character;
 			sourceTree = "<group>";
@@ -265,13 +267,7 @@
 				AB825DA72CB8D3E700965502 /* PrivacyPolicyPage.swift */,
 				AB06AA6A2CABFBC700E49F5C /* CollectionsPage.swift */,
 				AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */,
-				AB825DAC2CB9059600965502 /* LottieView.swift */,
-				AB825DB22CB90D7600965502 /* check.json */,
-				AB825DB42CB91B4B00965502 /* treasure.json */,
-				AB825DB82CB9277D00965502 /* walking.json */,
-				AB825DBC2CB92EF600965502 /* save.json */,
-				AB825DBE2CBA20F700965502 /* flying.json */,
-				AB825DCA2CBA7C2100965502 /* heart.json */,
+				ABB37C202CBC10C400110FC7 /* LottieFile */,
 				ABB59A072CB307DB00E61CF2 /* ToolView */,
 				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				ABB59A062CB307A800E61CF2 /* HomePage */,
@@ -355,6 +351,20 @@
 			path = TreasurePage;
 			sourceTree = "<group>";
 		};
+		ABB37C202CBC10C400110FC7 /* LottieFile */ = {
+			isa = PBXGroup;
+			children = (
+				AB825DAC2CB9059600965502 /* LottieView.swift */,
+				AB825DB22CB90D7600965502 /* check.json */,
+				AB825DB42CB91B4B00965502 /* treasure.json */,
+				AB825DB82CB9277D00965502 /* walking.json */,
+				AB825DBC2CB92EF600965502 /* save.json */,
+				AB825DBE2CBA20F700965502 /* flying.json */,
+				AB825DCA2CBA7C2100965502 /* heart.json */,
+			);
+			path = LottieFile;
+			sourceTree = "<group>";
+		};
 		ABB59A062CB307A800E61CF2 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
@@ -393,6 +403,7 @@
 				ABAFAAB02C93DBBF007CDB45 /* Frameworks */,
 				ABAFAAB12C93DBBF007CDB45 /* Resources */,
 				ABAFAAF82C97C803007CDB45 /* ShellScript */,
+				ABB37C232CBD0F7800110FC7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -412,6 +423,7 @@
 				AB06AA662CA9788A00E49F5C /* FirebaseStorage */,
 				AB06AA6D2CAD050C00E49F5C /* MediaPicker */,
 				AB825DAA2CB9014A00965502 /* Lottie */,
+				ABB37C212CBD0F6B00110FC7 /* FirebaseCrashlytics */,
 			);
 			productName = HanaMi;
 			productReference = ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */;
@@ -503,6 +515,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nif [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n\n\n\n";
+		};
+		ABB37C232CBD0F7800110FC7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -701,14 +735,15 @@
 				CODE_SIGN_ENTITLEMENTS = HanaMi/HanaMi.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"HanaMi/Preview Content\"";
 				DEVELOPMENT_TEAM = KX36U2DJW6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HanaMi/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "我們需要取得您相機的權限";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
+				INFOPLIST_KEY_NSCameraUsageDescription = "此應用程式需要存取您的相機以拍攝照片或影片。";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "此應用程式需要您的位置來支援寶藏地圖的服務。";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用程式需要使用您的麥克風以錄製音訊。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -721,7 +756,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tzuninglo.HanaMi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -747,9 +782,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HanaMi/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "我們需要取得您相機的權限";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
+				INFOPLIST_KEY_NSCameraUsageDescription = "此應用程式需要存取您的相機以拍攝照片或影片。";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "此應用程式需要您的位置來支援寶藏地圖的服務。";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用程式需要使用您的麥克風以錄製音訊。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -762,7 +797,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tzuninglo.HanaMi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -909,6 +944,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		ABB37C212CBD0F6B00110FC7 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB06AA592CA9788A00E49F5C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

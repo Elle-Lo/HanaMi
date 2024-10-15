@@ -28,7 +28,6 @@ struct CustomMapView: UIViewRepresentable {
         var mode: MapMode
         var userID: String 
 
-
         init(_ parent: CustomMapView, mode: MapMode, userID: String) {
             self.parent = parent
             self.mode = mode
@@ -139,7 +138,6 @@ struct CustomMapView: UIViewRepresentable {
 
                 return annotationView
             }
-
             return nil
         }
 
@@ -151,9 +149,10 @@ struct CustomMapView: UIViewRepresentable {
 
             if mode == .selectLocation { // 如果是選擇地點模式
                 parent.selectedCoordinate = coordinate
-                parent.selectedLocationName = ""
-
-                // 使用反向地理編碼獲取地點名稱
+                DispatchQueue.main.async {
+                    self.parent.selectedLocationName = "正在載入..."
+                       }
+                
                 let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
                 let geocoder = CLGeocoder()
                 geocoder.reverseGeocodeLocation(location) { placemarks, error in

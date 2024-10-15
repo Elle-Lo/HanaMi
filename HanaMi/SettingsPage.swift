@@ -10,11 +10,11 @@ struct SettingsPage: View {
     // MARK: - State Properties
     
     @AppStorage("log_Status") private var logStatus: Bool = false
-    @State private var userName: String = "Loading..."
+    @State private var userName: String = "Ning"
     @State private var newUserName: String = ""
     @State private var isEditingName: Bool = false
     
-    @State private var characterName: String = "Loading..."
+    @State private var characterName: String = "HanaMi"
     @State private var newCharacterName: String = ""
     @State private var showCharacterAlert: Bool = false
     

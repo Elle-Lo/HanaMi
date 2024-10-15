@@ -2,49 +2,45 @@ import SwiftUI
 import SpriteKit
 import FirebaseFirestore
 
-// 角色頁面主結構
 struct CharacterPage: View {
     
-    @State private var scene = CharacterAnimationScene(size: UIScreen.main.bounds.size)  // 創建場景實例
-    @State private var showSheet = false  // 控制狀態 Sheet 顯示
+    @State private var scene = CharacterAnimationScene(size: UIScreen.main.bounds.size)
+    @State private var showSheet = false
     @State private var characterName = ""
-    @State private var currentStatusText = ""  // 初始狀態欄文字
-
+    @State private var currentStatusText = ""
+    
     private let db = Firestore.firestore()
     
     var body: some View {
         ZStack {
-            // 背景圖片
             Image("Homebg")
                 .resizable()
                 .scaledToFill()
-                .ignoresSafeArea()  // 背景填充整個屏幕
+                .ignoresSafeArea()
             
-            // SpriteKitView 透明背景
             SpriteKitView(scene: scene)
-                .ignoresSafeArea()   // 讓角色的場景填充整個頁面
+                .ignoresSafeArea()
             
             VStack {
-                // 加長的通知欄
+                
                 Text(currentStatusText)
                     .font(.custom("LexendDeca-Semibold", size: 15))
                     .foregroundColor(.colorBrown)
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(
-                        RoundedRectangle(cornerRadius: 25)  // 圓角
-                            .fill(Color.white.opacity(0.6))  // 半透明白色背景
-                            .shadow(radius: 5)  // 添加陰影效果
+                        RoundedRectangle(cornerRadius: 25)
+                            .fill(Color.white.opacity(0.6))
+                            .shadow(radius: 5)
                     )
                     .padding(.horizontal, 16)
-                    .padding(.top, 30)  // 調整到頂部
+                    .padding(.top, 30)
                 
                 Spacer()
                 
-                // 底部按鈕區域
                 HStack {
                     Button(action: {
-                        showSheet = true  // 顯示狀態選擇 Sheet
+                        showSheet = true
                     }) {
                         Text("狀態")
                             .font(.body)
@@ -58,7 +54,7 @@ struct CharacterPage: View {
                             )
                     }
                 }
-                .padding(.bottom, 30)  // 底部按鈕的間距
+                .padding(.bottom, 30)
             }
         }
         .onAppear {
@@ -67,39 +63,39 @@ struct CharacterPage: View {
         }
         .sheet(isPresented: $showSheet) {
             StatusSelectionSheet(
-                            showSheet: $showSheet,
-                            currentNotification: scene,
-                            performActionAndUpdateStatus: performActionAndUpdateStatus
-                        )
-                .presentationDetents([.fraction(0.25)])  // 使用 fraction 設定 Sheet 高度為畫面的 25%
-                .presentationDragIndicator(.visible)  // 顯示拖動條
+                showSheet: $showSheet,
+                currentNotification: scene,
+                performActionAndUpdateStatus: performActionAndUpdateStatus
+            )
+            .presentationDetents([.fraction(0.25)])
+            .presentationDragIndicator(.visible)
         }
     }
     
     func fetchCharacterNameAndUpdateStatus() {
-            guard let userID = UserDefaults.standard.string(forKey: "userID") else { return }
-
-            db.collection("Users").document(userID).getDocument { document, error in
-                if let error = error {
-                    print("取得角色名稱錯誤: \(error.localizedDescription)")
-                    return
-                }
-
-                if let document = document, let data = document.data(), let name = data["characterName"] as? String {
-                    self.characterName = name
-                    self.updateStatusText(for: "idle")  // 預設為 idle 動作的狀態
-                } else {
-                    self.characterName = "角色"
-                    self.updateStatusText(for: "idle")  // 預設為 idle 動作的狀態
-                }
+        guard let userID = UserDefaults.standard.string(forKey: "userID") else { return }
+        
+        db.collection("Users").document(userID).getDocument { document, error in
+            if let error = error {
+                print("取得角色名稱錯誤: \(error.localizedDescription)")
+                return
+            }
+            
+            if let document = document, let data = document.data(), let name = data["characterName"] as? String {
+                self.characterName = name
+                self.updateStatusText(for: "idle")
+            } else {
+                self.characterName = "角色"
+                self.updateStatusText(for: "idle")
             }
         }
+    }
     
     func performActionAndUpdateStatus(action: String) {
-           scene.performAction(named: action)
-           updateStatusText(for: action)
-       }
-
+        scene.performAction(named: action)
+        updateStatusText(for: action)
+    }
+    
     func updateStatusText(for action: String) {
         let messages: [String]
         let generalStatusMessages = [
@@ -164,7 +160,6 @@ struct CharacterPage: View {
                 "\(characterName) 正在練習跳躍，試圖挑戰重力"
             ]
         case "idle":
-            // 將「通用狀態消息」加入 idle 狀態的隨機顯示
             messages = generalStatusMessages
         case "hit":
             messages = [
@@ -187,7 +182,6 @@ struct CharacterPage: View {
                 "\(characterName) 決定暫時放棄，躺平才是王道"
             ]
         default:
-            // 當沒有對應的動作時，顯示通用狀態消息
             messages = generalStatusMessages
         }
         
