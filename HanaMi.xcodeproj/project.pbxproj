@@ -40,6 +40,16 @@
 		AB825DA22CB3E5B800965502 /* URLImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */; };
 		AB825DA42CB4C74B00965502 /* LexendDeca-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AB825DA32CB4C74B00965502 /* LexendDeca-Regular.ttf */; };
 		AB825DA62CB5748C00965502 /* CollectionTreasureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */; };
+		AB825DA82CB8D3E700965502 /* PrivacyPolicyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DA72CB8D3E700965502 /* PrivacyPolicyPage.swift */; };
+		AB825DAB2CB9014A00965502 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = AB825DAA2CB9014A00965502 /* Lottie */; };
+		AB825DAD2CB9059600965502 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DAC2CB9059600965502 /* LottieView.swift */; };
+		AB825DB32CB90D7600965502 /* check.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DB22CB90D7600965502 /* check.json */; };
+		AB825DB52CB91B4B00965502 /* treasure.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DB42CB91B4B00965502 /* treasure.json */; };
+		AB825DB92CB9277E00965502 /* walking.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DB82CB9277D00965502 /* walking.json */; };
+		AB825DBD2CB92EF600965502 /* save.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DBC2CB92EF600965502 /* save.json */; };
+		AB825DBF2CBA20F800965502 /* flying.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DBE2CBA20F700965502 /* flying.json */; };
+		AB825DCB2CBA7C2100965502 /* heart.json in Resources */ = {isa = PBXBuildFile; fileRef = AB825DCA2CBA7C2100965502 /* heart.json */; };
+		AB825DCD2CBA902300965502 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB825DCC2CBA902300965502 /* BlurView.swift */; };
 		ABAFAAB72C93DBBF007CDB45 /* HanaMiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */; };
 		ABAFAAB92C93DBBF007CDB45 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */; };
 		ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABAFAABA2C93DBC1007CDB45 /* Assets.xcassets */; };
@@ -78,6 +88,8 @@
 		ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */; };
 		ABAFAB252C9A8533007CDB45 /* TreasureAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */; };
 		ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */; };
+		ABB37C222CBD0F6B00110FC7 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = ABB37C212CBD0F6B00110FC7 /* FirebaseCrashlytics */; };
+		ABB37C252CBE384F00110FC7 /* BlockListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB37C242CBE384F00110FC7 /* BlockListPage.swift */; };
 		ABB59A012CB2582A00E61CF2 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */; };
 		ABB59A032CB268CC00E61CF2 /* ImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */; };
 		ABB59A052CB3076A00E61CF2 /* TreasureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A042CB3076A00E61CF2 /* TreasureCardView.swift */; };
@@ -112,6 +124,15 @@
 		AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageViewWithPreview.swift; sourceTree = "<group>"; };
 		AB825DA32CB4C74B00965502 /* LexendDeca-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-Regular.ttf"; sourceTree = "<group>"; };
 		AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTreasureCardView.swift; sourceTree = "<group>"; };
+		AB825DA72CB8D3E700965502 /* PrivacyPolicyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyPage.swift; sourceTree = "<group>"; };
+		AB825DAC2CB9059600965502 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
+		AB825DB22CB90D7600965502 /* check.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = check.json; sourceTree = "<group>"; };
+		AB825DB42CB91B4B00965502 /* treasure.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = treasure.json; sourceTree = "<group>"; };
+		AB825DB82CB9277D00965502 /* walking.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = walking.json; sourceTree = "<group>"; };
+		AB825DBC2CB92EF600965502 /* save.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = save.json; sourceTree = "<group>"; };
+		AB825DBE2CBA20F700965502 /* flying.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = flying.json; sourceTree = "<group>"; };
+		AB825DCA2CBA7C2100965502 /* heart.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = heart.json; sourceTree = "<group>"; };
+		AB825DCC2CBA902300965502 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
 		ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HanaMi.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABAFAAB62C93DBBF007CDB45 /* HanaMiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HanaMiApp.swift; sourceTree = "<group>"; };
 		ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -148,6 +169,7 @@
 		ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureMapView.swift; sourceTree = "<group>"; };
 		ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureAnnotation.swift; sourceTree = "<group>"; };
 		ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureDetailView.swift; sourceTree = "<group>"; };
+		ABB37C242CBE384F00110FC7 /* BlockListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListPage.swift; sourceTree = "<group>"; };
 		ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewWithPreview.swift; sourceTree = "<group>"; };
 		ABB59A042CB3076A00E61CF2 /* TreasureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureCardView.swift; sourceTree = "<group>"; };
@@ -168,8 +190,10 @@
 				ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */,
 				AB06AA5B2CA9788A00E49F5C /* FirebaseAnalytics in Frameworks */,
 				AB06AA632CA9788A00E49F5C /* FirebaseFirestore in Frameworks */,
+				ABB37C222CBD0F6B00110FC7 /* FirebaseCrashlytics in Frameworks */,
 				AB06AA612CA9788A00E49F5C /* FirebaseDatabase in Frameworks */,
 				ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */,
+				AB825DAB2CB9014A00965502 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,9 +205,9 @@
 			children = (
 				ABAFAAE32C958650007CDB45 /* CharacterPage.swift */,
 				AB06AA022CA0101800E49F5C /* CharacterAnimationScene.swift */,
-				AB06AA042CA01CC300E49F5C /* StatusSelectionSheet.swift */,
-				AB06AA062CA01CE700E49F5C /* ActionButton.swift */,
 				AB06AA082CA021C500E49F5C /* SpriteKitView.swift */,
+				AB06AA062CA01CE700E49F5C /* ActionButton.swift */,
+				AB06AA042CA01CC300E49F5C /* StatusSelectionSheet.swift */,
 			);
 			path = Character;
 			sourceTree = "<group>";
@@ -242,8 +266,11 @@
 				ABAFAAB82C93DBBF007CDB45 /* ContentView.swift */,
 				ABAFAAEF2C96F39F007CDB45 /* MainTabView.swift */,
 				ABAFAAED2C96EFFE007CDB45 /* SettingsPage.swift */,
+				AB825DA72CB8D3E700965502 /* PrivacyPolicyPage.swift */,
 				AB06AA6A2CABFBC700E49F5C /* CollectionsPage.swift */,
 				AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */,
+				ABB37C242CBE384F00110FC7 /* BlockListPage.swift */,
+				ABB37C202CBC10C400110FC7 /* LottieFile */,
 				ABB59A072CB307DB00E61CF2 /* ToolView */,
 				ABAFAAF12C96F88E007CDB45 /* Log In */,
 				ABB59A062CB307A800E61CF2 /* HomePage */,
@@ -327,6 +354,20 @@
 			path = TreasurePage;
 			sourceTree = "<group>";
 		};
+		ABB37C202CBC10C400110FC7 /* LottieFile */ = {
+			isa = PBXGroup;
+			children = (
+				AB825DAC2CB9059600965502 /* LottieView.swift */,
+				AB825DB22CB90D7600965502 /* check.json */,
+				AB825DB42CB91B4B00965502 /* treasure.json */,
+				AB825DB82CB9277D00965502 /* walking.json */,
+				AB825DBC2CB92EF600965502 /* save.json */,
+				AB825DBE2CBA20F700965502 /* flying.json */,
+				AB825DCA2CBA7C2100965502 /* heart.json */,
+			);
+			path = LottieFile;
+			sourceTree = "<group>";
+		};
 		ABB59A062CB307A800E61CF2 /* HomePage */ = {
 			isa = PBXGroup;
 			children = (
@@ -348,6 +389,7 @@
 				ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */,
 				ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */,
 				AB825DA12CB3E5B800965502 /* URLImageViewWithPreview.swift */,
+				AB825DCC2CBA902300965502 /* BlurView.swift */,
 				ABAFAB112C996B5B007CDB45 /* Map */,
 			);
 			path = ToolView;
@@ -364,6 +406,7 @@
 				ABAFAAB02C93DBBF007CDB45 /* Frameworks */,
 				ABAFAAB12C93DBBF007CDB45 /* Resources */,
 				ABAFAAF82C97C803007CDB45 /* ShellScript */,
+				ABB37C232CBD0F7800110FC7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -382,6 +425,8 @@
 				AB06AA642CA9788A00E49F5C /* FirebaseFirestoreCombine-Community */,
 				AB06AA662CA9788A00E49F5C /* FirebaseStorage */,
 				AB06AA6D2CAD050C00E49F5C /* MediaPicker */,
+				AB825DAA2CB9014A00965502 /* Lottie */,
+				ABB37C212CBD0F6B00110FC7 /* FirebaseCrashlytics */,
 			);
 			productName = HanaMi;
 			productReference = ABAFAAB32C93DBBF007CDB45 /* HanaMi.app */;
@@ -417,6 +462,7 @@
 				ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				AB06AA592CA9788A00E49F5C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				AB06AA6C2CAD050C00E49F5C /* XCRemoteSwiftPackageReference "SwiftUI-MediaPicker" */,
+				AB825DA92CB9014A00965502 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = ABAFAAB42C93DBBF007CDB45 /* Products */;
 			projectDirPath = "";
@@ -432,15 +478,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB825DB52CB91B4B00965502 /* treasure.json in Resources */,
 				AB825DA42CB4C74B00965502 /* LexendDeca-Regular.ttf in Resources */,
 				ABAFAABE2C93DBC1007CDB45 /* Preview Assets.xcassets in Resources */,
 				AB825DA02CB3B5FB00965502 /* LexendDeca-ExtraBold.ttf in Resources */,
 				ABAFAABB2C93DBC1007CDB45 /* Assets.xcassets in Resources */,
 				ABB59A092CB380F300E61CF2 /* LexendDeca-Bold.ttf in Resources */,
 				AB06AA9E2CB17B2800E49F5C /* LexendDeca-SemiBold.ttf in Resources */,
+				AB825DB92CB9277E00965502 /* walking.json in Resources */,
+				AB825DCB2CBA7C2100965502 /* heart.json in Resources */,
+				AB825DBD2CB92EF600965502 /* save.json in Resources */,
+				AB825DB32CB90D7600965502 /* check.json in Resources */,
 				AB06AA722CAD802C00E49F5C /* Launch Screen.storyboard in Resources */,
 				ABAFAAC52C93F726007CDB45 /* GoogleService-Info.plist in Resources */,
 				AB06AAA22CB1FDE200E49F5C /* NotoSansHK-Regular.ttf in Resources */,
+				AB825DBF2CBA20F800965502 /* flying.json in Resources */,
 				AB06AAA02CB1FDD800E49F5C /* NotoSansHK-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,6 +518,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nif [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n\n\n\n";
+		};
+		ABB37C232CBD0F7800110FC7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -495,6 +569,7 @@
 				ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */,
 				AB06AA052CA01CC300E49F5C /* StatusSelectionSheet.swift in Sources */,
 				ABB59A012CB2582A00E61CF2 /* VideoPlayerView.swift in Sources */,
+				AB825DA82CB8D3E700965502 /* PrivacyPolicyPage.swift in Sources */,
 				ABAFAB212C9A7EEB007CDB45 /* CustomMapView.swift in Sources */,
 				ABAFAAFC2C980FFC007CDB45 /* LocationSelectionView.swift in Sources */,
 				AB06AA692CA982BB00E49F5C /* SignUpPage.swift in Sources */,
@@ -508,10 +583,13 @@
 				ABAFAB1F2C9A7D9E007CDB45 /* TreasureManager.swift in Sources */,
 				AB825DA62CB5748C00965502 /* CollectionTreasureCardView.swift in Sources */,
 				ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */,
+				AB825DCD2CBA902300965502 /* BlurView.swift in Sources */,
+				ABB37C252CBE384F00110FC7 /* BlockListPage.swift in Sources */,
 				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
 				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,
 				AB06AA972CAFDB6700E49F5C /* ImageViewer.swift in Sources */,
+				AB825DAD2CB9059600965502 /* LottieView.swift in Sources */,
 				AB06AA4D2CA9420D00E49F5C /* TreasureListView.swift in Sources */,
 				ABAFAB1C2C99ACF5007CDB45 /* CustomAlert.swift in Sources */,
 				ABAFAAF02C96F39F007CDB45 /* MainTabView.swift in Sources */,
@@ -661,26 +739,28 @@
 				CODE_SIGN_ENTITLEMENTS = HanaMi/HanaMi.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"HanaMi/Preview Content\"";
 				DEVELOPMENT_TEAM = KX36U2DJW6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HanaMi/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "我們需要取得您相機的權限";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
+				INFOPLIST_KEY_NSCameraUsageDescription = "此應用程式需要存取您的相機以拍攝照片或影片。";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "此應用程式需要您的位置來支援寶藏地圖的服務。";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用程式需要使用您的麥克風以錄製音訊。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tzuninglo.HanaMi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -689,7 +769,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -706,21 +786,22 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HanaMi/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "我們需要取得您相機的權限";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "我們需要您的位置來提供個性化地圖服務";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用需要使用麥克風進行音頻錄製";
+				INFOPLIST_KEY_NSCameraUsageDescription = "此應用程式需要存取您的相機以拍攝照片或影片。";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "此應用程式需要您的位置來支援寶藏地圖的服務。";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用程式需要使用您的麥克風以錄製音訊。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tzuninglo.HanaMi;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -729,7 +810,7 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -771,6 +852,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.2.0;
+			};
+		};
+		AB825DA92CB9014A00965502 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.0;
 			};
 		};
 		ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
@@ -840,6 +929,11 @@
 			package = AB06AA6C2CAD050C00E49F5C /* XCRemoteSwiftPackageReference "SwiftUI-MediaPicker" */;
 			productName = MediaPicker;
 		};
+		AB825DAA2CB9014A00965502 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB825DA92CB9014A00965502 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		ABAFAB0A2C993504007CDB45 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */;
@@ -854,6 +948,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		ABB37C212CBD0F6B00110FC7 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AB06AA592CA9788A00E49F5C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

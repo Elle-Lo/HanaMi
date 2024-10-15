@@ -28,7 +28,6 @@ struct CustomMapView: UIViewRepresentable {
         var mode: MapMode
         var userID: String 
 
-
         init(_ parent: CustomMapView, mode: MapMode, userID: String) {
             self.parent = parent
             self.mode = mode
@@ -79,20 +78,36 @@ struct CustomMapView: UIViewRepresentable {
             }
         
         // 当用户点击标注时，获取宝藏详细信息并显示 Sheet
-           func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-               if let treasureAnnotation = view.annotation as? TreasureAnnotation {
-                   // 调用 TreasureManager 来获取宝藏详细信息
-                   print("Selected treasure annotation with ID: \(treasureAnnotation.treasureID)")  // 添加日志
-                   parent.treasureManager.getTreasure(by: treasureAnnotation.treasureID, for: userID) { treasure in
-                       if let treasure = treasure {
-                           DispatchQueue.main.async {
-                               self.parent.selectedTreasure = treasure  // 更新选中的宝藏
-                               self.parent.showTreasureDetail = true    // 显示 Sheet
-                           }
-                       }
-                   }
-               }
-           }
+//           func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+//               if let treasureAnnotation = view.annotation as? TreasureAnnotation {
+//                   // 调用 TreasureManager 来获取宝藏详细信息
+//                   print("Selected treasure annotation with ID: \(treasureAnnotation.treasureID)")  // 添加日志
+//                   parent.treasureManager.getTreasure(by: treasureAnnotation.treasureID, for: userID) { treasure in
+//                       if let treasure = treasure {
+//                           DispatchQueue.main.async {
+//                               self.parent.selectedTreasure = treasure  // 更新选中的宝藏
+//                               self.parent.showTreasureDetail = true    // 显示 Sheet
+//                           }
+//                       }
+//                   }
+//               }
+//           }
+        
+        func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            if let treasureAnnotation = view.annotation as? TreasureAnnotation {
+                print("Selected treasure annotation with ID: \(treasureAnnotation.treasureID)")
+                
+                // 直接傳遞 isUserTreasure，讓 TreasureManager 處理邏輯
+                parent.treasureManager.getTreasure(by: treasureAnnotation.treasureID)  { treasure in
+                    if let treasure = treasure {
+                        DispatchQueue.main.async {
+                            self.parent.selectedTreasure = treasure  // 更新选中的宝藏
+                            self.parent.showTreasureDetail = true    // 顯示詳情
+                        }
+                    }
+                }
+            }
+        }
         
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             if annotation is MKUserLocation {
@@ -123,7 +138,6 @@ struct CustomMapView: UIViewRepresentable {
 
                 return annotationView
             }
-
             return nil
         }
 
@@ -135,9 +149,10 @@ struct CustomMapView: UIViewRepresentable {
 
             if mode == .selectLocation { // 如果是選擇地點模式
                 parent.selectedCoordinate = coordinate
-                parent.selectedLocationName = ""
-
-                // 使用反向地理編碼獲取地點名稱
+                DispatchQueue.main.async {
+                    self.parent.selectedLocationName = "正在載入..."
+                       }
+                
                 let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
                 let geocoder = CLGeocoder()
                 geocoder.reverseGeocodeLocation(location) { placemarks, error in

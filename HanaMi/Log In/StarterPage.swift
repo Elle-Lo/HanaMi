@@ -17,8 +17,8 @@ struct StarterPage: View {
         } else {
             VStack(spacing: 10) { // 設置較小的間距以控制元素之間的距離
                 // 調整 Welcome 和 Capybara 的上方 padding，使其往上移動
-                Text("Welcome")
-                    .font(.largeTitle)
+                Text("HanaMi")
+                    .font(.custom("LexendDeca-SemiBold", size: 30))
                     .foregroundColor(Color(hex: "#522504"))
                     .padding(.bottom, 30)
                 
@@ -31,6 +31,7 @@ struct StarterPage: View {
                 NavigationLink(destination: LogInPage()) {
                     Text("LOG IN")
                         .foregroundColor(Color(hex: "#522504"))
+                        .font(.custom("LexendDeca-Regular", size: 18))
                         .padding()
                         .frame(width: 250, height: 50)
                         .background(Color(hex: "#FFF7EF"))
@@ -44,6 +45,7 @@ struct StarterPage: View {
                 }) {
                     Text("OTHER LOGIN METHODS")
                         .foregroundColor(Color(hex: "#522504"))
+                        .font(.custom("LexendDeca-Regular", size: 15))
                         .padding()
                         .frame(width: 250, height: 50)
                         .background(Color(hex: "#FFF7EF"))
@@ -90,6 +92,15 @@ struct StarterPage: View {
                     }
                 }
                 .padding(.top, 5)
+                
+                Button(action: openEULA) {
+                    Text("End User License Agreement (EULA)")
+                        .underline()
+                        .foregroundColor(.blue)
+                        .font(.custom("LexendDeca-Regular", size: 10))
+                        .padding(.top, 1)
+                }
+                
             }
             .alert(errorMessge, isPresented: $showAlert) { }
             .overlay {
@@ -197,6 +208,12 @@ struct StarterPage: View {
         
         return hashString
     }
+    
+    private func openEULA() {
+            if let url = URL(string: "https://www.privacypolicies.com/live/dd18a0b6-f1e4-4a93-b142-146fe5b80b6c") {
+                UIApplication.shared.open(url)
+            }
+        }
 }
 
 #Preview {

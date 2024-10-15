@@ -8,18 +8,45 @@ struct MainTabView: View {
     }
     
     init() {
-           // 修改 tab bar 的背景色為透明
-           let appearance = UITabBarAppearance()
-           appearance.configureWithTransparentBackground()
-           appearance.backgroundEffect = UIBlurEffect(style: .light) // 添加模糊效果
-           appearance.backgroundColor = UIColor.clear // 設置為完全透明
-           UITabBar.appearance().standardAppearance = appearance
-           UITabBar.appearance().scrollEdgeAppearance = appearance
-           UITabBar.appearance().unselectedItemTintColor = UIColor.yellow
-       }
+        let appearance = UITabBarAppearance()
+        appearance.shadowImage = UIImage()
+        appearance.shadowColor = .clear
+
+        // 使用 createGradientImage 函數來創建漸變圖像，並應用到 UITabBar 的背景
+        if let gradientImage = createGradientImage(colors: [UIColor.colorDarkYellow, UIColor.white], size: CGSize(width: UIScreen.main.bounds.width, height: 50), opacity: 0.3) {
+            appearance.backgroundImage = gradientImage  // 將漸變圖像作為背景
+        }
+
+        // 設置未選中項目的顏色
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.colorGray
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.colorGray]
+
+        // 設置選中項目的顏色
+        appearance.stackedLayoutAppearance.selected.iconColor = UIColor.brown
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown]
+
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        
+    }
+    
+    func createGradientImage(colors: [UIColor], size: CGSize, opacity: CGFloat) -> UIImage? {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = CGRect(origin: .zero, size: size)
+        gradientLayer.colors = colors.map { $0.withAlphaComponent(opacity).cgColor }
+
+        UIGraphicsBeginImageContext(gradientLayer.bounds.size)
+        if let context = UIGraphicsGetCurrentContext() {
+            gradientLayer.render(in: context)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        }
+        return nil
+    }
+
     
     var body: some View {
-//        NavigationView {
             TabView(selection: $selectedTab) {
                 HomePage()
                     .tabItem {
@@ -29,19 +56,19 @@ struct MainTabView: View {
                 
                 CategoryAndAnalyticsPage(showCategory: $showCategory)
                     .tabItem {
-                        Label("類別分析", systemImage: "chart.pie")
+                        Label("類別", systemImage: "chart.pie")
                     }
                     .tag(1)
                 
                 DepositPage()
                     .tabItem {
-                        Label("儲存", systemImage: "plus.circle.fill")
+                        Label("新增", systemImage: "plus.circle.fill")
                     }
                     .tag(2)
 
                 TreasureMapPage(userID: userID)
                     .tabItem {
-                        Label("地圖", systemImage: "mappin.and.ellipse.circle.fill")
+                        Label("地圖", systemImage: "mappin.and.ellipse")
                     }
                     .tag(3)
 
@@ -64,7 +91,6 @@ struct MainTabView: View {
                 }
                 settingsButton // 全局設定按鈕
             })
-//        }
     }
 
     // 切換顯示 Category 或 Analytics 的按鈕
@@ -72,7 +98,7 @@ struct MainTabView: View {
             Button(action: {
                 showCategory.toggle() // 切換頁面
             }) {
-                Image(systemName: showCategory ? "chart.bar.fill" : "list.bullet")
+                Image(systemName: showCategory ? "chart.bar.xaxis" : "list.bullet")
                     .resizable()
                     .foregroundColor(.white)
                     .frame(width: 18, height: 18)
@@ -103,6 +129,15 @@ struct MainTabView: View {
                 )
         }
     }
+    
+    var backButton: some View {
+            Button(action: {
+                // 添加自定義返回邏輯，或使用默認返回
+            }) {
+                Image(systemName: "arrow.left")
+                    .foregroundColor(.colorBrown)
+            }
+        }
 }
 
 #Preview {

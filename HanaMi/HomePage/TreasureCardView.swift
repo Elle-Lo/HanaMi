@@ -70,7 +70,7 @@ struct TreasureCardView: View {
                         .lineSpacing(10.0)
                         .padding(.top, hasMediaContent ? 8 : 10)
                 }
-                .frame(maxHeight: 300)
+                .frame(maxHeight: 190)
             }
             
             // 類別標籤

@@ -1,17 +1,14 @@
 import SwiftUI
 import SpriteKit
 
-// 自定义 SpriteKit 场景类
 class CharacterAnimationScene: SKScene {
     
     var character: SKSpriteNode!
-    var currentActionName: String = "idle"  // 当前动作名称，用于判断是否需要移动
+    var currentActionName: String = "idle"
     
     override func didMove(to view: SKView) {
-        // 设置场景的背景颜色为透明
         self.backgroundColor = .clear
         
-        // 初始化角色精灵，展示默认动作的第一帧
         character = SKSpriteNode(imageNamed: "Idle_00")
         character.setScale(0.5)  // 将角色缩小
         character.position = CGPoint(x: size.width / 2, y: size.height / 2)

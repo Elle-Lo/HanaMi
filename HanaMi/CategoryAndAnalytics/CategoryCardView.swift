@@ -94,7 +94,6 @@ struct CategoryCardView: View {
                                            if let url = URL(string: content.content) {
                                                LinkPreviewView(url: url)
                                                    .cornerRadius(10)
-                                                   .shadow(radius: 5)
                                                    .padding(.vertical, 5)
                                            }
                                        default:
