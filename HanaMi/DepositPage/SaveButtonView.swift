@@ -29,14 +29,14 @@ struct SaveButtonView: View {
             saveDataToFirestore()
         }) {
             Text(isSaving ? "Saving..." : "Save")
-                           .font(.system(size: 16))
-                           .foregroundColor(.white)
+                .font(.custom("LexendDeca-Bold", size: 15))
+                .foregroundColor(isSaving ? .white : .colorBrown)
                            .padding()
-                           .background(isSaving ? Color.gray : Color.colorYellow)
+                           .background(isSaving ? .colorGray : .colorYellow)
                            .cornerRadius(10)
         }
         .disabled(isSaving)  // 禁用按鈕
-               .opacity(isSaving ? 0.5 : 1.0)  // 上傳中降低透明度
+        .opacity(isSaving ? 0.5 : 1.0)  // 上傳中降低透明度
     }
     
     private func saveDataToFirestore() {

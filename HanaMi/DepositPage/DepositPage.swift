@@ -248,7 +248,7 @@ struct DepositPage: View {
                             isSaving = true
                         }
                     )
-                    .opacity(canSave ? 1 : 0.5)  // 不可保存時降低不透明度
+                    .opacity(canSave ? 1 : 0.5) 
                     .disabled(isSaving)
                 }
                 .padding(.horizontal, 25)

@@ -89,6 +89,7 @@
 		ABAFAB252C9A8533007CDB45 /* TreasureAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */; };
 		ABAFAB272C9A862C007CDB45 /* TreasureDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */; };
 		ABB37C222CBD0F6B00110FC7 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = ABB37C212CBD0F6B00110FC7 /* FirebaseCrashlytics */; };
+		ABB37C252CBE384F00110FC7 /* BlockListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB37C242CBE384F00110FC7 /* BlockListPage.swift */; };
 		ABB59A012CB2582A00E61CF2 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */; };
 		ABB59A032CB268CC00E61CF2 /* ImageViewWithPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */; };
 		ABB59A052CB3076A00E61CF2 /* TreasureCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB59A042CB3076A00E61CF2 /* TreasureCardView.swift */; };
@@ -168,6 +169,7 @@
 		ABAFAB222C9A8001007CDB45 /* TreasureMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureMapView.swift; sourceTree = "<group>"; };
 		ABAFAB242C9A8533007CDB45 /* TreasureAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureAnnotation.swift; sourceTree = "<group>"; };
 		ABAFAB262C9A862C007CDB45 /* TreasureDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureDetailView.swift; sourceTree = "<group>"; };
+		ABB37C242CBE384F00110FC7 /* BlockListPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListPage.swift; sourceTree = "<group>"; };
 		ABB59A002CB2582A00E61CF2 /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		ABB59A022CB268CC00E61CF2 /* ImageViewWithPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewWithPreview.swift; sourceTree = "<group>"; };
 		ABB59A042CB3076A00E61CF2 /* TreasureCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreasureCardView.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				AB825DA72CB8D3E700965502 /* PrivacyPolicyPage.swift */,
 				AB06AA6A2CABFBC700E49F5C /* CollectionsPage.swift */,
 				AB825DA52CB5748C00965502 /* CollectionTreasureCardView.swift */,
+				ABB37C242CBE384F00110FC7 /* BlockListPage.swift */,
 				ABB37C202CBC10C400110FC7 /* LottieFile */,
 				ABB59A072CB307DB00E61CF2 /* ToolView */,
 				ABAFAAF12C96F88E007CDB45 /* Log In */,
@@ -581,6 +584,7 @@
 				AB825DA62CB5748C00965502 /* CollectionTreasureCardView.swift in Sources */,
 				ABAFAB232C9A8001007CDB45 /* TreasureMapView.swift in Sources */,
 				AB825DCD2CBA902300965502 /* BlurView.swift in Sources */,
+				ABB37C252CBE384F00110FC7 /* BlockListPage.swift in Sources */,
 				ABAFAAFE2C98102D007CDB45 /* CategorySelectionView.swift in Sources */,
 				ABAFAACE2C941493007CDB45 /* StarterPage.swift in Sources */,
 				ABAFAAEE2C96EFFE007CDB45 /* SettingsPage.swift in Sources */,

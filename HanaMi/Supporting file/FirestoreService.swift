@@ -431,25 +431,30 @@ class FirestoreService {
 
         // 1. 先取得當前使用者的封鎖名單
         userRef.getDocument { snapshot, error in
-            guard let data = snapshot?.data(),
-                  let blockList = data["blockList"] as? [String] else {
-                print("無法取得封鎖名單，或封鎖名單為空")
-                // 若無法取得封鎖名單，使用空的封鎖列表
-                self.queryPublicTreasures(
-                    minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng,
-                    blockList: [], currentUserID: currentUserID, completion: completion
-                )
-                return
-            }
+                guard let data = snapshot?.data() else {
+                    print("無法取得使用者資料")
+                    completion(.failure(error ?? NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "無法取得使用者資料"])))
+                    return
+                }
 
-            print("封鎖名單：\(blockList)")
-            
-            // 2. 查詢公開寶藏，並使用封鎖名單進行過濾
-            self.queryPublicTreasures(
-                minLat: minLat, maxLat: maxLat, minLng: minLng, maxLng: maxLng,
-                blockList: blockList, currentUserID: currentUserID, completion: completion
-            )
-        }
+                let blockList = data["blockList"] as? [String] ?? []
+                let wasBlockedByList = data["wasBlockedByList"] as? [String] ?? []
+
+                print("封鎖名單：\(blockList)")
+                print("被封鎖名單：\(wasBlockedByList)")
+
+                // 2. 呼叫 queryPublicTreasures 進行查詢
+                self.queryPublicTreasures(
+                    minLat: minLat,
+                    maxLat: maxLat,
+                    minLng: minLng,
+                    maxLng: maxLng,
+                    blockList: blockList,
+                    wasBlockedByList: wasBlockedByList,
+                    currentUserID: currentUserID,
+                    completion: completion
+                )
+            }
     }
 
     private func queryPublicTreasures(
@@ -458,6 +463,7 @@ class FirestoreService {
         minLng: Double,
         maxLng: Double,
         blockList: [String],
+        wasBlockedByList: [String],
         currentUserID: String,
         completion: @escaping (Result<[TreasureSummary], Error>) -> Void
     ) {
@@ -485,12 +491,13 @@ class FirestoreService {
                       let userID = data["userID"] as? String else {
                     return nil
                 }
-
-                if blockList.contains(userID) {
-                    print("封鎖的用戶 \(userID) 的寶藏已被排除")
+                
+                
+                if blockList.contains(userID) || wasBlockedByList.contains(userID) {
+                    print("排除 \(userID) 的寶藏，因為封鎖條件符合")
                     return nil
                 }
-
+                
                 if userID == currentUserID {
                     print("排除目前使用者自己的寶藏")
                     return nil
@@ -1179,15 +1186,91 @@ class FirestoreService {
     
     func blockUser(currentUserID: String, blockedUserID: String, completion: @escaping (Result<Void, Error>) -> Void) {
             let db = Firestore.firestore()
-            let userRef = db.collection("Users").document(currentUserID)
+            let batch = db.batch()
 
-            userRef.updateData([
+            // 更新封鎖者的 blockList
+            let currentUserRef = db.collection("Users").document(currentUserID)
+            batch.updateData([
                 "blockList": FieldValue.arrayUnion([blockedUserID])
-            ]) { error in
+            ], forDocument: currentUserRef)
+
+            // 更新被封鎖者的 wasBlockedByList
+            let blockedUserRef = db.collection("Users").document(blockedUserID)
+            batch.updateData([
+                "wasBlockedByList": FieldValue.arrayUnion([currentUserID])
+            ], forDocument: blockedUserRef)
+
+            // 提交批次更新
+            batch.commit { error in
                 if let error = error {
                     completion(.failure(error))
                 } else {
                     completion(.success(()))
+                }
+            }
+        }
+    
+    func fetchBlockedUsers(for userID: String, completion: @escaping (Result<[(id: String, name: String)], Error>) -> Void) {
+            let userRef = db.collection("Users").document(userID)
+
+            userRef.getDocument { snapshot, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+
+                guard let data = snapshot?.data(),
+                      let blockList = data["blockList"] as? [String] else {
+                    completion(.success([]))
+                    return
+                }
+
+                var blockedUsers: [(id: String, name: String)] = []
+                let dispatchGroup = DispatchGroup()
+
+                for blockedID in blockList {
+                    dispatchGroup.enter()
+                    self.db.collection("Users").document(blockedID).getDocument { snapshot, error in
+                        if let data = snapshot?.data(), let name = data["name"] as? String {
+                            blockedUsers.append((id: blockedID, name: name))
+                        }
+                        dispatchGroup.leave()
+                    }
+                }
+
+                dispatchGroup.notify(queue: .main) {
+                    completion(.success(blockedUsers))
+                }
+            }
+        }
+    
+    func removeBlock(for userID: String, blockedUserID: String, completion: @escaping (Bool) -> Void) {
+            let db = Firestore.firestore()
+            let batch = db.batch()
+
+            // 自己的用戶文件
+            let userRef = db.collection("Users").document(userID)
+            // 對方的用戶文件
+            let blockedUserRef = db.collection("Users").document(blockedUserID)
+
+            // 從自己的 blockList 移除該使用者
+            batch.updateData([
+                "blockList": FieldValue.arrayRemove([blockedUserID])
+            ], forDocument: userRef)
+
+            // 從對方的 wasBlockedByList 移除自己
+            batch.updateData([
+                "wasBlockedByList": FieldValue.arrayRemove([userID])
+            ], forDocument: blockedUserRef)
+
+            // 執行批次更新
+            batch.commit { error in
+                if let error = error {
+                    print("移除封鎖失敗：\(error.localizedDescription)")
+                    completion(false)
+                } else {
+                    print("成功移除雙向封鎖")
+                    completion(true)
                 }
             }
         }

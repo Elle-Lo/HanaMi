@@ -249,6 +249,8 @@ struct SettingsPage: View {
     private var settingsOptions: some View {
         VStack(spacing: 10) {
             
+            FavoriteButton()
+            
             SettingsButton(iconName: "pencil", text: "更換用戶名") {
                 isEditingName = true
             }
@@ -266,9 +268,7 @@ struct SettingsPage: View {
                 removeBackgroundImage()
             }
             
-            FavoriteButton()
-            
-            PrivacyPolicyButton()
+            BlockListButton()
             
             SettingsButton(iconName: "arrow.right.square", text: "登出") {
                 showLogOutAccountAlert = true
@@ -279,6 +279,8 @@ struct SettingsPage: View {
             SettingsButton(iconName: "trash.circle", text: "刪除帳號") {
                 showDeleteAccountAlert = true
             }
+            
+            PrivacyPolicyButton()
         }
     }
     
@@ -589,6 +591,35 @@ struct PrivacyPolicyButton: View {
 
                 Spacer()
 
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.colorBrown)
+                    .font(.system(size: 16))
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.clear)
+            .cornerRadius(10)
+        }
+        .padding(.vertical, 5)
+    }
+}
+
+struct BlockListButton: View {
+    var body: some View {
+        NavigationLink(destination: BlockListPage()) {
+            HStack {
+                Image(systemName: "person.crop.circle.badge.xmark")
+                    .foregroundColor(.colorBrown)
+                    .font(.system(size: 24))
+                    .padding(.trailing, 20)
+                    .frame(width: 40)
+                
+                Text("封鎖列表")
+                    .font(.custom("LexendDeca-SemiBold", size: 15))
+                    .foregroundColor(.colorBrown)
+                
+                Spacer()
+                
                 Image(systemName: "chevron.right")
                     .foregroundColor(.colorBrown)
                     .font(.system(size: 16))
