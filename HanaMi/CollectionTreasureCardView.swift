@@ -44,7 +44,10 @@ struct CollectionTreasureCardView: View {
                         }
                         .frame(height: 300)
                         .cornerRadius(8)
-                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: treasure.contents.count > 1 ? .always : .never))
+                        .tabViewStyle(
+                            PageTabViewStyle(indexDisplayMode: .automatic) // 使用 .automatic
+                        ) 
+//                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: treasure.contents.count > 1 ? .always : .never))
                     }
 
                     if let audioContent = treasure.contents.first(where: { $0.type == .audio }) {
