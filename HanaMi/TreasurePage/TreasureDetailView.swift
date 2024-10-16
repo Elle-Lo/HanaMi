@@ -16,6 +16,8 @@ struct TreasureDetailView: View {
     @State private var showReportAlert = false
     @State private var reportReason = ""
     @State private var showMenu = false // 控制 Menu 的顯示
+    @State private var isLoading = true  // 控制載入動畫的狀態
+    @State private var isPlayingAnimation = false  // 控制動畫播放
     
     private let firestoreService = FirestoreService()
 
@@ -102,7 +104,7 @@ struct TreasureDetailView: View {
                                     .foregroundColor(.colorBrown)
                                     .font(.custom("LexendDeca-SemiBold", size: 10))
                             }
-                            .padding(.vertical, 8)
+                        .padding(.vertical, 8)
                         .padding(.horizontal, 15)
                         .background(Color(hex: "E8E8E8").opacity(0.75))
                         .cornerRadius(10)
@@ -299,6 +301,4 @@ struct TreasureDetailView: View {
             }
         }
     }
-
-    
 }
