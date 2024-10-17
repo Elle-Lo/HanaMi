@@ -2,7 +2,7 @@ import SwiftUI
 import MapKit
 
 struct TreasureMapView: View {
-    @State private var selectedTreasure: Treasure? = nil
+    @State private var selectedTreasure: Treasure?
     @State private var showTreasureDetail = false
     @State private var isShowingAllTreasures = true
 

@@ -45,7 +45,6 @@ struct MainTabView: View {
         return nil
     }
 
-    
     var body: some View {
             TabView(selection: $selectedTab) {
                 HomePage()
