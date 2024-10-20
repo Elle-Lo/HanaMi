@@ -3,7 +3,7 @@ import MapKit
 
 class TreasureManager: ObservableObject {
     @Published var treasures: [Treasure] = [] // 缓存的宝藏列表
-    @Published var displayedTreasures: [TreasureSummary] = [] // 地圖範圍內要顯示的寶藏
+    @Published var displayedTreasures: [TreasureSummary] = []
     let firestoreService = FirestoreService()
     
     private var userID: String {

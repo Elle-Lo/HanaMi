@@ -189,14 +189,6 @@ struct TreasureDetailView: View {
         }
     }
     
-//    private func loadTreasureData() {
-//            // 模擬數據加載延遲，可以替換成真實的數據加載邏輯
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                // 假設數據加載完成後
-//                self.isLoading = false
-//            }
-//        }
-    
     private func handleFavoriteAction() {
         if collectionTreasureList.contains(treasure.id ?? "") {
             showAlert(message: "此寶藏已在收藏中")
@@ -271,7 +263,7 @@ struct CategoryBadgeView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.colorBrown, lineWidth: 2)
-                            .background(Color.colorYellow.cornerRadius(10)) // 使用背景顏色並設置圓角
+                            .background(Color.colorYellow.cornerRadius(10))
                     )
             } else {
                 BadgeView(text: "私 人", backgroundColor: .colorBrown, textColor: .colorYellow)
@@ -345,7 +337,6 @@ struct AddToFavoriteButton: View {
             }) {
                 Image("treasure")
                     .font(.system(size: 30))
-                    .foregroundColor(.red)
                     .padding()
                     .background(Color.white.opacity(0.6))
                     .cornerRadius(50)

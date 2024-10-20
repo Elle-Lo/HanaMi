@@ -78,7 +78,6 @@
 		ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */; };
 		ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */; };
 		ABAFAB0B2C993504007CDB45 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB0A2C993504007CDB45 /* Kingfisher */; };
-		ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB0D2C993707007CDB45 /* SwiftSoup */; };
 		ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */; };
 		ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */; };
 		ABAFAB182C998F1E007CDB45 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */; };
@@ -187,7 +186,6 @@
 				AB06AA5D2CA9788A00E49F5C /* FirebaseAuth in Frameworks */,
 				AB06AA672CA9788A00E49F5C /* FirebaseStorage in Frameworks */,
 				AB06AA652CA9788A00E49F5C /* FirebaseFirestoreCombine-Community in Frameworks */,
-				ABAFAB0E2C993707007CDB45 /* SwiftSoup in Frameworks */,
 				AB06AA5B2CA9788A00E49F5C /* FirebaseAnalytics in Frameworks */,
 				AB06AA632CA9788A00E49F5C /* FirebaseFirestore in Frameworks */,
 				ABB37C222CBD0F6B00110FC7 /* FirebaseCrashlytics in Frameworks */,
@@ -415,7 +413,6 @@
 			name = HanaMi;
 			packageProductDependencies = (
 				ABAFAB0A2C993504007CDB45 /* Kingfisher */,
-				ABAFAB0D2C993707007CDB45 /* SwiftSoup */,
 				ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */,
 				AB06AA5A2CA9788A00E49F5C /* FirebaseAnalytics */,
 				AB06AA5C2CA9788A00E49F5C /* FirebaseAuth */,
@@ -458,7 +455,6 @@
 			mainGroup = ABAFAAAA2C93DBBF007CDB45;
 			packageReferences = (
 				ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				AB06AA592CA9788A00E49F5C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				AB06AA6C2CAD050C00E49F5C /* XCRemoteSwiftPackageReference "SwiftUI-MediaPicker" */,
@@ -672,6 +668,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -727,6 +724,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -745,9 +743,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HanaMi/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "此應用程式需要存取您的相機以拍攝照片或影片。";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "此應用程式需要您的位置來支援寶藏地圖的服務。";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用程式需要使用您的麥克風以錄製音訊。";
+				INFOPLIST_KEY_NSCameraUsageDescription = "此應用程式需要存取您的相機以拍攝照片或影片，並將其上傳至資料庫中以顯示寶藏。";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "此應用程式需要您的位置來支援寶藏位置的顯示以及定位用戶位置。";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用程式需要使用您的麥克風錄製音訊，並將存取至資料庫中以顯示寶藏內容。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -786,9 +784,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HanaMi/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "此應用程式需要存取您的相機以拍攝照片或影片。";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "此應用程式需要您的位置來支援寶藏地圖的服務。";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用程式需要使用您的麥克風以錄製音訊。";
+				INFOPLIST_KEY_NSCameraUsageDescription = "此應用程式需要存取您的相機以拍攝照片或影片，並將其上傳至資料庫中以顯示寶藏。";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "此應用程式需要您的位置來支援寶藏位置的顯示以及定位用戶位置。";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "此應用程式需要使用您的麥克風錄製音訊，並將存取至資料庫中以顯示寶藏內容。";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -870,14 +868,6 @@
 				minimumVersion = 7.12.0;
 			};
 		};
-		ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scinfu/SwiftSoup";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.7.5;
-			};
-		};
 		ABAFAB162C998F1E007CDB45 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager";
@@ -938,11 +928,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ABAFAB092C993504007CDB45 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
-		};
-		ABAFAB0D2C993707007CDB45 /* SwiftSoup */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = ABAFAB0C2C993707007CDB45 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
-			productName = SwiftSoup;
 		};
 		ABAFAB172C998F1E007CDB45 /* IQKeyboardManagerSwift */ = {
 			isa = XCSwiftPackageProductDependency;
