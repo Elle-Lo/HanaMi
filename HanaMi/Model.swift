@@ -7,6 +7,7 @@ enum ContentType: String, Codable {
     case video
     case link
     case audio
+    case music
 }
 
 struct Users: Identifiable, Codable {

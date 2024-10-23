@@ -9,7 +9,7 @@ struct TreasureDetailView: View {
     @State private var alertState = AlertState()
     @State private var showImageViewer = false
     @State private var selectedImageURL: URL?
-    @State private var isPlayingHeartAnimation = false
+    @State var isPlayingHeartAnimation = false
     @State private var isPlayingLoadingAnimation = true
     @State private var isFavorite = false
     @State private var collectionTreasureList: [String] = []
@@ -329,6 +329,7 @@ struct AddToFavoriteButton: View {
                             isPlayingHeartAnimation = false
                         }
                     }
+                    .accessibility(identifier: "HeartAnimation")
             }
 
             Button(action: {
@@ -342,6 +343,7 @@ struct AddToFavoriteButton: View {
                     .cornerRadius(50)
                     .shadow(radius: 10)
             }
+            .accessibility(identifier: "AddToFavoriteButton")
         }
     }
 }

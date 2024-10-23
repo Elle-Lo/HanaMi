@@ -31,4 +31,3 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         return MKCoordinateRegion(center: location.coordinate, span: span)
     }
 }
-

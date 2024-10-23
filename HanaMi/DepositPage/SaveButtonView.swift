@@ -145,7 +145,13 @@ struct SaveButtonView: View {
                     }
                 }
                 currentIndex += 1
-
+                
+            case "music":
+                // 音樂處理
+                let musicContent = TreasureContent(type: .music, content: item.url.absoluteString, index: currentIndex)
+                contents.append(musicContent)
+                currentIndex += 1
+                
             default:
                 break
             }

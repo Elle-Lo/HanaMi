@@ -70,6 +70,7 @@ struct MainTabView: View {
                         Label("地圖", systemImage: "mappin.and.ellipse")
                     }
                     .tag(3)
+                    .accessibilityIdentifier("MapTab")
 
                 CharacterPage()
                     .tabItem {

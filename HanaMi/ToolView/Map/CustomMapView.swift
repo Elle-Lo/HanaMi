@@ -136,6 +136,7 @@ struct CustomMapView: UIViewRepresentable {
                 annotationView?.canShowCallout = false
                 annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
 
+                annotationView?.accessibilityIdentifier = "TreasureAnnotation_\(treasureAnnotation.treasureID)"
                 return annotationView
             }
             return nil
@@ -169,6 +170,7 @@ struct CustomMapView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> MKMapView {
         let mapView = MKMapView()
+        mapView.accessibilityIdentifier = "MapView" 
         mapView.delegate = context.coordinator
         mapView.showsUserLocation = true
 
@@ -196,8 +198,6 @@ struct CustomMapView: UIViewRepresentable {
             let isUserTreasure = (detailedTreasure.userID == userID)
             return TreasureAnnotation(treasureSummary: detailedTreasure, isUserTreasure: isUserTreasure)
         }
-
-
         
         // 只添加新的标注
         if !newAnnotations.isEmpty {
@@ -233,5 +233,3 @@ extension MKMapView {
         return centerLocation.distance(from: northWestLocation) // 返回半径（单位：米）
     }
 }
-
-

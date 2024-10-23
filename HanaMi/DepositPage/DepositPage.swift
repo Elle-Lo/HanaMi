@@ -9,6 +9,7 @@ import AVKit
 import AVFoundation
 import UniformTypeIdentifiers
 import MediaPicker
+import MusicKit
 
 struct DepositPage: View {
     @State private var isPublic: Bool = true
@@ -42,6 +43,11 @@ struct DepositPage: View {
     @State private var isSaveAnimationPlaying: Bool = false
     @State private var isSaving: Bool = false
     
+    @State private var isShowingMusicPicker = false
+    @State private var searchTerm = ""
+    @State private var musicResults: [Song] = []
+    @State private var selectedMusic: Song?
+    
     @StateObject private var locationManager = LocationManager()
     @StateObject private var searchViewModel = LocationSearchViewModel()
     
@@ -65,12 +71,6 @@ struct DepositPage: View {
                 VStack(alignment: .leading, spacing: 20) {
                     TopControlsView(isPublic: $isPublic, selectedCategory: $selectedCategory, categories: $categories, userID: userID)
                     
-//                    HStack(spacing: 0) {
-//                        ToggleButton(isPublic: $isPublic)
-//                        CategorySelectionView(selectedCategory: $selectedCategory, categories: $categories, userID: userID)
-//                    }
-//                    .padding(.horizontal)
-                    
                     LocationSelectionView(
                         selectedCoordinate: $selectedCoordinate,
                         selectedLocationName: $selectedLocationName,
@@ -81,53 +81,6 @@ struct DepositPage: View {
                     )
                     
                     MediaScrollView(selectedMediaItems: $selectedMediaItems)
-                   
-//                    ScrollView(.horizontal) {  // 改為橫向滑動
-//                        HStack(spacing: 10) {  // 使用 HStack 水平排列項目
-//                            ForEach(selectedMediaItems.indices, id: \.self) { index in
-//                                let item = selectedMediaItems[index]
-//                                
-//                                ZStack(alignment: .topTrailing) {
-//                                    if item.type == "image" {
-//                                        ImageViewWithPreview(
-//                                            image: UIImage(contentsOfFile: item.url.path)!
-//                                        )
-//                                        .frame(width: 300, height: 300)  // 確保圖片高度和寬度一致
-//                                        .cornerRadius(8)
-//                                    } else if item.type == "video" {
-//                                        // 正確顯示影片播放器
-//                                        VideoPlayerView(url: item.url)
-//                                            .frame(width: 300, height: 300)
-//                                            .cornerRadius(8)
-//                                    } else if item.type == "audio" {
-//                                        AudioPlayerView(audioURL: item.url)
-//                                            .frame(width: 300, height: 300)
-//                                    } else if item.type == "link" {
-//                                        // 顯示連結預覽
-//                                        LinkPreviewView(url: item.url)
-//                                            .frame(width: 350, height: 300)
-//                                            .cornerRadius(8)
-//                                    }
-//                                    
-//                                    // 添加刪除按鈕
-//                                    Button(action: {
-//                                        deleteMediaItem(at: IndexSet(integer: index))
-//                                    }) {
-//                                        Image(systemName: "xmark.circle.fill")
-//                                            .resizable()
-//                                            .frame(width: 24, height: 24)
-//                                            .foregroundColor(.white)
-//                                            .background(Color.black.opacity(0.7))
-//                                            .clipShape(Circle())
-//                                            .padding(8)
-//                                    }
-//                                }
-//                                .padding(.bottom, 10)  // 確保每個項目之間有間距
-//                            }
-//                        }
-//                        .padding(.horizontal)  // 保證水平有邊距
-//                    }
-//                    .scrollIndicators(.hidden)
                     
                     // TextEditor 文字輸入區域
                     PlaceholderTextEditor(text: $textContent, placeholder: "一個故事、一場經歷、一個情緒 \n任何想紀錄的事情都寫下來吧～")
@@ -226,6 +179,31 @@ struct DepositPage: View {
                             .font(.system(size: 22))
                             .foregroundColor(Color.colorBrown)
                             .padding(10)
+                    }
+                    
+                    // 音樂圖示按鈕
+                    Button(action: {
+                        isShowingMusicPicker = true
+                    }) {
+                        Image(systemName: "music.note")
+                            .font(.system(size: 22))
+                            .foregroundColor(.colorBrown)
+                            .padding(10)
+                    }
+                    .sheet(isPresented: $isShowingMusicPicker) {
+                        MusicSearchView(searchTerm: $searchTerm, musicResults: $musicResults, onMusicSelected: { musicItem in
+                            if let musicURL = musicItem.url {
+                                // 確保 URL 不是 nil
+                                self.selectedMediaItems.append((url: musicURL, type: "music"))
+                            }
+                            isShowingMusicPicker = false
+                        })
+                    }
+                    .presentationDetents([.height(650), .large])
+                    
+                    if let selectedMusic = selectedMusic {
+                        Text("Selected Song: \(selectedMusic.title)")
+                            .padding()
                     }
                     
                     Spacer()
