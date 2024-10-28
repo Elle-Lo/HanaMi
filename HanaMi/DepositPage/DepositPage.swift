@@ -18,18 +18,18 @@ struct DepositPage: View {
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var selectedLocationName: String?
     @State private var shouldZoomToUserLocation: Bool = true
-    @State private var showErrorMessage = false // 用來控制是否顯示錯誤訊息
+    @State private var showErrorMessage = false
     @State private var errorMessage: String?
-    @State private var textContent: String = ""  // 使用 TextEditor 替換富文本編輯器
+    @State private var textContent: String = ""
     @State private var keyboardHeight: CGFloat = 0
     
-    @State private var selectedMediaItems: [(url: URL, type: String)] = []  // 存儲選擇的圖片/影片
-    @State private var isShowingCameraPicker = false  // 控制相機的顯示
-    @State private var isShowingMediaPicker = false  // 控制媒體庫的顯示
-    @State private var mediaURLs: [URL] = []  // 存儲多選的媒體 URL
+    @State private var selectedMediaItems: [(url: URL, type: String)] = []
+    @State private var isShowingCameraPicker = false
+    @State private var isShowingMediaPicker = false
+    @State private var mediaURLs: [URL] = []
     @State private var mediaType: ImagePicker.MediaType?
-    @State private var cameraMediaURL: URL?  // 單個 URL 來處理相機拍攝
-    @State private var isShowingActionSheet = false // 控制 ActionSheet 的顯示
+    @State private var cameraMediaURL: URL?
+    @State private var isShowingActionSheet = false
     
     @State private var showingLinkAlert = false
     @State private var linkURL = ""
@@ -56,16 +56,16 @@ struct DepositPage: View {
     }
     
     private var canSave: Bool {
-           let trimmedText = textContent.trimmingCharacters(in: .whitespacesAndNewlines)
-           return selectedCoordinate != nil &&
-                  (!trimmedText.isEmpty || !selectedMediaItems.isEmpty || audioRecorder.recordingURL != nil)
-       }
+        let trimmedText = textContent.trimmingCharacters(in: .whitespacesAndNewlines)
+        return selectedCoordinate != nil &&
+        (!trimmedText.isEmpty || !selectedMediaItems.isEmpty || audioRecorder.recordingURL != nil)
+    }
     
     var body: some View {
         ZStack {
             
-            Color(.colorGrayBlue)  // 這裡可以替換成任何你想要的顏色或圖片
-                .edgesIgnoringSafeArea(.all)  // 擴展到整個屏幕
+            Color(.colorGrayBlue)
+                .edgesIgnoringSafeArea(.all)
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
@@ -82,19 +82,16 @@ struct DepositPage: View {
                     
                     MediaScrollView(selectedMediaItems: $selectedMediaItems)
                     
-                    // TextEditor 文字輸入區域
                     PlaceholderTextEditor(text: $textContent, placeholder: "一個故事、一場經歷、一個情緒 \n任何想紀錄的事情都寫下來吧～")
                         .lineSpacing(10)
                         .frame(height: 150)
                         .padding(.horizontal, 15)
                         .background(Color.clear)
                 }
-                .padding(.top, 20)  // 確保內容不會超出螢幕上方
+                .padding(.top, 20)
             }
             .padding(.horizontal, 15)
-
-
-            // 固定工具欄
+            
             VStack {
                 
                 Spacer()
@@ -106,9 +103,9 @@ struct DepositPage: View {
                         .padding(.horizontal)
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
-                // 工具欄按鈕
+                
                 HStack {
-                    // 相機按鈕
+                    
                     Button(action: {
                         isShowingActionSheet = true
                         errorMessage = nil
@@ -130,7 +127,7 @@ struct DepositPage: View {
                             .cancel()
                         ])
                     }
-                    // 打開相機的 Sheet
+                    
                     .sheet(isPresented: $isShowingCameraPicker) {
                         ImagePicker(mediaURL: $cameraMediaURL, mediaType: $mediaType, sourceType: .camera)
                             .edgesIgnoringSafeArea(.all)
@@ -140,7 +137,7 @@ struct DepositPage: View {
                                 }
                             }
                     }
-                    // 打開媒體庫的 MediaImporter
+                    
                     .mediaImporter(isPresented: $isShowingMediaPicker, allowedMediaTypes: .all, allowsMultipleSelection: true) { result in
                         switch result {
                         case .success(let urls):
@@ -152,7 +149,6 @@ struct DepositPage: View {
                     }
                     .background(Color.clear.edgesIgnoringSafeArea(.all))
                     
-                    // 插入連結按鈕
                     Button(action: {
                         showingLinkAlert = true
                         errorMessage = nil
@@ -168,7 +164,6 @@ struct DepositPage: View {
                         Button("取消", role: .cancel) { }
                     }
                     
-                    // 錄音按鈕
                     Button(action: {
                         withAnimation {
                             customAlert.toggle()
@@ -181,7 +176,6 @@ struct DepositPage: View {
                             .padding(10)
                     }
                     
-                    // 音樂圖示按鈕
                     Button(action: {
                         isShowingMusicPicker = true
                     }) {
@@ -193,7 +187,7 @@ struct DepositPage: View {
                     .sheet(isPresented: $isShowingMusicPicker) {
                         MusicSearchView(searchTerm: $searchTerm, musicResults: $musicResults, onMusicSelected: { musicItem in
                             if let musicURL = musicItem.url {
-                                // 確保 URL 不是 nil
+                                
                                 self.selectedMediaItems.append((url: musicURL, type: "music"))
                             }
                             isShowingMusicPicker = false
@@ -221,12 +215,12 @@ struct DepositPage: View {
                         audioRecorder: audioRecorder,
                         onSave: {
                             resetFields()
-                            showErrorMessage = false  // 成功保存後，隱藏錯誤訊息
+                            showErrorMessage = false
                             isSaveAnimationPlaying = true
                             isSaving = true
                         }
                     )
-                    .opacity(canSave ? 1 : 0.5) 
+                    .opacity(canSave ? 1 : 0.5)
                     .disabled(isSaving)
                 }
                 .padding(.horizontal, 25)
@@ -234,11 +228,11 @@ struct DepositPage: View {
                 .background(Color.clear)
             }
             .ignoresSafeArea(.keyboard, edges: .bottom)
-            // 顯示保存成功動畫
+            
             if isSaveAnimationPlaying {
                 LottieView(animationFileName: "flying", isPlaying: $isSaveAnimationPlaying)
                     .frame(width: 300, height: 300)
-                    .scaleEffect(0.2)  // 調整動畫大小
+                    .scaleEffect(0.2)
                     .cornerRadius(10)
                     .shadow(radius: 3)
                     .onAppear {
@@ -249,13 +243,12 @@ struct DepositPage: View {
                     .zIndex(1)
             }
             
-            // CustomAlert 彈出視窗，並添加背景遮罩和顯示在中間
             if customAlert {
-                Color.black.opacity(0.4).ignoresSafeArea()  // 遮罩
+                Color.black.opacity(0.4).ignoresSafeArea()
                     .zIndex(1)
                 CustomAlert(
                     show: $customAlert,
-                    richText: .constant(NSAttributedString(string: "")), 
+                    richText: .constant(NSAttributedString(string: "")),
                     audioRecorder: audioRecorder,
                     isRecording: $isRecording,
                     isPlaying: $isPlaying,
@@ -263,42 +256,41 @@ struct DepositPage: View {
                 )
                 .zIndex(2)
                 .transition(.scale)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)  // 滿版
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.clear)
-                .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2.5)  // 顯示在螢幕中央
+                .position(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2.5)
             }
         }
         .onAppear {
-                // 在畫面出現時檢查類別並設定選中的類別
-                if let firstCategory = categories.first {
-                    selectedCategory = firstCategory
-                } else {
-                    selectedCategory = "未分類"
-                }
+            
+            if let firstCategory = categories.first {
+                selectedCategory = firstCategory
+            } else {
+                selectedCategory = "未分類"
             }
-            .onChange(of: categories) { newCategories in
-                // 類別變更時重新設定選中的類別
-                if let firstCategory = newCategories.first {
-                    selectedCategory = firstCategory
-                } else {
-                    selectedCategory = "未分類"
-                }
+        }
+        .onChange(of: categories) { newCategories in
+            
+            if let firstCategory = newCategories.first {
+                selectedCategory = firstCategory
+            } else {
+                selectedCategory = "未分類"
             }
+        }
     }
     
-    // 處理選取的多媒體並將其添加到 ScrollView
     func handlePickedMedia(urls: [URL], mediaType: ImagePicker.MediaType?) {
         for url in urls {
-            // 根據 URL 的檔案屬性檢查媒體類型
+            
             do {
                 let resourceValues = try url.resourceValues(forKeys: [.contentTypeKey])
                 
                 if let contentType = resourceValues.contentType {
                     if contentType.conforms(to: .image) {
-                        // 確認是圖片
+                        
                         selectedMediaItems.append((url: url, type: "image"))
                     } else if contentType.conforms(to: .audiovisualContent) {
-                        // 確認是影片
+                        
                         selectedMediaItems.append((url: url, type: "video"))
                     } else {
                         print("Unsupported media type: \(contentType)")
@@ -312,19 +304,16 @@ struct DepositPage: View {
         }
     }
     
-    // 插入連結
     func insertLink() {
         guard let url = URL(string: linkURL) else { return }
         selectedMediaItems.append((url: url, type: "link"))
         linkURL = ""
     }
     
-    // 刪除 ScrollView 中的項目
     func deleteMediaItem(at offsets: IndexSet) {
         selectedMediaItems.remove(atOffsets: offsets)
     }
     
-    // 重置所有字段
     func resetFields() {
         textContent = ""
         selectedCategory = categories.first ?? "未分類"
@@ -335,42 +324,41 @@ struct DepositPage: View {
         audioRecorder.recordingURL = nil
         isRecording = false
         isPlaying = false
-        selectedMediaItems.removeAll()  // 清空已選擇的媒體
+        selectedMediaItems.removeAll()
         DispatchQueue.main.async {
-               isSaving = false  // 重置完成後啟用按鈕
-           }
+            isSaving = false
+        }
     }
 }
 
 struct PlaceholderTextEditor: View {
-    @FocusState private var keyboardFocused: Bool  // 用於跟踪 TextEditor 是否獲得焦點
-        @Binding var text: String  // 綁定的文本
-        var placeholder = ""  // 占位符文字
-
-        // 判斷是否顯示占位符：當文本為空且鍵盤未聚焦時顯示
-        var shouldShowPlaceholder: Bool {
-            text.isEmpty && !keyboardFocused
-        }
-
-        var body: some View {
-            ZStack(alignment: .topLeading) {
-                
-                TextEditor(text: $text)
-                    .foregroundColor(.black)
-                    .colorMultiply(shouldShowPlaceholder ? .clear : .colorGrayBlue)
-                    .focused($keyboardFocused)
-                
-                if shouldShowPlaceholder {
-                    Text(placeholder)
-                        .padding(.top, 10)
-                        .padding(.leading, 6)
-                        .foregroundColor(.gray)
-                        .onTapGesture {
-                            keyboardFocused = true
-                        }
-                }
+    @FocusState private var keyboardFocused: Bool
+    @Binding var text: String
+    var placeholder = ""
+    
+    var shouldShowPlaceholder: Bool {
+        text.isEmpty && !keyboardFocused
+    }
+    
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            
+            TextEditor(text: $text)
+                .foregroundColor(.black)
+                .colorMultiply(shouldShowPlaceholder ? .clear : .colorGrayBlue)
+                .focused($keyboardFocused)
+            
+            if shouldShowPlaceholder {
+                Text(placeholder)
+                    .padding(.top, 10)
+                    .padding(.leading, 6)
+                    .foregroundColor(.gray)
+                    .onTapGesture {
+                        keyboardFocused = true
+                    }
             }
         }
+    }
 }
 
 struct TopControlsView: View {
@@ -378,7 +366,7 @@ struct TopControlsView: View {
     @Binding var selectedCategory: String
     @Binding var categories: [String]
     let userID: String
-
+    
     var body: some View {
         HStack(spacing: 0) {
             ToggleButton(isPublic: $isPublic)
@@ -390,7 +378,7 @@ struct TopControlsView: View {
 
 struct MediaScrollView: View {
     @Binding var selectedMediaItems: [(url: URL, type: String)]
-
+    
     var body: some View {
         ScrollView(.horizontal) {
             HStack(spacing: 10) {
@@ -409,7 +397,7 @@ struct MediaScrollView: View {
 struct MediaItemView: View {
     let item: (url: URL, type: String)
     let onDelete: () -> Void
-
+    
     var body: some View {
         ZStack(alignment: .topTrailing) {
             if item.type == "image" {
@@ -428,7 +416,7 @@ struct MediaItemView: View {
                     .frame(width: 350, height: 300)
                     .cornerRadius(8)
             }
-
+            
             Button(action: onDelete) {
                 Image(systemName: "xmark.circle.fill")
                     .resizable()

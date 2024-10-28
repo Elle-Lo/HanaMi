@@ -6,20 +6,20 @@ struct URLImageViewWithPreview: View {
     @State private var dragOffset = CGSize.zero
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
-    @State private var imageOffset = CGSize.zero // 記錄圖片相對於初始位置的偏移量
+    @State private var imageOffset = CGSize.zero 
 
     let imageURL: URL
 
     var body: some View {
         ZStack(alignment: .center) {
-            // 縮略圖顯示並可點擊進入全屏
+           
             KFImage(imageURL)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 350, height: 300)
                 .cornerRadius(8)
                 .onTapGesture {
-                    isPresented.toggle()  // 點擊後顯示全屏預覽
+                    isPresented.toggle()
                 }
                 .fullScreenCover(isPresented: $isPresented, onDismiss: {
                     resetImagePosition()
@@ -51,7 +51,6 @@ struct URLImageViewWithPreview: View {
                                             imageOffset.height += value.translation.height
                                             dragOffset = .zero
 
-                                            // 如果拖動超過100點高度，關閉全屏
                                             if value.translation.height > 200 {
                                                 isPresented = false
                                             }
@@ -59,7 +58,6 @@ struct URLImageViewWithPreview: View {
                                     )
                             )
 
-                        // 右上角的關閉按鈕
                         VStack {
                             HStack {
                                 Spacer()
@@ -80,7 +78,6 @@ struct URLImageViewWithPreview: View {
         }
     }
 
-    // 重置圖片的位置和大小
     private func resetImagePosition() {
         scale = 1.0
         dragOffset = .zero

@@ -79,7 +79,6 @@
 		ABAFAB022C988FEF007CDB45 /* ToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */; };
 		ABAFAB042C98907E007CDB45 /* SaveButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */; };
 		ABAFAB062C9891FF007CDB45 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */; };
-		ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */; };
 		ABAFAB0B2C993504007CDB45 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = ABAFAB0A2C993504007CDB45 /* Kingfisher */; };
 		ABAFAB102C994F0D007CDB45 /* LinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */; };
 		ABAFAB132C997DC8007CDB45 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */; };
@@ -184,7 +183,6 @@
 		ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleButton.swift; sourceTree = "<group>"; };
 		ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveButtonView.swift; sourceTree = "<group>"; };
 		ABAFAB052C9891FF007CDB45 /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
-		ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditorView.swift; sourceTree = "<group>"; };
 		ABAFAB0F2C994F0D007CDB45 /* LinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewView.swift; sourceTree = "<group>"; };
 		ABAFAB122C997DC8007CDB45 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		ABAFAB1B2C99ACF5007CDB45 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
@@ -375,7 +373,6 @@
 				ABAFAB012C988FEF007CDB45 /* ToggleButton.swift */,
 				ABAFAAFD2C98102D007CDB45 /* CategorySelectionView.swift */,
 				ABAFAB032C98907E007CDB45 /* SaveButtonView.swift */,
-				ABAFAB072C990D4D007CDB45 /* RichTextEditorView.swift */,
 				ABAFAB1B2C99ACF5007CDB45 /* CustomAlert.swift */,
 				ABA089FE2CC8DA660011F48D /* MusicSearchView.swift */,
 			);
@@ -692,7 +689,6 @@
 				AB06AA912CAD942F00E49F5C /* ImagePicker.swift in Sources */,
 				ABAFAAD72C953CC0007CDB45 /* DepositPage.swift in Sources */,
 				ABAFAAF72C973C1E007CDB45 /* LocationSearchView.swift in Sources */,
-				ABAFAB082C990D4D007CDB45 /* RichTextEditorView.swift in Sources */,
 				ABB59A052CB3076A00E61CF2 /* TreasureCardView.swift in Sources */,
 				ABAFAADE2C95859E007CDB45 /* CategoryAndAnalyticsPage.swift in Sources */,
 				AB06AA052CA01CC300E49F5C /* StatusSelectionSheet.swift in Sources */,

@@ -1,10 +1,3 @@
-//
-//  MusicSearchView.swift
-//  HanaMi
-//
-//  Created by Tzu ning Lo on 2024/10/23.
-//
-
 import SwiftUI
 import MusicKit
 
@@ -19,7 +12,7 @@ struct MusicSearchView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
                 .onChange(of: searchTerm) { newTerm in
-                    // 每當輸入內容改變時觸發搜尋
+                  
                     searchMusic()
                 }
             
@@ -46,22 +39,15 @@ struct MusicSearchView: View {
             }
         }
     }
-    
-    // 使用 MusicKit 搜尋音樂
+
     func searchMusic() {
-        guard !searchTerm.isEmpty else { return }  // 確保搜尋字串非空
-        
         let request = MusicCatalogSearchRequest(term: searchTerm, types: [Song.self])
         Task {
             do {
                 let response = try await request.response()
-                if let songs = response.songs {
-                    musicResults = songs.items  // 確保解包 items
-                } else {
-                    musicResults = []  // 如果沒有歌曲，設置為空
-                }
+                musicResults = response.songs.compactMap { $0 }
             } catch {
-                print("搜尋失敗: \(error)")
+                print("Error searching music: \(error)")
             }
         }
     }

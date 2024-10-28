@@ -10,10 +10,6 @@ class TreasureManager: ObservableObject {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
     }
     
-//    func clearDisplayedTreasures() {
-//            displayedTreasures.removeAll()
-//        }
-    
     func fetchAllPublicAndUserTreasures(minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping ([TreasureSummary]) -> Void) {
     
         DispatchQueue.main.async {

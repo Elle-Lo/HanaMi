@@ -8,15 +8,15 @@ struct StarterPage: View {
     @State private var showAlert: Bool = false
     @State private var isLoading: Bool = false
     @State private var nonce: String?
-    @State private var showSmallSheet = false // 控制小型 sheet 的顯示
+    @State private var showSmallSheet = false
     @AppStorage("log_Status") private var logStatus: Bool = false
     
     var body: some View {
         if logStatus {
             MainTabView()
         } else {
-            VStack(spacing: 10) { // 設置較小的間距以控制元素之間的距離
-                // 調整 Welcome 和 Capybara 的上方 padding，使其往上移動
+            VStack(spacing: 10) {
+               
                 Text("HanaMi")
                     .font(.custom("LexendDeca-SemiBold", size: 30))
                     .foregroundColor(Color(hex: "#522504"))
@@ -26,7 +26,7 @@ struct StarterPage: View {
                     .resizable()
                     .frame(width: 200, height: 150)
                     .scaledToFit()
-                    .padding(.bottom, 30) // 增加與 LOG IN 按鈕之間的距離
+                    .padding(.bottom, 30)
                 
                 NavigationLink(destination: LogInPage()) {
                     Text("LOG IN")
@@ -37,11 +37,10 @@ struct StarterPage: View {
                         .background(Color(hex: "#FFF7EF"))
                         .cornerRadius(25)
                 }
-                .padding(.bottom, 10) // 增加 LOG IN 和 Other login methods 之間的距離
+                .padding(.bottom, 10)
                 
-                // 其他登入方式按鈕
                 Button(action: {
-                    showSmallSheet.toggle() // 點擊時顯示小型 sheet
+                    showSmallSheet.toggle()
                 }) {
                     Text("OTHER LOGIN METHODS")
                         .foregroundColor(Color(hex: "#522504"))
@@ -52,13 +51,12 @@ struct StarterPage: View {
                         .cornerRadius(25)
                 }
                 .sheet(isPresented: $showSmallSheet) {
-                    // 使用自定義的 small sheet 模仿 ActionSheet 大小
+                 
                     VStack {
                         Text("Select a login method")
-                            .font(.subheadline) // 字體變小
-                            .padding(.top, 10) // 調整字和按鈕間距
+                            .font(.subheadline)
+                            .padding(.top, 10)
                         
-                        // 原本的 Sign in with Apple 按鈕，會自動使用預設樣式
                         SignInWithAppleButton(.signIn) { request in
                             let nonce = randomNonceString()
                             self.nonce = nonce
@@ -83,11 +81,11 @@ struct StarterPage: View {
                 HStack {
                     Text("Don’t have an account?")
                         .foregroundColor(.gray)
-                        .font(.footnote) // 調整字體大小變小
+                        .font(.footnote)
                     NavigationLink(destination: SignUpPage()) {
                         Text("Sign Up")
                             .foregroundColor(Color(hex: "#522504"))
-                            .font(.footnote) // 調整字體大小變小
+                            .font(.footnote)
                             .fontWeight(.bold)
                     }
                 }
@@ -154,15 +152,12 @@ struct StarterPage: View {
                     return
                 }
                 
-                // 登錄成功，檢查 Firestore 中是否已有該用戶
                 if let uid = authResult?.user.uid {
                     let email = authResult?.user.email ?? "Unknown email"
                     let fullName = appleIDCredential.fullName?.formatted() ?? "Unknown name"
                     print("Apple Full Name: \(fullName)")
                     createUserInFirestoreIfNeeded(uid: uid, name: fullName, email: email)
-                    // 將 userID 存入 UserDefaults
                     UserDefaults.standard.set(uid, forKey: "userID")
-//                    UserDefaults.standard.set(fullName, forKey: "userName")
                 }
                 
                 logStatus = true

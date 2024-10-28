@@ -55,7 +55,7 @@ struct SettingsPage: View {
         ZStack {
             
             ScrollView {
-                // 背景圆角矩形
+              
                 RoundedRectangle(cornerRadius: 60, style: .continuous)
                     .fill(Color.colorYellow)
                     .frame(height: UIScreen.main.bounds.height * 0.75)
@@ -102,11 +102,10 @@ struct SettingsPage: View {
                 Text("您確認要登出嗎？")
             }
             
-            // Lottie 動畫 (置於最上層，並縮小尺寸)
             if isLottiePlaying {
                 LottieView(animationFileName: "check", isPlaying: $isLottiePlaying)
                     .frame(width: 140, height: 140)
-                    .scaleEffect(0.15)  // 調整動畫大小
+                    .scaleEffect(0.15)
                     .background(Color.white.opacity(0.6))
                     .cornerRadius(10)
                     .shadow(radius: 10)
@@ -120,11 +119,11 @@ struct SettingsPage: View {
         }
         .navigationTitle("設定")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)  // 隱藏系統默認的返回按鈕
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()  // 返回到上一頁
+                    presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "chevron.backward")
                         .foregroundColor(.colorBrown)
@@ -166,7 +165,7 @@ struct SettingsPage: View {
     
     private var profileSection: some View {
         VStack {
-            // 头像按钮
+          
             Button(action: {
                 showActionSheet = true
             }) {
@@ -201,25 +200,23 @@ struct SettingsPage: View {
             }
             .padding(.bottom, 10)
             
-            // 用户名和编辑按钮
             if isEditingName {
                 TextField("\(userName)", text: $newUserName, onCommit: {
-                    saveUserName()  // 保存新用户名
+                    saveUserName()
                 })
                 .focused($isNameFocused)
                 .background(Color.clear)
                 .multilineTextAlignment(.center)
                 .submitLabel(.done)
                 .onSubmit {
-                    saveUserName()  // 提交时保存新用户名
+                    saveUserName()
                     isEditingName = false
                 }
                 .onAppear {
-                    newUserName = userName  // 确保编辑时显示当前用户名
-                    isNameFocused = true  // 在编辑模式时自动激活焦点，弹出键盘
+                    newUserName = userName
+                    isNameFocused = true
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-                    // 监听键盘隐藏的事件，确保 IQKeyboard 的 Done 按钮也能完成编辑
                     if isEditingName {
                         saveUserName()
                         isEditingName = false
@@ -236,7 +233,6 @@ struct SettingsPage: View {
                     }
             }
                
-            // 角色名字
             Text(characterName)
                 .font(.custom("LexendDeca-SemiBold", size: 13))
                 .foregroundColor(.gray)
@@ -324,8 +320,6 @@ struct SettingsPage: View {
         }
         selectedProfileImage = nil
     }
-    
-    
     
     private func uploadBackgroundImageToStorage(image: UIImage) {
         guard let uid = uid else { return }
@@ -443,10 +437,8 @@ struct SettingsPage: View {
                 try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
             }
             
-            // 删除 Firestore 中的用户数据
             await deleteUserFromFirestore(uid: user.uid)
             
-            // 删除用户帐号
             try await user.delete()
             errorMessage = ""
             print("帳號刪除成功")
@@ -469,7 +461,6 @@ struct SettingsPage: View {
         }
     }
     
-    // 生成随机字符串
     private func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)
         let charset: [Character] =
@@ -501,12 +492,6 @@ struct SettingsPage: View {
         return result
     }
     
-    // 打開隱私權政策頁面
-//    private func openPrivacyPolicy() {
-//        if let url = URL(string: "https://www.privacypolicies.com/live/87b7a63c-e519-440a-9f90-370fcdff9b0a") {
-//            UIApplication.shared.open(url)
-//        }
-//    }
 }
 
 struct CharacterButton: View {
@@ -564,13 +549,13 @@ struct FavoriteButton: View {
                     .font(.system(size: 16))
             }
             .padding()
-            .frame(maxWidth: .infinity)  // 让按钮填满可用宽度
+            .frame(maxWidth: .infinity)
             .background(
                 Rectangle()
                     .fill(Color.clear)
                     .cornerRadius(10)
             )
-            .contentShape(Rectangle())  // 确保整个区域可点击
+            .contentShape(Rectangle())
         }
     }
 }
@@ -667,5 +652,4 @@ struct SettingsButton: View {
         }
         .padding(.vertical, 5)
     }
-
 }

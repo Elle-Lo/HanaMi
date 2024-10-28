@@ -11,7 +11,7 @@ enum ContentType: String, Codable {
 }
 
 struct Users: Identifiable, Codable {
-    @DocumentID var id: String? // 用戶的 Firestore document ID
+    @DocumentID var id: String? 
     var name: String
     var email: String
     var treasureList: [String]
