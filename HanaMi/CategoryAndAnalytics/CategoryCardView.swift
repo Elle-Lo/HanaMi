@@ -53,7 +53,6 @@ struct CategoryCardView: View {
             }
             .padding(.vertical, 5)
 
-            // 顯示經緯度
             HStack(spacing: 4) {
                 Image("pin")
                     .resizable()
@@ -69,10 +68,8 @@ struct CategoryCardView: View {
             Divider()
                 .padding(.vertical, 10)
 
-            // 檢查是否有圖片、影片或連結的內容
             let mediaContents = viewModel.treasure.contents.filter { $0.type == .image || $0.type == .video || $0.type == .link }
                        
-                       // 如果有圖片、影片、連結，顯示 TabView
                        if !mediaContents.isEmpty {
                            TabView {
                                ForEach(mediaContents.sorted(by: { $0.index < $1.index })) { content in
@@ -105,22 +102,20 @@ struct CategoryCardView: View {
                 .frame(height: 300)
                 .cornerRadius(8)
                 .tabViewStyle(
-                    PageTabViewStyle(indexDisplayMode: .automatic) // 使用 .automatic
+                    PageTabViewStyle(indexDisplayMode: .automatic)
                 ) 
                 /*.tabViewStyle(PageTabViewStyle(indexDisplayMode: viewModel.treasure.contents.count > 1 ? .always : .never))*/ // 這裡動態顯示或隱藏頁面指示器
             }
 
-            // 音訊內容單獨處理
             if let audioContent = viewModel.treasure.contents.first(where: { $0.type == .audio }) {
                 if let audioURL = URL(string: audioContent.content) {
                     AudioPlayerView(audioURL: audioURL)
-                        .frame(height: 100) // 固定音訊播放器高度
+                        .frame(height: 100)
                         .padding(.top, 10)
                         .padding(.bottom, 20)
                 }
             }
 
-            // 文字內容
             if let textContent = viewModel.treasure.contents.first(where: { $0.type == .text })?.content {
                 ScrollView {
                     Text(textContent)
@@ -128,7 +123,7 @@ struct CategoryCardView: View {
                         .foregroundColor(.black)
                         .padding(.horizontal, 5)
                         .lineSpacing(10.0)
-                        .padding(.top, mediaContents.isEmpty ? 0 : 10) // 如果沒有媒體，則不留間距
+                        .padding(.top, mediaContents.isEmpty ? 0 : 10)
                 }
             }
 

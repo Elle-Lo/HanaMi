@@ -11,14 +11,14 @@ struct AddCategoryForm: View {
         VStack(spacing: 15) {
 
             TextField("新增類別", text: $newCategoryName)
-                .padding(.vertical, 10)  // 控制輸入框上下的間距
+                .padding(.vertical, 10)
                 .multilineTextAlignment(.center)
                 .font(.custom("LexendDeca-SemiBold", size: 16))
                 .overlay(
-                    Rectangle()  // 使用矩形作為底線
-                        .frame(height: 1)  // 底線的高度
-                        .foregroundColor(.gray),  // 底線顏色
-                    alignment: .bottom  // 將底線對齊到輸入框底部
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.gray),
+                    alignment: .bottom
                 )
                 .padding(.horizontal, 100)
                 .onChange(of: newCategoryName) { _ in
@@ -39,13 +39,13 @@ struct AddCategoryForm: View {
                     }
                 }
             }) {
-                Text("添加")  // 包裝文字
-                    .font(.custom("LexendDeca-SemiBold", size: 16))  // 設定字體和大小
-                    .foregroundColor(.colorYellow)  // 設定文字顏色
+                Text("添加")
+                    .font(.custom("LexendDeca-SemiBold", size: 16))
+                    .foregroundColor(.colorYellow)
                     .padding(.vertical, 10)
                     .padding(.horizontal, 18)
-                    .background(Color.colorBrown)  // 背景色
-                    .cornerRadius(8)  // 圓角
+                    .background(Color.colorBrown)
+                    .cornerRadius(8) 
             }
             .padding(.top, 10)
             .disabled(newCategoryValidationMessage != nil)

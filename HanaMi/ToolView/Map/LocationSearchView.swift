@@ -24,7 +24,6 @@ struct LocationSearchView: View {
             .padding(.top, 20)
             .padding(.horizontal, 16)
             
-            // 顯示錯誤信息或空結果
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.gray)
@@ -36,7 +35,7 @@ struct LocationSearchView: View {
                     .padding(.top)
                     .padding(.horizontal, 16)
             }
-            // 列表顯示搜索結果
+       
             List(viewModel.searchResults, id: \.self) { result in
                 Button(action: {
                     selectLocation(result)
@@ -53,11 +52,11 @@ struct LocationSearchView: View {
                                 .foregroundColor(.gray)
                         }
                     }
-                    .padding(.vertical, 8)  // 增加每行的上下間距
+                    .padding(.vertical, 8)
                 }
             }
-            .listStyle(PlainListStyle())  // 確保 List 無邊框
-            .padding(.horizontal, 16)  // 為 List 增加左右邊距
+            .listStyle(PlainListStyle())
+            .padding(.horizontal, 16)
             .background(Color.white)
             
             Spacer()

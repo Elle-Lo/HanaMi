@@ -187,10 +187,7 @@ class FirestoreService {
         }
     }
     
-    
-    
     // MARK: - Treasure Handling
-    
     func fetchRandomTreasures(userID: String, completion: @escaping (Result<[Treasure], Error>) -> Void) {
         let userDocument = db.collection("Users").document(userID)
         
@@ -233,8 +230,7 @@ class FirestoreService {
     }
     
     func saveTreasure(userID: String, coordinate: CLLocationCoordinate2D, locationName: String, category: String, isPublic: Bool, contents: [TreasureContent], completion: @escaping (Result<Void, Error>) -> Void) {
-        
-        // 生成相同的 treasureID
+     
         let treasureID = db.collection("Users").document(userID).collection("Treasures").document().documentID
         
         let treasureData: [String: Any] = [
@@ -429,7 +425,6 @@ class FirestoreService {
         let db = Firestore.firestore()
         let userRef = db.collection("Users").document(currentUserID)
 
-        // 1. 先取得當前使用者的封鎖名單
         userRef.getDocument { snapshot, error in
                 guard let data = snapshot?.data() else {
                     print("無法取得使用者資料")
@@ -443,7 +438,6 @@ class FirestoreService {
                 print("封鎖名單：\(blockList)")
                 print("被封鎖名單：\(wasBlockedByList)")
 
-                // 2. 呼叫 queryPublicTreasures 進行查詢
                 self.queryPublicTreasures(
                     minLat: minLat,
                     maxLat: maxLat,
@@ -469,7 +463,6 @@ class FirestoreService {
     ) {
         let db = Firestore.firestore()
 
-        // 3. 查詢符合範圍的公開寶藏
         let publicTreasuresQuery = db.collection("AllTreasures")
             .whereField("isPublic", isEqualTo: true)
             .whereField("latitude", isGreaterThanOrEqualTo: minLat)
@@ -483,7 +476,6 @@ class FirestoreService {
                 return
             }
 
-            // 4. 過濾掉封鎖名單內的用戶以及自己的寶藏
             let treasures = snapshot?.documents.compactMap { document -> TreasureSummary? in
                 let data = document.data()
                 guard let latitude = data["latitude"] as? Double,
@@ -491,7 +483,6 @@ class FirestoreService {
                       let userID = data["userID"] as? String else {
                     return nil
                 }
-                
                 
                 if blockList.contains(userID) || wasBlockedByList.contains(userID) {
                     print("排除 \(userID) 的寶藏，因為封鎖條件符合")
@@ -511,7 +502,6 @@ class FirestoreService {
         }
     }
 
-   
     func fetchUserTreasuresNear(userID: String, minLat: Double, maxLat: Double, minLng: Double, maxLng: Double, completion: @escaping (Result<[TreasureSummary], Error>) -> Void) {
         
         let userTreasuresQuery = db.collection("Users").document(userID).collection("Treasures")
@@ -994,8 +984,7 @@ class FirestoreService {
                                 switch result {
                                 case .success(let updatedTreasures):
                                     print("寶藏名稱和類別成功更新")
-                                    // 在這裡你可以直接觸發 UI 刷新，例如通過回調或者發送通知來更新 UI
-                                    // 例如：self.delegate?.didUpdateCategory(newName: newName, treasures: updatedTreasures)
+                                    
                                     completion(true)
                                 case .failure(let error):
                                     print("更新後加載寶藏失敗: \(error.localizedDescription)")
@@ -1188,19 +1177,16 @@ class FirestoreService {
             let db = Firestore.firestore()
             let batch = db.batch()
 
-            // 更新封鎖者的 blockList
             let currentUserRef = db.collection("Users").document(currentUserID)
             batch.updateData([
                 "blockList": FieldValue.arrayUnion([blockedUserID])
             ], forDocument: currentUserRef)
 
-            // 更新被封鎖者的 wasBlockedByList
             let blockedUserRef = db.collection("Users").document(blockedUserID)
             batch.updateData([
                 "wasBlockedByList": FieldValue.arrayUnion([currentUserID])
             ], forDocument: blockedUserRef)
 
-            // 提交批次更新
             batch.commit { error in
                 if let error = error {
                     completion(.failure(error))
@@ -1248,22 +1234,18 @@ class FirestoreService {
             let db = Firestore.firestore()
             let batch = db.batch()
 
-            // 自己的用戶文件
             let userRef = db.collection("Users").document(userID)
-            // 對方的用戶文件
+           
             let blockedUserRef = db.collection("Users").document(blockedUserID)
 
-            // 從自己的 blockList 移除該使用者
             batch.updateData([
                 "blockList": FieldValue.arrayRemove([blockedUserID])
             ], forDocument: userRef)
 
-            // 從對方的 wasBlockedByList 移除自己
             batch.updateData([
                 "wasBlockedByList": FieldValue.arrayRemove([userID])
             ], forDocument: blockedUserRef)
 
-            // 執行批次更新
             batch.commit { error in
                 if let error = error {
                     print("移除封鎖失敗：\(error.localizedDescription)")

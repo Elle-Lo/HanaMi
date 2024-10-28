@@ -11,8 +11,8 @@ struct SaveButtonView: View {
     let selectedLocationName: String?
     let selectedCategory: String
     let isPublic: Bool
-    let textContent: String  // 純文字內容
-    let selectedMediaItems: [(url: URL, type: String)]  // 已選擇的媒體項目
+    let textContent: String
+    let selectedMediaItems: [(url: URL, type: String)]
     @State private var isShowingSaveAnimation = false
     @Binding var errorMessage: String?
     @Binding var isSaving: Bool
@@ -24,8 +24,8 @@ struct SaveButtonView: View {
 
     var body: some View {
         Button(action: {
-            guard !isSaving else { return }  // 如果正在儲存則跳過
-                        isSaving = true  // 禁用按鈕
+            guard !isSaving else { return }
+                        isSaving = true
             saveDataToFirestore()
         }) {
             Text(isSaving ? "Saving..." : "Save")
@@ -35,12 +35,12 @@ struct SaveButtonView: View {
                            .background(isSaving ? .colorGray : .colorYellow)
                            .cornerRadius(10)
         }
-        .disabled(isSaving)  // 禁用按鈕
-        .opacity(isSaving ? 0.5 : 1.0)  // 上傳中降低透明度
+        .disabled(isSaving)
+        .opacity(isSaving ? 0.5 : 1.0)
     }
     
     private func saveDataToFirestore() {
-        // 檢查是否選擇了有效的地點
+       
         guard let coordinate = selectedCoordinate,
               let locationName = selectedLocationName else {
             errorMessage = "請選擇一個有效的地點"
@@ -48,7 +48,6 @@ struct SaveButtonView: View {
             return
         }
 
-        // 檢查是否輸入了文本、選擇了媒體項目，或是有錄音
         let trimmedText = textContent.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmedText.isEmpty && selectedMediaItems.isEmpty && audioRecorder.recordingURL == nil {
             errorMessage = "請輸入內容或上傳圖片、影片或音訊"
@@ -56,7 +55,6 @@ struct SaveButtonView: View {
             return
         }
 
-        // 開始提取內容並上傳
         extractContentsWithMediaUpload(textContent) { processedContents in
             firestoreService.saveTreasure(
                 userID: userID,
@@ -80,30 +78,27 @@ struct SaveButtonView: View {
         }
     }
 
-    // 提取文字及媒體並處理上傳
     private func extractContentsWithMediaUpload(_ textContent: String, completion: @escaping ([TreasureContent]) -> Void) {
         var contents: [TreasureContent] = []
         var pendingUploads = 0
         var currentIndex = 0
 
-        // 儲存純文字
         if !textContent.isEmpty {
             let content = TreasureContent(type: .text, content: textContent, index: currentIndex)
             contents.append(content)
             currentIndex += 1
         }
 
-        // 處理選擇的媒體項目
         for item in selectedMediaItems {
             switch item.type {
             case "link":
-                // 連結類型處理
+                
                 let linkContent = TreasureContent(type: .link, content: item.url.absoluteString, index: currentIndex)
                 contents.append(linkContent)
                 currentIndex += 1
 
             case "image":
-                // 圖片類型處理
+            
                 if let image = UIImage(contentsOfFile: item.url.path) {
                     pendingUploads += 1
                     uploadMediaToStorage(imageData: image.pngData(), mediaURL: nil, path: "images", type: .image, currentIndex: currentIndex) { content in
@@ -119,7 +114,7 @@ struct SaveButtonView: View {
                 }
 
             case "video":
-                // 視頻類型處理
+              
                 pendingUploads += 1
                 uploadMediaToStorage(imageData: nil, mediaURL: item.url, path: "videos", type: .video, currentIndex: currentIndex) { content in
                     if let content = content {
@@ -133,7 +128,7 @@ struct SaveButtonView: View {
                 currentIndex += 1
 
             case "audio":
-                // 音訊類型處理
+               
                 pendingUploads += 1
                 uploadMediaToStorage(imageData: nil, mediaURL: item.url, path: "audios", type: .audio, currentIndex: currentIndex) { content in
                     if let content = content {
@@ -145,13 +140,18 @@ struct SaveButtonView: View {
                     }
                 }
                 currentIndex += 1
-
+                
+            case "music":
+               
+                let musicContent = TreasureContent(type: .music, content: item.url.absoluteString, index: currentIndex)
+                contents.append(musicContent)
+                currentIndex += 1
+                
             default:
                 break
             }
         }
 
-        // 如果有音檔則上傳音檔
         if let localAudioURL = audioRecorder.recordingURL {
             pendingUploads += 1
             uploadMediaToStorage(imageData: nil, mediaURL: localAudioURL, path: "audios", type: .audio, currentIndex: currentIndex) { content in
@@ -167,13 +167,11 @@ struct SaveButtonView: View {
             currentIndex += 1
         }
 
-        // 當沒有待處理的上傳時，完成處理
         if pendingUploads == 0 {
             completion(contents.sorted(by: { $0.index < $1.index }))
         }
     }
 
-    // 上傳媒體到Firebase Storage
     private func uploadMediaToStorage(imageData: Data?, mediaURL: URL?, path: String, type: ContentType, currentIndex: Int, completion: @escaping (TreasureContent?) -> Void) {
         let filename = UUID().uuidString + (type == .video ? ".mp4" : ".png")
         let storageRef = Storage.storage().reference().child("\(path)/\(filename)")

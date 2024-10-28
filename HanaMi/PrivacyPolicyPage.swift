@@ -2,29 +2,28 @@ import SwiftUI
 import WebKit
 
 struct PrivacyPolicyPage: View {
-    @Environment(\.presentationMode) var presentationMode  // 用於控制返回操作
+    @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
         VStack {
-            // "完成" 按鈕，左上角返回到設置頁面
+           
             HStack {
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()  // 返回到上一頁
-                }) {
+                    presentationMode.wrappedValue.dismiss()
+                }, label: {
                     Text("完成")
                         .font(.system(size: 16))
                         .foregroundColor(.colorBrown)
-                }
+                })
                 .padding()
 
                 Spacer()
             }
 
-            // WebView 顯示隱私權政策
             WebView(url: URL(string: "https://www.privacypolicies.com/live/87b7a63c-e519-440a-9f90-370fcdff9b0a")!)
                 .edgesIgnoringSafeArea(.all)
         }
-        .navigationBarBackButtonHidden(true)  // 隱藏系統默認的返回按鈕
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -40,4 +39,3 @@ struct WebView: UIViewRepresentable {
 
     func updateUIView(_ uiView: WKWebView, context: Context) {}
 }
-

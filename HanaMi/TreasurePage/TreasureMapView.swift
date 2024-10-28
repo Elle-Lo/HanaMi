@@ -2,7 +2,7 @@ import SwiftUI
 import MapKit
 
 struct TreasureMapView: View {
-    @State private var selectedTreasure: Treasure? = nil
+    @State private var selectedTreasure: Treasure?
     @State private var showTreasureDetail = false
     @State private var isShowingAllTreasures = true
 
@@ -16,8 +16,8 @@ struct TreasureMapView: View {
                 selectedCoordinate: .constant(nil),
                 selectedLocationName: .constant(nil),
                 shouldZoomToUserLocation: .constant(false),
-                selectedTreasure: $selectedTreasure,  // 绑定选中的宝藏
-                showTreasureDetail: $showTreasureDetail,  // 控制 Sheet 的显示
+                selectedTreasure: $selectedTreasure,
+                showTreasureDetail: $showTreasureDetail, 
                 isShowingAllTreasures: $isShowingAllTreasures,
                 locationManager: locationManager,
                 treasureManager: treasureManager,

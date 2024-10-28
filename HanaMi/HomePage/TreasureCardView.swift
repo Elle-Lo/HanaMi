@@ -13,26 +13,25 @@ struct TreasureCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             
-            // 檢查是否有圖片、影片或連結的內容
             let hasMediaContent = treasure.contents.contains { $0.type == .image || $0.type == .video || $0.type == .link }
             
             if hasMediaContent {
-                // TabView 用於顯示圖片、影片、連結
+                
                 TabView {
                     ForEach(treasure.contents.sorted(by: { $0.index < $1.index })) { content in
                         switch content.type {
                         case .image:
                             if let imageURL = URL(string: content.content) {
-                                URLImageViewWithPreview(imageURL: imageURL) // 直接使用 URLImageViewWithPreview
+                                URLImageViewWithPreview(imageURL: imageURL)
                             }
                             
                         case .video:
                             if let videoURL = URL(string: content.content) {
                                 VideoPlayerView(url: videoURL)
-                                    .scaledToFill()  // 影片填滿框架
+                                    .scaledToFill()
                                     .frame(width: 350, height: 300)
                                     .cornerRadius(8)
-                                    .clipped()  // 剪裁溢出的部分
+                                    .clipped()
                             }
                             
                         case .link:
@@ -48,11 +47,10 @@ struct TreasureCardView: View {
                 .frame(height: 300)
                 .cornerRadius(8)
                 .tabViewStyle(
-                    PageTabViewStyle(indexDisplayMode: .automatic) // 使用 .automatic
-                ) // 這裡動態顯示或隱藏頁面指示器
+                    PageTabViewStyle(indexDisplayMode: .automatic)
+                )
             }
             
-            // 音訊內容單獨處理，設置固定高度
             if let audioContent = treasure.contents.first(where: { $0.type == .audio }) {
                 if let audioURL = URL(string: audioContent.content) {
                     AudioPlayerView(audioURL: audioURL)
@@ -62,7 +60,6 @@ struct TreasureCardView: View {
                 }
             }
             
-            // 文字內容的 ScrollView，當文字內容過多時可以滾動
             if let textContent = treasure.contents.first(where: { $0.type == .text })?.content {
                 ScrollView {
                     Text(textContent)
@@ -75,13 +72,11 @@ struct TreasureCardView: View {
                 .frame(maxHeight: 190)
             }
             
-            // 類別標籤
             Text("# \(treasure.category)")
                 .font(.custom("LexendDeca-SemiBold", size: 16))
                 .foregroundColor(.black)
                 .padding(.top, 10)
             
-            // 經緯度顯示
             HStack(spacing: 4) {
                 Image("pin")
                     .resizable()
@@ -99,7 +94,7 @@ struct TreasureCardView: View {
         .shadow(radius: 5)
         .fullScreenCover(isPresented: $showFullScreenImage) {
             if let imageURL = selectedImageURL {
-                URLImageViewWithPreview(imageURL: imageURL)  // 使用URL來進行圖片預覽
+                URLImageViewWithPreview(imageURL: imageURL) 
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

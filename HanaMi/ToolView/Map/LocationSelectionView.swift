@@ -14,14 +14,14 @@ struct LocationSelectionView: View {
     @ObservedObject var locationManager: LocationManager
     
     @ObservedObject var searchViewModel: LocationSearchViewModel
-    @State private var activeSheet: ActiveSheet? = nil
+    @State private var activeSheet: ActiveSheet?
     let userID: String
     
     var body: some View {
         HStack {
             
             Button(action: {
-                activeSheet = .search // 打開搜索 sheet
+                activeSheet = .search
             }) {
                 Image(systemName: "magnifyingglass")
                     .padding(10)
@@ -29,13 +29,13 @@ struct LocationSelectionView: View {
                     .cornerRadius(10)
             }
             .padding(.trailing, 2)
-            // 顯示地圖選擇地點的按鈕
+           
             Button(action: {
-                shouldZoomToUserLocation = true // 確保縮放到使用者位置
-                activeSheet = .map // 打開地圖 sheet
+                shouldZoomToUserLocation = true
+                activeSheet = .map
             }) {
                 HStack {
-                    // 顯示地名和經緯度
+              
                     if let name = selectedLocationName {
                         HStack {
                             Image("pin")
@@ -73,7 +73,6 @@ struct LocationSelectionView: View {
             }
         }
         .padding(.horizontal)
-        // 使用 activeSheet 決定顯示的 sheet
         .sheet(item: $activeSheet) { item in
             switch item {
             case .map:
@@ -87,7 +86,7 @@ struct LocationSelectionView: View {
                         showTreasureDetail: .constant(false),
                         isShowingAllTreasures: .constant(false),
                         locationManager: locationManager,
-                        treasureManager: TreasureManager(), // 傳入空的 treasureManager
+                        treasureManager: TreasureManager(), 
                         mode: .selectLocation,
                         userID: userID
                     )
