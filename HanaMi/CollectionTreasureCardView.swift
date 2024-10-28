@@ -13,7 +13,7 @@ struct CollectionTreasureCardView: View {
     var body: some View {
         ZStack {
             if treasure.isPublic {
-                // 正常顯示卡片內容
+             
                 VStack(alignment: .leading, spacing: 10) {
                     let hasMediaContent = treasure.contents.contains { $0.type == .image || $0.type == .video || $0.type == .link }
 
@@ -45,9 +45,8 @@ struct CollectionTreasureCardView: View {
                         .frame(height: 300)
                         .cornerRadius(8)
                         .tabViewStyle(
-                            PageTabViewStyle(indexDisplayMode: .automatic) // 使用 .automatic
-                        ) 
-//                        .tabViewStyle(PageTabViewStyle(indexDisplayMode: treasure.contents.count > 1 ? .always : .never))
+                            PageTabViewStyle(indexDisplayMode: .automatic)
+                        )
                     }
 
                     if let audioContent = treasure.contents.first(where: { $0.type == .audio }) {
@@ -91,7 +90,6 @@ struct CollectionTreasureCardView: View {
                 .cornerRadius(15)
                 .shadow(radius: 2)
             } else {
-                // 顯示為私人寶藏的模糊背景卡片
                 ZStack {
                     BlurView()
                         .frame(height: 100)

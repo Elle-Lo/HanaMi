@@ -9,7 +9,7 @@ struct HomePage: View {
     @State private var isLoading = false
     @State private var selectedBackgroundImage: UIImage?
     @State private var isUsingDefaultBackground = true
-    @State private var backgroundImageUrl: URL?  // 用戶背景圖片 URL
+    @State private var backgroundImageUrl: URL?
     
     private var userID: String {
         return UserDefaults.standard.string(forKey: "userID") ?? "Unknown User"
@@ -19,7 +19,6 @@ struct HomePage: View {
     var body: some View {
         ZStack {
             
-            // 半透明黑色遮罩
             Color.black.opacity(0.2).edgesIgnoringSafeArea(.all)
             
             VStack {
@@ -64,18 +63,18 @@ struct HomePage: View {
                     KFImage(backgroundImageUrl)
                         .resizable()
                         .scaledToFill()
-                        .edgesIgnoringSafeArea(.all) // 背景延伸到安全区域外
+                        .edgesIgnoringSafeArea(.all)
                 } else {
                     Image("Homebg")
                         .resizable()
                         .scaledToFill()
-                        .edgesIgnoringSafeArea(.all) // 使用默认背景
+                        .edgesIgnoringSafeArea(.all)
                 }
             }
         )
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear {
-            fetchBackgroundImage()  // 加載用戶背景圖片
+            fetchBackgroundImage()
             fetchRandomTreasures()
         }
     }
@@ -84,9 +83,9 @@ struct HomePage: View {
         firestoreService.fetchUserBackgroundImage(uid: userID) { imageUrlString in
             if let imageUrlString = imageUrlString, let url = URL(string: imageUrlString) {
                 self.backgroundImageUrl = url
-                self.isUsingDefaultBackground = false  // 使用自定義背景
+                self.isUsingDefaultBackground = false
             } else {
-                self.isUsingDefaultBackground = true  // 沒有背景圖片，使用默認背景
+                self.isUsingDefaultBackground = true  
             }
         }
     }

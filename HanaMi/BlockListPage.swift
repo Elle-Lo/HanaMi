@@ -2,32 +2,26 @@ import SwiftUI
 
 struct BlockListPage: View {
     @State private var blockedUsers: [(id: String, name: String)] = []
-    @State private var isEditing = false // 控制是否顯示編輯模式
-    @Environment(\.presentationMode) var presentationMode  // 用於返回上一頁
+    @State private var isEditing = false
+    @Environment(\.presentationMode) var presentationMode
     private let firestoreService = FirestoreService()
     
     var body: some View {
         ZStack {
             Color(.colorYellow)
                 .edgesIgnoringSafeArea(.all)
-            // 標題
             VStack {
-//                ZStack {
-                    // 中間的標題
+
                     Text("Block")
                         .foregroundColor(.colorBrown)
                         .font(.custom("LexendDeca-Bold", size: 30))
-                    
-//                }
-//                .padding(.top, 10)
                 
                 ScrollView {
-                    // 列出所有被封鎖的使用者
+                    
                     ForEach(blockedUsers, id: \.id) { user in
                         BlockedUserCard(userID: user.id, userName: user.name) {
                             removeBlock(userID: user.id)
                         }
-//                        Divider()
                     }
                 }
                 .padding(.horizontal, 20)
@@ -35,12 +29,12 @@ struct BlockListPage: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            fetchBlockedUsers()  // 頁面載入時取得被封鎖名單
+            fetchBlockedUsers()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()  // 返回上一頁
+                    presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "chevron.backward")
                         .foregroundColor(.colorBrown)
@@ -49,7 +43,6 @@ struct BlockListPage: View {
         }
     }
     
-    // 從 Firestore 取得封鎖名單
     private func fetchBlockedUsers() {
         guard let userID = UserDefaults.standard.string(forKey: "userID") else { return }
         firestoreService.fetchBlockedUsers(for: userID) { result in
@@ -62,7 +55,6 @@ struct BlockListPage: View {
         }
     }
     
-    // 移除封鎖
     private func removeBlock(userID: String) {
         guard let currentUserID = UserDefaults.standard.string(forKey: "userID") else { return }
         firestoreService.removeBlock(for: currentUserID, blockedUserID: userID) { success in

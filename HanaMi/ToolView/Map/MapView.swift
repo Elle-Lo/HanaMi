@@ -5,8 +5,8 @@ struct MapView: View {
     @State private var selectedCoordinate: CLLocationCoordinate2D?
     @State private var selectedLocationName: String?
     @State private var shouldZoomToUserLocation = true
-    @Binding var selectedTreasure: Treasure?  // 可選的寶藏
-    @Binding var showTreasureDetail: Bool     // 可選的顯示詳情
+    @Binding var selectedTreasure: Treasure?
+    @Binding var showTreasureDetail: Bool
     @ObservedObject var locationManager = LocationManager()
     @ObservedObject var treasureManager = TreasureManager()
     let userID: String
@@ -21,9 +21,9 @@ struct MapView: View {
                 selectedCoordinate: $selectedCoordinate,
                 selectedLocationName: $selectedLocationName,
                 shouldZoomToUserLocation: $shouldZoomToUserLocation,
-                selectedTreasure: .constant(nil),  // 不需要寶藏，設置為 nil
-                showTreasureDetail: .constant(false),  // 不需要詳情，設置為 false
-                isShowingAllTreasures: .constant(false),  // 固定為 false，因為不涉及寶藏顯示
+                selectedTreasure: .constant(nil),
+                showTreasureDetail: .constant(false),
+                isShowingAllTreasures: .constant(false),  
                 locationManager: locationManager,
                 treasureManager: treasureManager,
                 mode: .selectLocation,

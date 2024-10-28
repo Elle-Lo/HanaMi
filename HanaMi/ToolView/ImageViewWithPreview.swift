@@ -5,13 +5,13 @@ struct ImageViewWithPreview: View {
     @State private var dragOffset = CGSize.zero
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
-    @State private var imageOffset = CGSize.zero // 记录图片相对于初始位置的偏移量
+    @State private var imageOffset = CGSize.zero 
 
     let image: UIImage
 
     var body: some View {
         ZStack(alignment: .center) {
-            // 缩略图显示
+          
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
@@ -49,7 +49,6 @@ struct ImageViewWithPreview: View {
                                             imageOffset.height += value.translation.height
                                             dragOffset = .zero
 
-                                            // 如果拖动超过100点高度，关闭全屏
                                             if value.translation.height > 200 {
                                                 isPresented = false
                                             }
@@ -57,7 +56,6 @@ struct ImageViewWithPreview: View {
                                     )
                             )
 
-                        // 右上角的关闭按钮
                         VStack {
                             HStack {
                                 Spacer()
@@ -78,11 +76,10 @@ struct ImageViewWithPreview: View {
         }
     }
 
-    // 重置图片的位置和大小
     private func resetImagePosition() {
         scale = 1.0
         dragOffset = .zero
-        imageOffset = .zero // 使图片返回初始位置
+        imageOffset = .zero
         lastScale = 1.0
     }
 }

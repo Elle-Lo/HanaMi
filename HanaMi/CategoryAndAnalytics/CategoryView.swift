@@ -20,8 +20,8 @@ struct CategoryView: View {
     var body: some View {
         ZStack {
             
-            Color(.colorGrayBlue)  // 這裡可以替換成任何你想要的顏色或圖片
-                .edgesIgnoringSafeArea(.all)  // 擴展到整個屏幕
+            Color(.colorGrayBlue)
+                .edgesIgnoringSafeArea(.all)
             
             VStack(alignment: .leading) {
                 Text("Category")
@@ -29,7 +29,6 @@ struct CategoryView: View {
                     .font(.custom("LexendDeca-Bold", size: 30))
                     .padding(.leading, 20)
                 
-                // 類別選擇按鈕
                 ScrollView(.horizontal, showsIndicators: false) {
                     CategorySelectionButtons(
                         categories: $categories,
@@ -62,11 +61,10 @@ struct CategoryView: View {
                                 newCategoryValidationMessage = nil
                             }
                         )
-                        .presentationDetents([.fraction(0.2)])  // 讓視窗只佔螢幕高度的30%
-                        .presentationDragIndicator(.hidden)     // 隱藏拖動指示器
+                        .presentationDetents([.fraction(0.2)])
+                        .presentationDragIndicator(.hidden)
                     }
                 
-                // 顯示寶藏列表
                 TreasureListView(
                     treasures: $treasures,
                     categories: $categories,
@@ -86,8 +84,7 @@ struct CategoryView: View {
                 loadAllTreasures()
                 loadCategories()
             }
-            
-            // 添加编辑按钮
+     
             if selectedCategory != "All" && selectedCategory != nil {
                 VStack {
                     Spacer()
@@ -97,28 +94,26 @@ struct CategoryView: View {
                             showEditOptions = true
                         }) {
                             ZStack {
-                                // 背景圓形
+                                
                                 Circle()
-                                    .fill(Color(hex: "522504")) // 圓形背景顏色
-                                    .frame(width: 55, height: 55) // 設置圓形大小
+                                    .fill(Color(hex: "522504"))
+                                    .frame(width: 55, height: 55)
 
-                                // 鉛筆圖標
                                 Image(systemName: "pencil")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 25, height: 25) // 設置圖標大小
-                                    .foregroundColor(Color(hex: "FFF7EF")) // 鉛筆顏色
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(Color(hex: "FFF7EF"))
                             }
                         }
                         .padding()
-                        .offset(x: -10, y: -10) // 控制按鈕向左和向上的偏移
+                        .offset(x: -10, y: -10)
                     }
                 }
             }
 
         }
         
-        // 彈出操作選項
         .confirmationDialog("編輯類別", isPresented: $showEditOptions, titleVisibility: .visible) {
             Button("刪除類別", role: .destructive) {
                 showCategoryDeleteAlert = true
@@ -129,7 +124,6 @@ struct CategoryView: View {
             Button("取消", role: .cancel) { }
         }
         
-        // 刪除類別確認框
         .alert("刪除類別", isPresented: $showCategoryDeleteAlert) {
             Button("確認", role: .destructive) {
                 if let category = selectedCategory {
@@ -141,7 +135,6 @@ struct CategoryView: View {
             Text("您確認要删除該類別及其所有寶藏嗎？")
         }
         
-        // 更改名稱彈窗
         .alert("更改類別名稱", isPresented: $showChangeNameAlert) {
             TextField("新類別名稱", text: $editedCategoryName)
                 .onChange(of: editedCategoryName) { _ in
@@ -152,17 +145,15 @@ struct CategoryView: View {
                 if let category = selectedCategory {
                     FirestoreService().updateCategoryNameAndTreasures(userID: userID, oldName: category, newName: trimmedName) { success in
                         if success {
-                            // 更新 categories 和 selectedCategory
+                          
                             if let index = categories.firstIndex(of: category) {
                                 categories[index] = trimmedName
                             }
-                            selectedCategory = trimmedName  // 更新為新的類別名稱
+                            selectedCategory = trimmedName
                             
-                            // 為了強制 SwiftUI 視圖重繪，重新賦值 categories 來觸發更新
-                            categories = categories.map { $0 }  // 重新賦值 categories
-                            
-                            // 重新加載更新後的寶藏
-                            loadTreasuresDetail(for: trimmedName)  // 使用新的類別名稱加載寶藏
+                            categories = categories.map { $0 }
+                           
+                            loadTreasuresDetail(for: trimmedName)
                             
                             DispatchQueue.main.async {
                                 editedCategoryName = ""
@@ -188,7 +179,6 @@ struct CategoryView: View {
         }
     }
     
-    // 验证新类别名称
     private func validateNewCategoryName() {
         let trimmedName = newCategoryName.trimmingCharacters(in: .whitespaces)
         if trimmedName.isEmpty {
@@ -200,7 +190,6 @@ struct CategoryView: View {
         }
     }
     
-    // 验证编辑的类别名称
     private func validateEditedCategoryName() {
         let trimmedName = editedCategoryName.trimmingCharacters(in: .whitespaces)
         
@@ -215,7 +204,6 @@ struct CategoryView: View {
         }
     }
     
-    // 加载所有类别
     private func loadCategories() {
         FirestoreService().loadCategories(userID: userID) { fetchedCategories in
             DispatchQueue.main.async {
@@ -223,8 +211,7 @@ struct CategoryView: View {
             }
         }
     }
-    
-    // 加载特定类别的宝藏
+
     private func loadTreasuresDetail(for category: String) {
         FirestoreService().fetchTreasuresForCategory(userID: userID, category: category) { result in
             DispatchQueue.main.async {
@@ -239,7 +226,6 @@ struct CategoryView: View {
         }
     }
     
-    // 加载所有宝藏
     private func loadAllTreasures() {
         FirestoreService().fetchAllTreasures(userID: userID) { result in
             DispatchQueue.main.async {
@@ -254,7 +240,6 @@ struct CategoryView: View {
         }
     }
     
-    // 删除选中的类别及其宝藏
     private func deleteCategory(_ category: String) {
         FirestoreService().deleteCategoryAndTreasures(userID: userID, category: category) { success in
             if success {

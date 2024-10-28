@@ -4,8 +4,8 @@ import FirebaseFirestore
 struct CollectionsPage: View {
     @State private var favoriteTreasures: [Treasure] = []
     @State private var isLoading = true
-    @State private var isEditing = false // 控制是否顯示編輯模式
-    @State private var isPlayingAnimation = true // 控制動畫播放
+    @State private var isEditing = false
+    @State private var isPlayingAnimation = true
     @Environment(\.presentationMode) var presentationMode
     private let firestoreService = FirestoreService()
 
@@ -19,14 +19,13 @@ struct CollectionsPage: View {
                 .edgesIgnoringSafeArea(.all)
 
             VStack {
-                // 標題和編輯按鈕
+              
                 ZStack {
-                    // 中間的標題
+                   
                     Text("Collection")
                         .foregroundColor(.colorBrown)
                         .font(.custom("LexendDeca-Bold", size: 30))
 
-                    // 右上角的編輯按鈕
                     HStack {
                         Spacer()
                         Button(action: {
@@ -36,21 +35,21 @@ struct CollectionsPage: View {
                                 .foregroundColor(.colorBrown)
                         }
                     }
-                    .padding(.trailing, 20) // 調整按鈕的右邊距離
+                    .padding(.trailing, 20)
                 }
                 .padding(.top, 10)
 
                 if isLoading {
-                    // Lottie 動畫替代 ProgressView
+                   
                     LottieView(animationFileName: "walking", loopMode: .loop, isPlaying: $isPlayingAnimation)
                         .frame(width: 140, height: 140)
-                        .offset(y: 550)  // 調整動畫在按鈕上方的位置
-                        .scaleEffect(0.3)  // 調整動畫大小
+                        .offset(y: 550)
+                        .scaleEffect(0.3)
                         .onAppear {
-                            isPlayingAnimation = true // 開始播放動畫
+                            isPlayingAnimation = true
                         }
                         .onDisappear {
-                            isPlayingAnimation = false // 停止動畫
+                            isPlayingAnimation = false
                         }
 
                     Spacer()

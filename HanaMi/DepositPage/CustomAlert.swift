@@ -11,13 +11,13 @@ struct CustomAlert: View {
     @State private var audioPlayer: AVPlayer?
     @State private var currentTime: Double = 0
     @State private var duration: Double = 0
-    @State private var isDragging = false // 用於標記是否正在拖動進度條
+    @State private var isDragging = false
 
     var body: some View {
         ZStack {
-            // 中央彈出視窗
+        
             VStack(spacing: 15) {
-                // 關閉按鈕（右上角）
+              
                 HStack {
                     Spacer()
                     Button(action: {
@@ -31,12 +31,11 @@ struct CustomAlert: View {
                     }
                 }
 
-                // 錄音狀態顯示
                 Text(isRecording ? "Recording..." : "Ready to Record")
                     .font(.custom("LexendDeca-SemiBold", size: 20))
 
                 if isRecording {
-                    // 顯示停止錄音按鈕
+                  
                     Button(action: {
                         audioRecorder.stopRecording()
                         isRecording = false
@@ -50,7 +49,7 @@ struct CustomAlert: View {
                             .foregroundColor(.red)
                     }
                 } else if let recordingURL = audioRecorder.recordingURL {
-                    // 錄音停止後顯示播放、保存、刪除按鈕
+                  
                     Button(action: {
                         togglePlayPause(for: recordingURL)
                     }) {
@@ -60,9 +59,8 @@ struct CustomAlert: View {
                             .foregroundColor(.colorBrown)
                     }
 
-                    // 播放進度條和時間顯示
                     HStack {
-                        Text(formatTime(seconds: currentTime))  // 開始時間
+                        Text(formatTime(seconds: currentTime))
                             .font(.caption)
                             .foregroundColor(.gray)
 
@@ -75,16 +73,16 @@ struct CustomAlert: View {
                         .accentColor(Color.gray)
                         .padding(.horizontal, 3)
 
-                        Text(formatTime(seconds: duration))  // 結束時間
+                        Text(formatTime(seconds: duration))
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
                     .padding(.horizontal, 10)
 
                     HStack(spacing: 15) {
-                        // 保存按鈕
+                       
                         Button(action: {
-                            show = false // 保存後關閉
+                            show = false
                         }) {
                             Text("保存")
                                 .foregroundColor(.colorYellow)
@@ -95,7 +93,6 @@ struct CustomAlert: View {
                                 .cornerRadius(15)
                         }
 
-                        // 刪除按鈕
                         Button(action: {
                             deleteRecording(recordingURL)
                         }) {
@@ -109,7 +106,7 @@ struct CustomAlert: View {
                         }
                     }
                 } else {
-                    // 顯示錄音按鈕
+                    
                     Button(action: {
                         audioRecorder.startRecording()
                         isRecording = true
@@ -122,7 +119,7 @@ struct CustomAlert: View {
                 }
             }
             .padding(20)
-            .background(BlurView())  // 添加模糊背景
+            .background(BlurView())
             .cornerRadius(25)
             .shadow(radius: 10)
             .frame(width: 300, height: 400)
@@ -143,7 +140,7 @@ struct CustomAlert: View {
             audioPlayer?.pause()
             isPlaying = false
         } else {
-            setupAudioSession()  // 設置音頻會話
+            setupAudioSession()
             audioPlayer?.play()
             isPlaying = true
         }
@@ -154,8 +151,7 @@ struct CustomAlert: View {
         audioPlayer?.volume = 1.0
         if let currentItem = audioPlayer?.currentItem {
             duration = CMTimeGetSeconds(currentItem.asset.duration)
-            
-            // 監聽播放進度，定期更新進度條
+
             let interval = CMTime(seconds: 0.1, preferredTimescale: 600)
             audioPlayer?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { time in
                 if !isDragging {
@@ -163,8 +159,7 @@ struct CustomAlert: View {
                 }
             }
         }
-        
-        // 當播放完畢後，重置狀態
+       
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: audioPlayer?.currentItem, queue: .main) { _ in
             isPlaying = false
             currentTime = 0
@@ -185,7 +180,7 @@ struct CustomAlert: View {
     private func deleteRecording(_ url: URL) {
         try? FileManager.default.removeItem(at: url)
         audioRecorder.recordingURL = nil
-        show = false // 刪除後關閉
+        show = false
     }
 
     private func formatTime(seconds: Double) -> String {

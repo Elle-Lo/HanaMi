@@ -12,16 +12,13 @@ struct MainTabView: View {
         appearance.shadowImage = UIImage()
         appearance.shadowColor = .clear
 
-        // 使用 createGradientImage 函數來創建漸變圖像，並應用到 UITabBar 的背景
         if let gradientImage = createGradientImage(colors: [UIColor.colorDarkYellow, UIColor.white], size: CGSize(width: UIScreen.main.bounds.width, height: 50), opacity: 0.3) {
-            appearance.backgroundImage = gradientImage  // 將漸變圖像作為背景
+            appearance.backgroundImage = gradientImage
         }
 
-        // 設置未選中項目的顏色
         appearance.stackedLayoutAppearance.normal.iconColor = UIColor.colorGray
         appearance.stackedLayoutAppearance.normal.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.colorGray]
 
-        // 設置選中項目的顏色
         appearance.stackedLayoutAppearance.selected.iconColor = UIColor.brown
         appearance.stackedLayoutAppearance.selected.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.brown]
 
@@ -45,7 +42,6 @@ struct MainTabView: View {
         return nil
     }
 
-    
     var body: some View {
             TabView(selection: $selectedTab) {
                 HomePage()
@@ -71,6 +67,7 @@ struct MainTabView: View {
                         Label("地圖", systemImage: "mappin.and.ellipse")
                     }
                     .tag(3)
+                    .accessibilityIdentifier("MapTab")
 
                 CharacterPage()
                     .tabItem {
@@ -79,24 +76,23 @@ struct MainTabView: View {
                     .tag(4)
             }
             
-            .accentColor(.colorBrown) // 选中的 tab 项目变为黑色
+            .accentColor(.colorBrown)
             .background(
-                Color.white.opacity(0.3) // 添加半透明的白色背景
+                Color.white.opacity(0.3)
                     .edgesIgnoringSafeArea(.all)
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(trailing: HStack {
-                if selectedTab == 1 { // 只在CategoryAndAnalyticsPage中顯示切換按鈕
+                if selectedTab == 1 {
                     categoryAnalyticsToggleButton
                 }
-                settingsButton // 全局設定按鈕
+                settingsButton
             })
     }
 
-    // 切換顯示 Category 或 Analytics 的按鈕
         var categoryAnalyticsToggleButton: some View {
             Button(action: {
-                showCategory.toggle() // 切換頁面
+                showCategory.toggle()
             }) {
                 Image(systemName: showCategory ? "chart.bar.xaxis" : "list.bullet")
                     .resizable()
@@ -113,7 +109,6 @@ struct MainTabView: View {
             .padding(.trailing, 5)
         }
     
-    // 全局的設定按鈕
     var settingsButton: some View {
         NavigationLink(destination: SettingsPage()) {
             Image(systemName: "gearshape.fill")
@@ -132,7 +127,7 @@ struct MainTabView: View {
     
     var backButton: some View {
             Button(action: {
-                // 添加自定義返回邏輯，或使用默認返回
+               
             }) {
                 Image(systemName: "arrow.left")
                     .foregroundColor(.colorBrown)

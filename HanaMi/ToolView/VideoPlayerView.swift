@@ -17,7 +17,7 @@ struct VideoPlayerView: View {
                 ZStack(alignment: .center) {
                     VideoPlayer(player: player)
                         .onAppear {
-                            setupAudioSession() // 設置音訊會話
+                            setupAudioSession()
                             player.seek(to: .zero)
                         }
                         .scaledToFill()
@@ -34,17 +34,16 @@ struct VideoPlayerView: View {
             }
         }
         .fullScreenCover(isPresented: $showFullScreenPlayer, onDismiss: {
-            resetVideoPosition() // 重置位置與縮放
-            player?.pause() // 退出全屏時暫停影片
+            resetVideoPosition()
+            player?.pause()
         }) {
             fullScreenVideoView()
         }
         .onReceive(NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime)) { _ in
-            player?.seek(to: .zero) // 重置影片至開頭
+            player?.seek(to: .zero)
         }
     }
-
-    // 全屏播放視圖
+    
     private func fullScreenVideoView() -> some View {
         ZStack {
             Color.black.ignoresSafeArea()
@@ -79,7 +78,7 @@ struct VideoPlayerView: View {
                             )
                     )
                     .onAppear {
-                        player.play() // 全屏時開始播放
+                        player.play()
                     }
                     .edgesIgnoringSafeArea(.all)
 
@@ -88,7 +87,7 @@ struct VideoPlayerView: View {
                         Spacer()
                         Button(action: {
                             showFullScreenPlayer = false
-                            player.pause() // 全屏退出時暫停
+                            player.pause()
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .resizable()
@@ -103,7 +102,6 @@ struct VideoPlayerView: View {
         }
     }
 
-    // 音訊會話設定
     func setupAudioSession() {
         let audioSession = AVAudioSession.sharedInstance()
         do {
@@ -115,7 +113,6 @@ struct VideoPlayerView: View {
         }
     }
 
-    // 重置影片的位置和大小
     private func resetVideoPosition() {
         scale = 1.0
         dragOffset = .zero
