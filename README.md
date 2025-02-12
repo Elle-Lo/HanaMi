@@ -1,6 +1,4 @@
-<!-- ![](https://i.imgur.com/BeYmbqH.png) -->
-
-![](https://i.imgur.com/3LlKK5I.jpeg)
+![Reflix Logo](https://i.imgur.com/3LlKK5I.jpeg)
 
 <p align="left">
     <img src="https://img.shields.io/badge/platform-iOS-lightgray">
