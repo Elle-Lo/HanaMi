@@ -17,7 +17,7 @@ HanaMi is a lifestyle journaling app that allows users to record the small but i
 
 <br>
 
- [![](https://i.imgur.com/NKyvGNy.png)]()
+ [![](https://i.imgur.com/NKyvGNy.png)](https://apps.apple.com/tw/app/hanami/id6695725845)
 
 ## Table of Contents
 * [Features](#Features)
